@@ -12,7 +12,6 @@ namespace Achiever.Services.Goals.Endpoints
             .MapGet<GetGoalsRequest, GetGoalsResponse>()
             .WithSummary("Gets all goals")
             .WithDescription("Gets all goals");
-            //.RequireAuthorization();
 
         public async Task<EndpointResult<GetGoalsResponse>> Handle(GetGoalsRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
         {
