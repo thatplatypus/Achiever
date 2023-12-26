@@ -1,0 +1,71 @@
+﻿@page "/goals"
+@using Achiever.Client.Services.Goals
+@using Achiever.Shared.Goals
+@inject GoalClient GoalClient
+
+<PageTitle>Goals</PageTitle>
+
+<h1>Goals</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (_goals == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <button type="button" class="btn btn-primary" @onclick="CreateGoal">Create Goal</button>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Target End Date</th>
+            <th>SubTasks</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var goal in _goals)
+        {
+            <tr>
+                <td>@goal.Id</td>
+                <td>@goal.Title</td>
+                <td>@goal.StartDate</td>
+                <td>@goal.EndDate</td>
+                <td>@goal.TargetEndDate</td>
+                <td>@goal.SubTasks?.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+
+@code {
+    private List<Goal>? _goals;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _goals = await GoalClient.GetGoalsAsync();
+    }
+
+    protected async Task CreateGoal()
+    {
+        var goal = new Goal {
+            Title = "New Goal" 
+        };
+        var result = await GoalClient.CreateGoalAsync(goal);
+        if(result.IsSuccess)
+        {
+            goal.Id = result.Value;
+            _goals.Add(goal);
+        }
+        else
+        {
+            Console.WriteLine("Error creating goal: " + result?.Message ?? "Unknown error");
+        }
+        StateHasChanged();
+    }
+}
