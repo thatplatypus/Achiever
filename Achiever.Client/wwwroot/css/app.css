@@ -1,3 +1,5 @@
+@import '/_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css';
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -131,3 +133,13 @@ input {
 .flex-outer div label + * {
     flex: 1 0 120px;
 }
+
+.header-link > * > * > .content-region {
+    display: flex;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+    .header-link > * > * > .content-region:hover {
+        background-color: var(--neutral-base-color);
+    }

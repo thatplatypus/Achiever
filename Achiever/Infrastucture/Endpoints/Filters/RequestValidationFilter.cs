@@ -13,11 +13,11 @@ namespace Achiever.Infrastucture.Endpoints.Filters
 
             if (validator is null)
             {
-                logger.LogDebug("{Time} {Request}:No validator configured.", GetCurrentTime(), requestName);
+                logger.LogDebug("[{Time}] {Request} No validator configured.", GetCurrentTime(), requestName);
                 return await next(context);
             }
 
-            logger.LogInformation("{Time} {Request}:Validating...", GetCurrentTime(), requestName);
+            logger.LogInformation("[{Time}] {Request} Validating...", GetCurrentTime(), requestName);
             var request = context.GetArgument<TRequest>(0);
             var cancellationToken = context.GetArgument<CancellationToken>(context.Arguments.Count - 1);
 
@@ -25,11 +25,11 @@ namespace Achiever.Infrastucture.Endpoints.Filters
             if (!validationResult.IsValid)
             {
                 var validationError = new ValidationError(validationResult.Errors.First().ErrorMessage);
-                logger.LogWarning("{Time} {Request}:Validation failed. Reason: {ValidationError}.", GetCurrentTime(), requestName, validationError?.Message);
+                logger.LogWarning("[{Time}] {Request} Validation failed. Reason: {ValidationError}.", GetCurrentTime(), requestName, validationError?.Message);
                 return TypedResults.BadRequest(validationError);
             }
 
-            logger.LogInformation("{Time} {Request}:Validation succeeded.", GetCurrentTime(), requestName);
+            logger.LogInformation("[{Time}] {Request} Validation succeeded.", GetCurrentTime(), requestName);
             return await next(context);
         }
 

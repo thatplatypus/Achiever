@@ -1,0 +1,10 @@
+﻿<FluentDropZone TItem="string" Id="@Subtask.Id.ToString()" Draggable="true" Droppable="true">
+    <div style="width: 100px; height: 80px;background-color:var(--accent-fill-rest);">
+                        @Subtask.Title
+                    </div>
+</FluentDropZone>
+
+@code {
+    [Parameter]
+    public SubTask Subtask { get; set; } = default!;
+}

@@ -4,6 +4,7 @@ using Achiever.Identity;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.FluentUI.AspNetCore.Components;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -34,5 +35,8 @@ builder.Services.AddHttpClient(
     .AddHttpMessageHandler<CookieHandler>();
 
 builder.Services.AddHttpClient<GoalClient>("Goals", opt => opt.BaseAddress = new Uri(builder.Configuration["BackendUrl"] ?? "https://localhost:5001"));
+    //.AddHttpMessageHandler<CookieHandler>();
+
+builder.Services.AddFluentUIComponents();
 
 await builder.Build().RunAsync();

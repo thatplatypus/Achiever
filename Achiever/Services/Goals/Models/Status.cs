@@ -7,5 +7,6 @@
         InProgress,
         Completed,
         Expired,
+        Closed
     }
 }

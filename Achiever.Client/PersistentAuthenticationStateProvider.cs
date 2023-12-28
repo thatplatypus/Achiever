@@ -21,11 +21,22 @@ namespace Achiever.Client
 
         public PersistentAuthenticationStateProvider(PersistentComponentState state)
         {
+            Claim[] claims =
+            [
+                 new Claim(ClaimTypes.NameIdentifier, "Local"),
+                 new Claim(ClaimTypes.Name, "System"),
+                 new Claim(ClaimTypes.Email, "system@achiever-app.com"),
+             ];
+
+            authenticationStateTask = Task.FromResult(
+                new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims,
+                    authenticationType: nameof(PersistentAuthenticationStateProvider)))));
+
             if (!state.TryTakeFromJson<UserInfo>(nameof(UserInfo), out var userInfo) || userInfo is null)
             {
                 return;
             }
-
+            /*
             Claim[] claims = [
                 new Claim(ClaimTypes.NameIdentifier, userInfo.UserId),
                 new Claim(ClaimTypes.Name, userInfo.Email),
@@ -34,6 +45,7 @@ namespace Achiever.Client
             authenticationStateTask = Task.FromResult(
                 new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims,
                     authenticationType: nameof(PersistentAuthenticationStateProvider)))));
+            */
         }
 
         public override Task<AuthenticationState> GetAuthenticationStateAsync() => authenticationStateTask;

@@ -32,11 +32,22 @@ builder.Services.AddCors(
     options => options.AddPolicy(
         "wasm",
         policy => policy.WithOrigins([builder.Configuration["BackendUrl"] ?? "https://localhost:5001", 
-            builder.Configuration["FrontendUrl"] ?? "https://localhost:5002"])
+            builder.Configuration["FrontendUrl"] ?? "https://localhost:5002",
+                "https://localhost:7171", "https://localhost:7211", "*"])
             .AllowAnyMethod()
             .SetIsOriginAllowed(pol => true)
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
             .AllowAnyHeader()
             .AllowCredentials()));
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+});
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at
@@ -77,10 +88,20 @@ allEndpointsGroup.WithOpenApi();
 
 var scope = app.Services.CreateScope();
 
-    var endpoints = scope.ServiceProvider.GetServices<IEndpoint>();
-    foreach (var endpoint in endpoints)
-    {
-        endpoint.Map(allEndpointsGroup);
-    }
+var endpoints = scope.ServiceProvider.GetServices<IEndpoint>();
+foreach (var endpoint in endpoints)
+{
+    endpoint.Map(allEndpointsGroup);
+}
+
+try
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    InMemoryGoalSeeder.SeedGoalDatabase(context);
+}
+catch (Exception ex)
+{
+    Console.WriteLine("An error occurred while seeding the database.", ex);
+}
 
 app.Run();

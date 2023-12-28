@@ -64,7 +64,7 @@ namespace Achiever.Services.Goals
 
         public async Task UpdateGoalAsync(GoalEntity goal)
         {
-            _context.Goals.Update(goal);
+            //_context.Goals.Update(goal);
             await _context.SaveChangesAsync();
         }
 

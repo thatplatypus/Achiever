@@ -7,8 +7,6 @@
 
 <h1>Goals</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
-
 @if (_goals == null)
 {
     <p><em>Loading...</em></p>
@@ -16,39 +14,36 @@
 else
 {
     <button type="button" class="btn btn-primary" @onclick="CreateGoal">Create Goal</button>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Title</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Target End Date</th>
-            <th>SubTasks</th>
-        </tr>
-    </thead>
-    <tbody>
+
+    <FluentGrid Templates="(new GridTemplates { Columns = '1fr 1fr 1fr' })">
         @foreach (var goal in _goals)
         {
-            <tr>
-                <td>@goal.Id</td>
-                <td>@goal.Title</td>
-                <td>@goal.StartDate</td>
-                <td>@goal.EndDate</td>
-                <td>@goal.TargetEndDate</td>
-                <td>@goal.SubTasks?.Count</td>
-            </tr>
+            <FluentGridItem>
+                <GoalCard Goal="@goal" />
+            </FluentGridItem>
         }
-    </tbody>
-</table>
+    </FluentGrid>
 }
 
 @code {
     private List<Goal>? _goals;
 
+    [Inject]
+    IToastService ToastService { get; set; } = default!;
+
     protected override async Task OnInitializedAsync()
     {
-        _goals = await GoalClient.GetGoalsAsync();
+        var result = await GoalClient.GetGoalsAsync();
+
+        if(result.IsSuccess)
+        {
+            _goals = result.Value;
+        }
+        else
+        {
+            ToastService.ShowError($"Error retrieving goals: {result?.Message ?? "Unknown Error"}");
+            _goals = new List<Goal>();
+        }
     }
 
     protected async Task CreateGoal()
@@ -64,7 +59,7 @@ else
         }
         else
         {
-            Console.WriteLine("Error creating goal: " + result?.Message ?? "Unknown error");
+            ToastService.ShowError($"Error creating goal: {result?.Message ?? "Unknown Error"}");
         }
         StateHasChanged();
     }

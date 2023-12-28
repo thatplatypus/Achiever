@@ -1,0 +1,97 @@
+﻿@page "/goals/{Id}"
+@using Achiever.Client.Services.Goals
+@inject GoalClient GoalClient
+@inject IToastService ToastService
+
+@if(_goal != null)
+{
+    <h3>@_goal.Title</h3>
+}
+
+<FluentDragContainer TItem="string"
+                     OnDropEnd="@(e => UpdateSubTaskStatus(e, e.Target.Id))">
+    <FluentStack>
+        <FluentDropZone Id="New" Draggable="false" Droppable="true">
+            @if (_goal?.SubTasks != null)
+            {
+                <div style="width:300px;height:50vh;">
+                    <h4>New</h4>
+                @foreach (var subtask in _goal?.SubTasks?.Where(st => st.Status == "New"))
+                {
+                        <DraggableSubTask Subtask="@subtask" />
+                }
+                </div>
+            }
+        </FluentDropZone>
+        <FluentDropZone Id="InProgress" Draggable="false" Droppable="true">
+            @if (_goal?.SubTasks != null)
+
+{            
+                    <div style="width:300px;height:50vh;">
+                        <h4>In Progres</h4>
+    @foreach(var subtask in _goal?.SubTasks?.Where(st => st.Status == "InProgress"))
+            {
+              <DraggableSubTask Subtask="@subtask" />
+            }
+            </div>
+}
+        </FluentDropZone>
+        <FluentDropZone Id="Completed" Draggable="false" Droppable="true">
+            @if (_goal?.SubTasks != null)
+            {
+                                    <div style="width:300px;height:50vh;">
+                    <h4>Completed</h4>
+                @foreach (var subtask in _goal?.SubTasks?.Where(st => st.Status == "Completed"))
+                {
+                        <DraggableSubTask Subtask="@subtask" />
+                }
+                </div>
+            }                    
+        </FluentDropZone>
+    </FluentStack>
+</FluentDragContainer>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Goal _goal { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await GoalClient.GetGoalByIdAsync(Guid.Parse(Id));
+
+        if (result.IsSuccess)
+        {
+            _goal = result.Value;
+        }
+        else
+        {
+            ToastService.ShowError(result?.Message ?? "Unknown Error");
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+    private async void UpdateSubTaskStatus(FluentDragEventArgs<string> e, string newStatus)
+    {
+        Console.WriteLine(e.Source.Id);
+        var subtask = _goal.SubTasks.FirstOrDefault(st => st.Id.ToString() == e.Source.Id);
+        if (subtask != null)
+        {
+            subtask.Status = newStatus;
+            var result =  await GoalClient.UpdateGoalAsync(_goal);
+
+            if(result.IsSuccess)
+            {
+                ToastService.ShowSuccess($"{_goal.Title} updated successfully");
+            }
+            else
+            {
+                ToastService.ShowError(result?.Message ?? "Unknown Error");
+            }
+
+            StateHasChanged();
+        }
+    }
+}

@@ -1,0 +1,37 @@
+﻿@inject NavigationManager NavigationManager
+
+<FluentCard Width="40vw">
+    <FluentStack Orientation="Orientation.Vertical" Tokens="(new StackTokens { Padding = 10 })">
+        <FluentStack Orientation="Orientation.Vertical">
+            <h3>@Goal.Title</h3>
+        </FluentStack>
+        <FluentStack Orientation="Orientation.Vertical">
+            @if(@Goal.SubTasks != null){
+            <h4>@Goal.SubTasks.Where(x => x.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase)).Count() / @Goal.SubTasks.Count() Complete</h4>
+                }
+            else {
+             <h4>No Tasks</h4>
+            }
+        </FluentStack>
+        <FluentStack Orientation="Orientation.Horizontal" Tokens="(new StackTokens { ChildrenGap = 10 })">
+            <FluentDivider />
+            <FluentButton Appearance="Appearance.Lightweight" OnClick="EditGoal" IconStart="@(new Icons.Regular.Size32.Edit())">Edit</FluentButton>
+            <FluentButton Appearance="Appearance.Lightweight" OnClick="DeleteGoal" IconStart="@(new Icons.Regular.Size32.Delete())">Delete</FluentButton>
+        </FluentStack>
+    </FluentStack>
+</FluentCard>
+
+@code {
+    [Parameter]
+    public Goal Goal { get; set; } = default!;
+
+    void EditGoal()
+    {
+        NavigationManager.NavigateTo($"goals/{Goal.Id}");
+    }
+
+    void DeleteGoal()
+    {
+        // Confirm deletion and remove the goal
+    }
+}

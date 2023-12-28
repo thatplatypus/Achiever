@@ -3,6 +3,7 @@ using Achiever.Infrastucture.Extensions;
 using Achiever.Services.Goals.Domain;
 using Achiever.Services.Goals.Entities;
 using Achiever.Services.Goals.Models;
+using Achiever.Shared.Goals;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
@@ -23,7 +24,7 @@ namespace Achiever.Services.Goals.Endpoints
     public class UpdateGoal(IGoalReadRepository readRepository, IGoalWriteRepository writeRepository) : IEndpoint<UpdateGoalRequest, UpdateGoalResponse>
     {
         public void Map(IEndpointRouteBuilder app) => app
-            .MapPost<UpdateGoalRequest, UpdateGoalResponse>()
+            .MapPost(this)
             .WithSummary("Updates an existing goal")
             .WithDescription("Updates an existing goal");
 
@@ -35,15 +36,25 @@ namespace Achiever.Services.Goals.Endpoints
                 return new EndpointResult<UpdateGoalResponse>(new ValidationError("Goal not found"));
             }
 
-            goal.Title = request.Goal.Title;
-            goal.StartDate = request.Goal.StartDate;
-            goal.EndDate = request.Goal.EndDate;
-            goal.TargetEndDate = request.Goal.TargetEndDate;
-            goal.Status = (Status?)request?.Goal.Status ?? Status.New;
-            goal.LastModified = DateTime.UtcNow;
+            UpdateFromRequestModel(goal, request.Goal);
 
             await writeRepository.UpdateGoalAsync(goal);
             return new UpdateGoalResponse(goal.Id);
+        }
+
+        private static void UpdateFromRequestModel(GoalEntity goal, Goal viewModel)
+        {
+            goal.Title = viewModel.Title;
+            goal.StartDate = viewModel.StartDate;
+            goal.EndDate = viewModel.EndDate;
+            goal.TargetEndDate = viewModel.TargetEndDate;
+            goal.Status = (Status?)viewModel?.Status ?? Status.New;
+            goal.SubTasks.ForEach(x =>
+            {
+                var task = viewModel.SubTasks.FirstOrDefault(request => request.Id == x.Id);
+                x.Status = Enum.Parse<Status>(task.Status);
+                x.Title = task.Title;
+            });
         }
     }
 }

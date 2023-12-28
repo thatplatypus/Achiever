@@ -21,7 +21,7 @@ namespace Achiever.Services.Goals.Endpoints
     public class CreateGoal(IGoalWriteRepository repository) : IEndpoint<CreateGoalRequest, CreateGoalResponse>
     {
         public void Map(IEndpointRouteBuilder app) => app
-            .MapPost<CreateGoalRequest, CreateGoalResponse>()
+            .MapPost(this)
             .WithSummary("Creates a new goal")
             .WithDescription("Creates a new goal");
 
@@ -30,7 +30,6 @@ namespace Achiever.Services.Goals.Endpoints
             var goal = new GoalEntity
             {
                 Title = request.Goal.Title,
-                Id = Guid.NewGuid(),
                 StartDate = request.Goal.StartDate,
                 EndDate = request.Goal.EndDate,
                 TargetEndDate = request.Goal.TargetEndDate,

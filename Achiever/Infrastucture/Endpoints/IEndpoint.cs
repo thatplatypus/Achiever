@@ -1,6 +1,7 @@
 ﻿namespace Achiever.Infrastucture.Endpoints
 {
     using System.Security.Claims;
+    using Microsoft.AspNetCore.Mvc;
     using OneOf;
 
     public interface IEndpoint
