@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Achiever.Client.Models;
 using Achiever.Client.Services.Goals;
 using Achiever.Shared.Goals;
+using Achiever.Shared.Goals.Endpoints;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using static Achiever.Shared.Goals.Endpoints.CreateGoalRequestModel;
+using static Achiever.Shared.Goals.Endpoints.DeleteGoalRequestModel;
 using static Achiever.Shared.Goals.Endpoints.GetGoalByIdRequestModel;
 using static Achiever.Shared.Goals.Endpoints.GetGoalsRequestModel;
 using static Achiever.Shared.Goals.Endpoints.UpdateGoalRequestModel;
@@ -80,7 +82,7 @@ namespace Achiever.Client.Services.Goals
 
             try
             {
-                var response = await _httpClient.PostAsJsonAsync("UpdateGoal", request);
+                var response = await _httpClient.PutAsJsonAsync("UpdateGoal", request);
 
                 if (!response.IsSuccessStatusCode)
                     return new ErrorResult<Guid?>($"failed with {response.StatusCode}");
@@ -93,6 +95,28 @@ namespace Achiever.Client.Services.Goals
             {
                 _logger.LogError(ex?.Message);
                 return new ErrorResult<Guid?>(ex.Message);
+            }
+        }
+
+        public async Task<ClientResult<bool?>> DeleteGoalAsync(Guid goalId)
+        {
+            var request = new DeleteGoalRequest(goalId);
+
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("DeleteGoal", request);
+
+                if (!response.IsSuccessStatusCode)
+                    return new ErrorResult<bool?>($"failed with {response.StatusCode}");
+
+                var content = await response.Content.ReadFromJsonAsync<DeleteGoalResponse>();
+
+                return new SuccessResult<bool?>(content.Success);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex?.Message);
+                return new ErrorResult<bool?>(ex.Message);
             }
         }
     }

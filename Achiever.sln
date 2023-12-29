@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Achiever", "Achiever\Achiev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Achiever.Client", "Achiever.Client\Achiever.Client.csproj", "{215D0C18-470C-47CF-87A1-C483EFFD60CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Achiever.Shared", "Achiever.Shared\Achiever.Shared.csproj", "{005EB057-AB2D-4063-AB00-B012FE584ED2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Achiever.Shared", "Achiever.Shared\Achiever.Shared.csproj", "{005EB057-AB2D-4063-AB00-B012FE584ED2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Achiever.Tests", "Achiever.Tests\Achiever.Tests.csproj", "{2C87E58A-611D-422E-B8D8-34A0218B7080}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Achiever.Tests", "Achiever.Tests\Achiever.Tests.csproj", "{2C87E58A-611D-422E-B8D8-34A0218B7080}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

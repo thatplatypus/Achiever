@@ -10,44 +10,10 @@
 
 <FluentDragContainer TItem="string"
                      OnDropEnd="@(e => UpdateSubTaskStatus(e, e.Target.Id))">
-    <FluentStack>
-        <FluentDropZone Id="New" Draggable="false" Droppable="true">
-            @if (_goal?.SubTasks != null)
-            {
-                <div style="width:300px;height:50vh;">
-                    <h4>New</h4>
-                @foreach (var subtask in _goal?.SubTasks?.Where(st => st.Status == "New"))
-                {
-                        <DraggableSubTask Subtask="@subtask" />
-                }
-                </div>
-            }
-        </FluentDropZone>
-        <FluentDropZone Id="InProgress" Draggable="false" Droppable="true">
-            @if (_goal?.SubTasks != null)
-
-{            
-                    <div style="width:300px;height:50vh;">
-                        <h4>In Progres</h4>
-    @foreach(var subtask in _goal?.SubTasks?.Where(st => st.Status == "InProgress"))
-            {
-              <DraggableSubTask Subtask="@subtask" />
-            }
-            </div>
-}
-        </FluentDropZone>
-        <FluentDropZone Id="Completed" Draggable="false" Droppable="true">
-            @if (_goal?.SubTasks != null)
-            {
-                                    <div style="width:300px;height:50vh;">
-                    <h4>Completed</h4>
-                @foreach (var subtask in _goal?.SubTasks?.Where(st => st.Status == "Completed"))
-                {
-                        <DraggableSubTask Subtask="@subtask" />
-                }
-                </div>
-            }                    
-        </FluentDropZone>
+    <FluentStack HorizontalAlignment="HorizontalAlignment.Center" HorizontalGap="108">
+        <SubTaskDropzone DropZoneId="New" SubTasks="@_goal?.SubTasks" Color="var(--neutral-base-color)" />
+        <SubTaskDropzone DropZoneId="InProgress" Title="In Progress" SubTasks="@_goal?.SubTasks" Color="DarkCyan" />
+        <SubTaskDropzone DropZoneId="Completed" SubTasks="@_goal?.SubTasks" Color="var(--bs-success)" />
     </FluentStack>
 </FluentDragContainer>
 

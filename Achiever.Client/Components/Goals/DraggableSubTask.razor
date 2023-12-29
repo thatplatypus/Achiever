@@ -1,10 +1,23 @@
-﻿<FluentDropZone TItem="string" Id="@Subtask.Id.ToString()" Draggable="true" Droppable="true">
-    <div style="width: 100px; height: 80px;background-color:var(--accent-fill-rest);">
-                        @Subtask.Title
-                    </div>
+﻿<FluentDropZone TItem="string" Id="@Subtask.Id.ToString()" Draggable="true" Droppable="false">
+    <FluentCard Height="5rem;" Width="15rem;" 
+    @ondblclick="DoubleClick"
+    Style="border-left-color:var(--accent-fill-rest);border-left-style:solid;border-left-width:0.25rem;">
+        @Subtask.Title
+    </FluentCard>
 </FluentDropZone>
 
 @code {
     [Parameter]
     public SubTask Subtask { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<SubTask> OnDoubleClick { get; set; } = default!;
+
+    protected async Task DoubleClick()
+    {
+        if(OnDoubleClick.HasDelegate)
+        {
+            await OnDoubleClick.InvokeAsync(Subtask);
+        }
+    }
 }
