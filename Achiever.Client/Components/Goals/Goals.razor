@@ -2,10 +2,17 @@
 @using Achiever.Client.Services.Goals
 @using Achiever.Shared.Goals
 @inject GoalClient GoalClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject IToastService ToastService
 
 <PageTitle>Goals</PageTitle>
 
-<h1>Goals</h1>
+<FluentToolbar Class="p-2" Style="margin-bottom:1rem;border-radius:0.25rem;width:-webkit-fill-available;" id="toolbar-fluent-components">
+    <h1>Goals</h1>
+    <FluentSpacer />
+    <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size20.Trophy())" OnClick="CreateGoal" Disabled="@(_goals == null)">Create Goal</FluentButton>
+</FluentToolbar>
 
 @if (_goals == null)
 {
@@ -13,13 +20,11 @@
 }
 else
 {
-    <button type="button" class="btn btn-primary" @onclick="CreateGoal">Create Goal</button>
-
-    <FluentGrid Templates="(new GridTemplates { Columns = '1fr 1fr 1fr' })">
+       <FluentGrid Spacing="10">
         @foreach (var goal in _goals)
         {
             <FluentGridItem>
-                <GoalCard Goal="@goal" />
+                <GoalCard Goal="@goal" OnGoalDelete="OnDeleteGoal" OnGoalEdit="OnEditGoal" />
             </FluentGridItem>
         }
     </FluentGrid>
@@ -27,9 +32,6 @@ else
 
 @code {
     private List<Goal>? _goals;
-
-    [Inject]
-    IToastService ToastService { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,6 +63,37 @@ else
         {
             ToastService.ShowError($"Error creating goal: {result?.Message ?? "Unknown Error"}");
         }
+        StateHasChanged();
+    }
+
+    protected void OnEditGoal(Goal goal)
+    {
+        NavigationManager.NavigateTo($"goals/{goal.Id}");
+    }
+
+    protected async Task OnDeleteGoal(Goal goal)
+    {
+        var dialog = await DialogService.ShowConfirmationAsync("Do you really want to delete this goal?", "Delete", "Cancel", goal.Title);
+        var dialogResult = await dialog.Result;
+
+        if (dialogResult.Cancelled)
+        {
+            await Task.CompletedTask;
+            return;
+        }
+
+        var result = await GoalClient.DeleteGoalAsync(goal.Id.Value);
+
+        if(!result.IsSuccess || !(result.Value ?? true))
+        {
+            ToastService.ShowError($"Error deleting goal: {goal.Title}");
+        }
+        else
+        {
+            ToastService.ShowSuccess($"Successfully deleted goal: {goal.Title}");
+            _goals?.Remove(goal);
+        }
+
         StateHasChanged();
     }
 }

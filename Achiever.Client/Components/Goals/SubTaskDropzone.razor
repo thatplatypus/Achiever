@@ -1,0 +1,56 @@
+﻿<FluentDropZone TItem="string" Id="@DropZoneId" Draggable="false" Droppable="true">
+    @if (SubTasks != null)
+    {
+        <FluentCard Style="@($"min-height:35rem;border-left-color:{Color};border-left-style:solid;border-left-width:0.25rem;")" Width="20rem;">
+            <h4>@Title</h4>
+            <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Vertical">
+            @foreach (var subtask in SubTasks?.Where(st => st.Status.Equals(Status, StringComparison.OrdinalIgnoreCase)))
+            {
+                <DraggableSubTask OnDoubleClick="OpenSubTaskDetails" Subtask="@subtask" />
+            }
+            </FluentStack>
+        </FluentCard>
+    }
+</FluentDropZone>
+
+@code {
+    [Parameter]
+    public string DropZoneId { get; set; } = default!;
+
+    [Parameter]
+    public string Status { get; set; } = "";
+
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public string Color { get; set; } = "var(--accent-fill-rest)";
+
+    [Parameter]
+    public List<SubTask> SubTasks { get; set; } = default!;
+
+    protected override Task OnParametersSetAsync()
+    {
+        if (string.IsNullOrWhiteSpace(DropZoneId))
+        {
+            throw new ArgumentNullException(nameof(DropZoneId));
+        };
+
+        if (string.IsNullOrWhiteSpace(Status))
+        {
+            Status = DropZoneId;
+        };
+
+        if (string.IsNullOrWhiteSpace(Title))
+        {
+            Title = DropZoneId;
+        }
+
+        return base.OnParametersSetAsync();
+    }
+
+    protected async Task OpenSubTaskDetails(SubTask subTask)
+    {
+        
+    }
+}

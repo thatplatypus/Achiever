@@ -11,5 +11,7 @@ namespace Achiever.Shared.Goals
         public Guid GoalId { get; set; }
 
         public Goal Goal { get; set; }
+
+        public double? EstimatedHours { get; set; }
     }
 }

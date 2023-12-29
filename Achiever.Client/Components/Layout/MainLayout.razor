@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using Color = Microsoft.FluentUI.AspNetCore.Components.Color
+@using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation
+@inherits LayoutComponentBase
 <FluentMainLayout>
     <Header>
             <h3>Achiever</h3>
@@ -15,7 +17,7 @@
     </Header>
     
     <Body>
-        <article class="content px-4">
+        <article class="content px-4 overflow-hidden">
             @Body
         </article>
         <FluentToastProvider />
@@ -26,6 +28,6 @@
 
     <NavMenuContent>
         <FluentNavLink Icon="@(new Icons.Regular.Size24.Home())" Match="NavLinkMatch.All" Href="/" Tooltip="Home">Home</FluentNavLink>
-        <FluentNavLink Icon="@(new Icons.Regular.Size24.Cloud())" Href="goals" Tooltip="Goals">Goals</FluentNavLink>
+        <FluentNavLink Icon="@(new Icons.Regular.Size24.Trophy())" Href="goals" Tooltip="Goals">Goals</FluentNavLink>
     </NavMenuContent>
 </FluentMainLayout>

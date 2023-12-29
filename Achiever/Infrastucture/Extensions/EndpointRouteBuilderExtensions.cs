@@ -8,6 +8,9 @@ namespace Achiever.Infrastucture.Extensions
 {
     public static class EndpointRouteBuilderExtensions
     {
+        /// <summary>
+        /// Maps a parameterless Get request
+        /// </summary>
         public static RouteHandlerBuilder MapGet<TRequest, TResponse>(this IEndpointRouteBuilder app, IEndpoint<TRequest, TResponse> endpoint, string? path = null)
         {
             var endpointPath = GetEndpointPath<TRequest>(path);
@@ -15,6 +18,9 @@ namespace Achiever.Infrastucture.Extensions
                 .AddEndpointFilterPipeline<TRequest>();
         }
 
+        /// <summary>
+        /// Maps a parametered Get request, alllows passing parameters via query string
+        /// </summary>
         public static RouteHandlerBuilder MapGetFromQuery<TRequest, TResponse>(this IEndpointRouteBuilder app, IEndpoint<TRequest, TResponse> endpoint, string? path = null)
         {
             var endpointPath = GetEndpointPath<TRequest>(path); 
@@ -22,10 +28,23 @@ namespace Achiever.Infrastucture.Extensions
                 .AddEndpointFilterPipeline<TRequest>();
         }
 
+        /// <summary>
+        /// Maps a Post request
+        /// </summary>
         public static RouteHandlerBuilder MapPost<TRequest, TResponse>(this IEndpointRouteBuilder app, IEndpoint<TRequest, TResponse> endpoint, string? path = null)
         {
             var endpointPath = GetEndpointPath<TRequest>(path);
             return app.MapPost(endpointPath, (TRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken) => Handle(request, endpoint, claimsPrincipal, cancellationToken))
+                .AddEndpointFilterPipeline<TRequest>();
+        }
+
+        /// <summary>
+        /// Maps a Put request
+        /// </summary>
+        public static RouteHandlerBuilder MapPut<TRequest, TResponse>(this IEndpointRouteBuilder app, IEndpoint<TRequest, TResponse> endpoint, string? path = null)
+        {
+            var endpointPath = GetEndpointPath<TRequest>(path);
+            return app.MapPut(endpointPath, (TRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken) => Handle(request, endpoint, claimsPrincipal, cancellationToken))
                 .AddEndpointFilterPipeline<TRequest>();
         }
 

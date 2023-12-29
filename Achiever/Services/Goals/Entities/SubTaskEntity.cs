@@ -14,5 +14,7 @@ namespace Achiever.Services.Goals.Entities
         public Guid GoalId { get; set; }
 
         public GoalEntity Goal { get; set; }
+
+        public double? EstimatedHours { get; set; }
     }
 }

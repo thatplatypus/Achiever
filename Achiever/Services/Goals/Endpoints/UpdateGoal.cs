@@ -24,7 +24,7 @@ namespace Achiever.Services.Goals.Endpoints
     public class UpdateGoal(IGoalReadRepository readRepository, IGoalWriteRepository writeRepository) : IEndpoint<UpdateGoalRequest, UpdateGoalResponse>
     {
         public void Map(IEndpointRouteBuilder app) => app
-            .MapPost(this)
+            .MapPut(this)
             .WithSummary("Updates an existing goal")
             .WithDescription("Updates an existing goal");
 
@@ -54,6 +54,7 @@ namespace Achiever.Services.Goals.Endpoints
                 var task = viewModel.SubTasks.FirstOrDefault(request => request.Id == x.Id);
                 x.Status = Enum.Parse<Status>(task.Status);
                 x.Title = task.Title;
+                x.EstimatedHours = task.EstimatedHours;
             });
         }
     }
