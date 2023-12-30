@@ -1,6 +1,6 @@
 ﻿using Achiever.Services.Goals.Entities;
 using Achiever.Services.Goals.Models;
-using Achiever.Shared.Goals;
+using Achiever.Shared.Goals.ViewModels;
 
 namespace Achiever.Services.Goals.Domain
 {
@@ -50,14 +50,12 @@ namespace Achiever.Services.Goals.Domain
 
         public static SubTaskEntity ToEntity(this SubTask viewModel)
         {
-            var status = Enum.TryParse<Status>(viewModel.Status, out var parsedStatus) ? parsedStatus : Status.New; 
-
             return new SubTaskEntity
             {
                 Id = viewModel.Id,
                 Title = viewModel.Title,
                 GoalId = viewModel.GoalId,
-                Status = status,
+                Status = viewModel.Status,
                 LastModified = viewModel.LastModified,
                 EstimatedHours = viewModel.EstimatedHours
             };

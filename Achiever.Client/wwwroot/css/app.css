@@ -143,3 +143,11 @@ input {
     .header-link > * > * > .content-region:hover {
         background-color: var(--neutral-base-color);
     }
+
+.date-input-sm {
+    width:130px;
+}
+
+.achiever-card:hover {
+    background-color: var(--neutral-layer-1);
+}

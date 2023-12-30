@@ -45,7 +45,7 @@ namespace Achiever.Tests.Unit.Goals
                 Id = Guid.NewGuid(),
                 Title = "Test SubTask",
                 GoalId = Guid.NewGuid(),
-                Status = Status.Completed,
+                Status = "Completed",
                 LastModified = DateTime.Now
             };
 

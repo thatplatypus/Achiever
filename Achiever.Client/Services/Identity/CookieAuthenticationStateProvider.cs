@@ -2,9 +2,9 @@
 using System.Security.Claims;
 using System.Text.Json;
 using System.Net.Http.Json;
-using Achiever.Identity.Models;
+using Achiever.Client.Services.Identity.Models;
 
-namespace Achiever.Identity
+namespace Achiever.Client.Services.Identity
 {
     /// <summary>
     /// Handles state for cookie-based auth.
@@ -33,7 +33,7 @@ namespace Achiever.Identity
         /// <summary>
         /// Default principal for anonymous (not authenticated) users.
         /// </summary>
-        private readonly ClaimsPrincipal Unauthenticated = 
+        private readonly ClaimsPrincipal Unauthenticated =
             new(new ClaimsIdentity());
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Achiever.Identity
                 };
             }
             catch { }
-             
+
             // unknown error
             return new FormResult
             {
@@ -134,7 +134,7 @@ namespace Achiever.Identity
 
                     // success!
                     return new FormResult { Succeeded = true };
-                }                
+                }
             }
             catch { }
 
@@ -171,7 +171,7 @@ namespace Achiever.Identity
 
                 // user is authenticated,so let's build their authenticated identity
                 var userJson = await userResponse.Content.ReadAsStringAsync();
-                var userInfo = JsonSerializer.Deserialize<UserInfo>(userJson, jsonSerializerOptions);
+                var userInfo = JsonSerializer.Deserialize<Models.UserInfo>(userJson, jsonSerializerOptions);
 
                 if (userInfo != null)
                 {

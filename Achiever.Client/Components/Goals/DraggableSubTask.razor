@@ -1,5 +1,6 @@
 ﻿<FluentDropZone TItem="string" Id="@Subtask.Id.ToString()" Draggable="true" Droppable="false">
-    <FluentCard Height="5rem;" Width="15rem;" 
+    <FluentCard class="achiever-card" Height="5rem;" Width="15rem;" 
+    @onclick="Click"
     @ondblclick="DoubleClick"
     Style="border-left-color:var(--accent-fill-rest);border-left-style:solid;border-left-width:0.25rem;">
         @Subtask.Title
@@ -11,7 +12,18 @@
     public SubTask Subtask { get; set; } = default!;
 
     [Parameter]
+    public EventCallback<SubTask> OnClick { get; set; } = default!;
+
+    [Parameter]
     public EventCallback<SubTask> OnDoubleClick { get; set; } = default!;
+
+protected async Task Click()
+    {
+        if(OnClick.HasDelegate)
+        {
+            await OnClick.InvokeAsync(Subtask);
+        }
+    }
 
     protected async Task DoubleClick()
     {

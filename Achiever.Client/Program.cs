@@ -1,6 +1,7 @@
 using Achiever.Client.Components;
 using Achiever.Client.Services.Goals;
-using Achiever.Identity;
+using Achiever.Client.Services.Identity;
+using Achiever.Client.Services.Snapshot;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -38,5 +39,7 @@ builder.Services.AddHttpClient<GoalClient>("Goals", opt => opt.BaseAddress = new
     //.AddHttpMessageHandler<CookieHandler>();
 
 builder.Services.AddFluentUIComponents();
+
+builder.Services.AddScoped<ISnapshotService, SnapshotService>();
 
 await builder.Build().RunAsync();

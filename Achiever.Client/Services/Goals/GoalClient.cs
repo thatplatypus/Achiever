@@ -4,8 +4,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Achiever.Client.Models;
 using Achiever.Client.Services.Goals;
-using Achiever.Shared.Goals;
 using Achiever.Shared.Goals.Endpoints;
+using Achiever.Shared.Goals.ViewModels;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using static Achiever.Shared.Goals.Endpoints.CreateGoalRequestModel;
 using static Achiever.Shared.Goals.Endpoints.DeleteGoalRequestModel;
@@ -42,7 +42,7 @@ namespace Achiever.Client.Services.Goals
                 var response = await _httpClient.GetAsync($"GetGoalById?request={JsonSerializer.Serialize(new GetGoalByIdRequest(id))}");
 
                 if (!response.IsSuccessStatusCode)
-                    return new ErrorResult<Goal>($"failed with {(int)response.StatusCode}:{response.StatusCode}");
+                    return new ErrorResult<Goal>($"failed with {await response.Content.ReadAsStringAsync()}");
 
                 var content = await response.Content.ReadFromJsonAsync<GetGoalByIdResponse>();
 
@@ -63,7 +63,7 @@ namespace Achiever.Client.Services.Goals
                 var response = await _httpClient.PostAsJsonAsync("CreateGoal", request);
 
                 if(!response.IsSuccessStatusCode)
-                    return new ErrorResult<Guid?>($"failed with {response.StatusCode}");
+                    return new ErrorResult<Guid?>($"failed with {await response.Content.ReadAsStringAsync()}");
 
                 var newGoal = await response.Content.ReadFromJsonAsync<CreateGoalResponse>();
 
@@ -85,7 +85,7 @@ namespace Achiever.Client.Services.Goals
                 var response = await _httpClient.PutAsJsonAsync("UpdateGoal", request);
 
                 if (!response.IsSuccessStatusCode)
-                    return new ErrorResult<Guid?>($"failed with {response.StatusCode}");
+                    return new ErrorResult<Guid?>($"failed with {await response.Content.ReadAsStringAsync()}");
 
                 var updatedGoal = await response.Content.ReadFromJsonAsync<UpdateGoalResponse>();
 

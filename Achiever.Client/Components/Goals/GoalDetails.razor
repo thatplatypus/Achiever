@@ -1,19 +1,22 @@
 ﻿@page "/goals/{Id}"
 @using Achiever.Client.Services.Goals
+@using Achiever.Client.Services.Snapshot
 @inject GoalClient GoalClient
 @inject IToastService ToastService
+@inject ISnapshotService SnapshotService
 
-@if(_goal != null)
-{
-    <h3>@_goal.Title</h3>
-}
+<FluentToolbar Class="p-2" Style="margin-bottom:1rem;border-radius:0.25rem;width:-webkit-fill-available;" id="toolbar-fluent-components">
+    <h1>@_goal?.Title</h1>
+    <FluentSpacer />
+    <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size20.Add())" OnClick="AddSubTask">Add Task</FluentButton>
+</FluentToolbar>
 
 <FluentDragContainer TItem="string"
                      OnDropEnd="@(e => UpdateSubTaskStatus(e, e.Target.Id))">
     <FluentStack HorizontalAlignment="HorizontalAlignment.Center" HorizontalGap="108">
-        <SubTaskDropzone DropZoneId="New" SubTasks="@_goal?.SubTasks" Color="var(--neutral-base-color)" />
-        <SubTaskDropzone DropZoneId="InProgress" Title="In Progress" SubTasks="@_goal?.SubTasks" Color="DarkCyan" />
-        <SubTaskDropzone DropZoneId="Completed" SubTasks="@_goal?.SubTasks" Color="var(--bs-success)" />
+        <SubTaskDropzone OnSubTaskUpdated="SubTaskUpdated" DropZoneId="New" SubTasks="@_goal?.SubTasks" Color="var(--neutral-base-color)" />
+        <SubTaskDropzone OnSubTaskUpdated="SubTaskUpdated" DropZoneId="InProgress" Title="In Progress" SubTasks="@_goal?.SubTasks" Color="DarkCyan" />
+        <SubTaskDropzone OnSubTaskUpdated="SubTaskUpdated" DropZoneId="Completed" SubTasks="@_goal?.SubTasks" Color="var(--bs-success)" />
     </FluentStack>
 </FluentDragContainer>
 
@@ -30,6 +33,7 @@
         if (result.IsSuccess)
         {
             _goal = result.Value;
+            SnapshotService.Snapshot(_goal);
         }
         else
         {
@@ -46,18 +50,57 @@
         if (subtask != null)
         {
             subtask.Status = newStatus;
-            var result =  await GoalClient.UpdateGoalAsync(_goal);
-
-            if(result.IsSuccess)
-            {
-                ToastService.ShowSuccess($"{_goal.Title} updated successfully");
-            }
-            else
-            {
-                ToastService.ShowError(result?.Message ?? "Unknown Error");
-            }
-
-            StateHasChanged();
+            await UpdateGoalAsync(_goal);
         }
     }
+
+    private async Task SubTaskUpdated(SubTask subTask)
+    {
+        var index = _goal.SubTasks.FindIndex(st => st.Id == subTask.Id);
+        if(index >= 0)
+        {
+            _goal.SubTasks[index] = subTask;
+            await UpdateGoalAsync(_goal, SnapshotService.GetLatest<Goal>());
+        }
+        else
+        {
+            ToastService.ShowError($"Subtask not found: {subTask.Title}");
+        }
+    }
+
+    protected async Task AddSubTask()
+    {
+        var id = SnapshotService.Snapshot(_goal);
+
+        var subTask = new SubTask
+        {
+            Title = "New Subtask",
+            Status = "New",
+            Id = Guid.Empty,
+        };
+
+        _goal?.SubTasks.Add(subTask);
+
+        await UpdateGoalAsync(_goal, SnapshotService.GetSnapshot<Goal>(id));
+    }
+
+    private async Task UpdateGoalAsync(Goal goal, Goal snapshot = default!)
+    {
+        var result = await GoalClient.UpdateGoalAsync(goal);
+
+        if (result.IsSuccess)
+        {
+            ToastService.ShowSuccess($"{goal.Title} updated successfully");
+        }
+        else
+        {
+            ToastService.ShowError(result?.Message ?? "Unknown Error");
+            var goalSnapshot = SnapshotService.GetLatest<Goal>();
+            _goal = goalSnapshot ?? snapshot ?? _goal;
+        }
+
+        StateHasChanged();
+    }
+
+
 }

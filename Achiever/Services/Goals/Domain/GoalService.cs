@@ -1,8 +1,7 @@
-﻿using Achiever.Services.Goals.Domain;
-using Achiever.Services.Goals.Entities;
+﻿using Achiever.Services.Goals.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Achiever.Services.Goals
+namespace Achiever.Services.Goals.Domain
 {
     public class GoalService : IGoalReadRepository, IGoalWriteRepository
     {

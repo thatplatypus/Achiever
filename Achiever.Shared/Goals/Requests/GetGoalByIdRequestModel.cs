@@ -1,5 +1,6 @@
 ﻿
 using System.Text.Json;
+using Achiever.Shared.Goals.ViewModels;
 
 namespace Achiever.Shared.Goals.Endpoints
 {

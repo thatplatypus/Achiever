@@ -1,4 +1,4 @@
-﻿namespace Achiever.Identity.Models
+﻿namespace Achiever.Client.Services.Identity.Models
 {
     /// <summary>
     /// Response for login and registration.
