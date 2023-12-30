@@ -1,7 +1,6 @@
-﻿
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
+﻿using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
-namespace Achiever.Identity
+namespace Achiever.Client.Services.Identity
 {
     /// <summary>
     /// Handler to ensure cookie credentials are automatically sent over with each request.

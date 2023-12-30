@@ -1,4 +1,4 @@
-﻿namespace Achiever.Identity.Models
+﻿namespace Achiever.Client.Services.Identity.Models
 {
     /// <summary>
     /// User info from identity endpoint to establish claims.

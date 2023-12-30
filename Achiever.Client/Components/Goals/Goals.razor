@@ -1,6 +1,5 @@
 ﻿@page "/goals"
 @using Achiever.Client.Services.Goals
-@using Achiever.Shared.Goals
 @inject GoalClient GoalClient
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
@@ -24,7 +23,7 @@ else
         @foreach (var goal in _goals)
         {
             <FluentGridItem>
-                <GoalCard Goal="@goal" OnGoalDelete="OnDeleteGoal" OnGoalEdit="OnEditGoal" />
+                <GoalCard Goal="@goal" OnGoalDelete="OnDeleteGoal" OnGoalEdit="OnEditGoal" OnSubTaskUpdated="OnSubTaskUpdated" />
             </FluentGridItem>
         }
     </FluentGrid>
@@ -95,5 +94,32 @@ else
         }
 
         StateHasChanged();
+    }
+
+    protected async Task OnSubTaskUpdated((SubTask subTask, Goal snapshot) x)
+    {
+        var goal = _goals?.FirstOrDefault(g => g.SubTasks.Any(st => st.Id == x.subTask.Id));
+
+        var result = await GoalClient.UpdateGoalAsync(goal!);
+
+        if(result.IsSuccess)
+        {
+            ToastService.ShowSuccess($"Successfully updated subtask: {x.subTask.Title}");
+        }
+        else
+        {
+            var index = _goals?.FindIndex(g => g.Id == goal?.Id);
+
+            if(index != null && index >= 0)
+            {
+                _goals![(int)index] = x.snapshot;
+            }
+
+            var title = x.snapshot.SubTasks.FirstOrDefault(st => st.Id == x.subTask.Id)?.Title ?? "Unknown Subtask";
+
+            ToastService.ShowError($"Error updating subtask: {title}\n\n{result.Message}");
+
+            StateHasChanged();
+        }
     }
 }

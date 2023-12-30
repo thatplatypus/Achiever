@@ -1,8 +1,9 @@
 ﻿@using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation;
 @using Color = Microsoft.FluentUI.AspNetCore.Components.Color;
 @inject NavigationManager NavigationManager
+@inject IDialogService DialogService
 
-<FluentCard Width="26rem" Height="20rem">
+<FluentCard class="achiever-card" Width="26rem" Height="21rem">
     <FluentStack Orientation="Orientation.Vertical">
         <div style="display:flex;width:100%;">
             <h3>@Goal.Title</h3>
@@ -16,10 +17,11 @@
         <FluentDivider Class="w-100" Role="DividerRole.Separator" Orientation="Orientation.Horizontal" />
 
         <FluentStack Style="height:11rem;" Orientation="Orientation.Horizontal">
-        <FluentStack Orientation="Orientation.Vertical">
-            @if(Goal.SubTasks != null && Goal.SubTasks.Count() > 0){
-            <h4>@Goal.SubTasks.Where(x => x.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase)).Count() / @Goal.SubTasks.Count() Complete</h4>
-            @foreach(var task in Goal.SubTasks.Take(5))
+            <FluentStack Orientation="Orientation.Vertical">
+                @if (Goal.SubTasks != null && Goal.SubTasks.Count() > 0)
+                {
+                    <h4>@Goal.SubTasks.Where(x => x.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase)).Count() / @Goal.SubTasks.Count() Complete</h4>
+                    @foreach (var task in Goal.SubTasks.Take(SubTaskDisplayCount))
                     {
                         var backgroundColor = task.Status switch
                         {
@@ -28,37 +30,44 @@
                             "Not Started" => "var(--fill-color)",
                             _ => "var(--fill-color)",
                         };
-                        <FluentBadge title="@task.Status" Fill="@backgroundColor" BackgroundColor="@backgroundColor" Color="white">
+                        <FluentBadge OnClick="async () => await ShowSubTaskDetails(task)" title="@task.Status" Fill="@backgroundColor" BackgroundColor="@backgroundColor" Color="white">
                             @task.Title
                         </FluentBadge>
                     }
                 }
-            else {
-             <h4>No Tasks</h4>
-            }
-        </FluentStack>
-        <FluentDivider Style="height:80%;margin-top:auto;margin-bottom:auto;" Role="DividerRole.Presentation" Orientation="Orientation.Vertical" />
-        <div style="width:18rem;">
-            @if(_chartLoaded)
-            {
-                <ApexGauge 
-                    Options="_options" 
-                    Percentage="@(Goal?.SubTasks?.Count() > 0 ? Math.Round((decimal)(Goal.SubTasks.Where(x => x.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase)).Count() / (decimal)Goal.SubTasks.Count()) * 100, 2) : 100)" 
-                    Label="Progress"/>
-            }
-            else
-            {
-                <FluentSkeleton Height="200px" Width="200px" Shape="SkeletonShape.Circle"></FluentSkeleton>
-            }
-        </div>
+                else
+                {
+                    <h4>No Tasks</h4>
+                }
+            </FluentStack>
+            <FluentDivider Style="height:80%;margin-top:auto;margin-bottom:auto;" Role="DividerRole.Presentation" Orientation="Orientation.Vertical" />
+            <div style="width:18rem;">
+                @if (_chartLoaded)
+                {
+                    <ApexChart @ref="_chart" TItem="GaugeValue" Title="" Options="_options">
+
+                        <ApexPointSeries TItem="GaugeValue"
+                                         SeriesType=SeriesType.RadialBar
+                                         Items=GetItems()
+                                         Name=""
+                                         XValue="@(e => e.Label)"
+                                         YValue="@(e => e.Percentage)" />
+                    </ApexChart>
+                }
+                else
+                {
+                    <p>Loading...</p>
+                    <FluentSkeleton Height="200px" Width="200px" Shape="SkeletonShape.Circle"></FluentSkeleton>
+                }
+            </div>
         </FluentStack>
 
         <FluentDivider Class="w-100" Role="DividerRole.Separator" Orientation="Orientation.Horizontal" />
 
         <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End">
             <FluentDivider />
-            <FluentButton Appearance="Appearance.Lightweight" OnClick="EditGoal" IconStart="@(new Icons.Regular.Size32.Edit())">Edit</FluentButton>
-            <FluentButton Appearance="Appearance.Lightweight" OnClick="DeleteGoal" IconStart="@(new Icons.Regular.Size32.Delete())">Delete</FluentButton>
+            <FluentButton Appearance="Appearance.Lightweight" OnClick="EditGoal" IconStart="@(new Icons.Regular.Size24.Edit())">Edit</FluentButton>
+            <FluentButton Appearance="Appearance.Lightweight" OnClick="DeleteGoal" IconStart="@(new Icons.Regular.Size24.Delete())">Delete</FluentButton>
         </FluentStack>
     </FluentStack>
 
@@ -68,14 +77,35 @@
     [Parameter]
     public Goal Goal { get; set; } = default!;
 
+    private Goal? _goalSnapshot = default!;
+
     [Parameter]
     public EventCallback<Goal> OnGoalEdit { get; set; } = default!;
 
     [Parameter]
     public EventCallback<Goal> OnGoalDelete { get; set; } = default!;
 
+    [Parameter]
+    public EventCallback<(SubTask, Goal)> OnSubTaskUpdated { get; set; } = default!;
+
+    [Parameter]
+    public int SubTaskDisplayCount { get; set; } = 4;
+
+    private ApexChart<GaugeValue> _chart = default!;
+
     //Figure out how to introduce a better loading state later
     private bool _chartLoaded = true;
+
+    private decimal _percentage = 0;
+
+    protected override void OnInitialized()
+    {
+        _percentage = GetPercentage(Goal);
+
+        UpdateGraphSettings();
+
+        base.OnInitialized();
+    }
 
     private ApexChartOptions<GaugeValue> _options = new()
         {
@@ -108,12 +138,12 @@
             Stroke = new()
             {
                 LineCap = LineCap.Round,
-            },
+            },            
         };
 
     protected async Task EditGoal()
     {
-        if(OnGoalEdit.HasDelegate)
+        if (OnGoalEdit.HasDelegate)
         {
             await OnGoalEdit.InvokeAsync(Goal);
         };
@@ -121,7 +151,7 @@
 
     protected async Task DeleteGoal()
     {
-        if(OnGoalDelete.HasDelegate)
+        if (OnGoalDelete.HasDelegate)
         {
             await OnGoalDelete.InvokeAsync(Goal);
         };
@@ -129,9 +159,9 @@
 
     protected string GetTargetDateStyle(DateTimeOffset? completedDate, DateTimeOffset? targetDate)
     {
-        if(completedDate.HasValue)
+        if (completedDate.HasValue)
         {
-                return "color:var(--bs-success);";
+            return "color:var(--bs-success);";
         };
 
         if (targetDate.HasValue)
@@ -148,4 +178,92 @@
 
         return string.Empty;
     }
+
+    protected async Task ShowSubTaskDetails(SubTask subTask)
+    {
+        _goalSnapshot = Goal.Clone();
+
+        await DialogService.ShowDialogAsync<SubTaskDetailsDialog>(subTask, new DialogParameters()
+            {
+                Title = $"{subTask.Title}",
+                OnDialogResult = DialogService.CreateDialogCallback(this, HandleSubTaskDialog),
+                PrimaryAction = "Save",
+                PrimaryActionEnabled = true,
+                SecondaryAction = "Cancel",
+                Width = "500px",
+                TrapFocus = true,
+                Modal = true,
+            });
+    }
+
+    private async Task HandleSubTaskDialog(DialogResult result)
+    {       
+        if (result.Cancelled)
+        {
+                Goal = _goalSnapshot;
+                _goalSnapshot = default!;
+
+            return;
+        }
+
+        if (result.Data != null)
+        {
+            SubTask? subTask = result.Data as SubTask;
+
+            var index = Goal.SubTasks.FindIndex(st => st.Id == subTask.Id);
+            if (index >= 0)
+            {
+                Goal.SubTasks[index] = subTask;
+            }
+
+            if (OnSubTaskUpdated.HasDelegate)
+            {
+                await OnSubTaskUpdated.InvokeAsync((subTask, _goalSnapshot));
+            }
+
+            _percentage = GetPercentage(Goal);
+
+            UpdateGraphSettings();
+
+            await _chart.RenderAsync();
+
+            StateHasChanged();
+
+            _goalSnapshot = default!;
+
+            return;
+        }
+    }
+
+    private decimal GetPercentage(Goal? goal = default!)
+    {
+        goal ??= Goal;
+
+        if (goal == null || goal.SubTasks == null || goal.SubTasks.Count() == 0)
+        {
+            return 0;
+        }
+
+        var completed = goal.SubTasks.Where(x => x.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase)).Count();
+        var total = goal.SubTasks.Count();
+
+        return Math.Round((decimal)completed / (decimal)total * 100, 2);
+    }
+
+    private void UpdateGraphSettings()
+    {
+        if (_percentage >= 100)
+        {
+            _options.Colors = ["var(--bs-success)"];
+        }
+        else
+        {
+            _options.Colors = ["rgba(0, 143, 251, 0.85)"];
+        }
+    }
+    private List<GaugeValue> GetItems()
+        {
+            return new List<GaugeValue> { new GaugeValue { Label = "Progress", Percentage = GetPercentage(Goal) } };
+        }
+ 
 }

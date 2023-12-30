@@ -1,4 +1,4 @@
-﻿namespace Achiever.Identity.Models
+﻿namespace Achiever.Client.Services.Identity.Models
 {
     /// <summary>
     /// Basic user information to register and login.

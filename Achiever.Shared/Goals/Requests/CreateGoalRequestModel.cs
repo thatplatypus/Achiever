@@ -1,4 +1,6 @@
-﻿namespace Achiever.Shared.Goals.Endpoints
+﻿using Achiever.Shared.Goals.ViewModels;
+
+namespace Achiever.Shared.Goals.Endpoints
 {
     public static class CreateGoalRequestModel
     {

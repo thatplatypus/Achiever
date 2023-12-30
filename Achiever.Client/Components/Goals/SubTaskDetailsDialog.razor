@@ -1,0 +1,23 @@
+﻿@using Achiever.Client.Services.Goals
+@implements IDialogContentComponent<SubTask>
+
+<FluentMessageBarProvider Section="Goals" MaxMessageCount="1" />
+
+<FluentTextField @bind-Value="@Content.Title">Title</FluentTextField>
+<FluentSelect TOption="KeyValuePair<string, string>"
+              Label="Select status"
+              Items="@SubTaskDisplay.Statuses.ToArray()"
+              Id="subtask-statuses-listbox"
+              Width="200px"
+              OptionValue="@(x => x.Key)"
+              OptionText="@(x => x.Value)"
+              @bind-Value="@Content.Status"/>
+<FluentNumberField @bind-Value="@Content.EstimatedHours">Estimated Hours</FluentNumberField>
+
+@code {
+    [Parameter]
+    public SubTask Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+}

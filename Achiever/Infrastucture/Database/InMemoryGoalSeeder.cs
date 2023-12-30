@@ -17,14 +17,14 @@ namespace Achiever.Infrastucture.Database
                 TargetEndDate = DateTimeOffset.UtcNow.AddDays(7),
                 Status = Status.New,
                 LastModified = DateTime.UtcNow,
-                SubTasks = new List<SubTaskEntity>
-                {
+                SubTasks =
+                [
                     new SubTaskEntity
                     {
                         Id = Guid.NewGuid(),
                         Title = "Backend Api",
                         GoalId = Guid.NewGuid(),
-                        Status = Status.InProgress,
+                        Status = "InProgress",
                         LastModified = DateTime.UtcNow
                     },
                     new SubTaskEntity
@@ -32,7 +32,7 @@ namespace Achiever.Infrastucture.Database
                         Id = Guid.NewGuid(),
                         Title = "Frontend App",
                         GoalId = Guid.NewGuid(),
-                        Status = Status.InProgress,
+                        Status = "InProgress",
                         LastModified = DateTime.UtcNow
                     },
                     new SubTaskEntity
@@ -40,7 +40,7 @@ namespace Achiever.Infrastucture.Database
                         Id = Guid.NewGuid(),
                         Title = "Setup GitHub Repo",
                         GoalId = Guid.NewGuid(),
-                        Status = Status.Completed,
+                        Status = "Completed",
                         LastModified = DateTime.UtcNow
                     },
                     new SubTaskEntity
@@ -48,10 +48,10 @@ namespace Achiever.Infrastucture.Database
                         Id = Guid.NewGuid(),
                         Title = "Start ReadMe",
                         GoalId = Guid.NewGuid(),
-                        Status = Status.New,
+                        Status = "New",
                         LastModified = DateTime.UtcNow
                     }
-                }   
+                ]   
             };
 
             var secondGoal = new GoalEntity
@@ -62,14 +62,14 @@ namespace Achiever.Infrastucture.Database
                 TargetEndDate = DateTimeOffset.UtcNow.AddDays(3),
                 Status = Status.New,
                 LastModified = DateTime.UtcNow,
-                SubTasks = new List<SubTaskEntity>
-                {                  
+                SubTasks =
+                [
                     new SubTaskEntity
                     {
                         Id = Guid.NewGuid(),
                         Title = "Install Development Environment",
                         GoalId = Guid.NewGuid(),
-                        Status = Status.New,
+                        Status = "New",
                         LastModified = DateTime.UtcNow
                     },
                     new SubTaskEntity
@@ -77,7 +77,7 @@ namespace Achiever.Infrastucture.Database
                         Id = Guid.NewGuid(),
                         Title = "Read Official Docs",
                         GoalId = Guid.NewGuid(),
-                        Status = Status.New,
+                        Status = "New",
                         LastModified = DateTime.UtcNow
                     },
                     new SubTaskEntity
@@ -85,10 +85,10 @@ namespace Achiever.Infrastucture.Database
                         Id = Guid.NewGuid(),
                         Title = "Create Hello World project",
                         GoalId = Guid.NewGuid(),
-                        Status = Status.New,
+                        Status = "New",
                         LastModified = DateTime.UtcNow
                     }
-                }
+                ]
             };
 
             // Add the goal to the Goals DbSet

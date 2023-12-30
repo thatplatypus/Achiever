@@ -18,6 +18,9 @@ namespace Achiever.Services.Goals.Endpoints
         {
             var entityGoal = await database.GetByIdAsync(request.Id);
 
+            if (entityGoal == null)
+                return new EndpointResult<GetGoalByIdResponse>(new ValidationError("Goal not found"));
+
             var goal = entityGoal.ToViewModel();
 
             return new GetGoalByIdResponse(goal);

@@ -1,6 +1,6 @@
-﻿using Achiever.Identity.Models;
+﻿using Achiever.Client.Services.Identity.Models;
 
-namespace Achiever.Identity
+namespace Achiever.Client.Services.Identity
 {
     /// <summary>
     /// Account management services.

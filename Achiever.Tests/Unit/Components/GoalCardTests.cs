@@ -1,5 +1,6 @@
 ﻿using Achiever.Client.Components.Goals;
 using Achiever.Shared.Goals;
+using Achiever.Shared.Goals.ViewModels;
 using Bunit;
 
 namespace Achiever.Tests.Unit.Components
