@@ -18,7 +18,14 @@ namespace Achiever.Services.Goals.Endpoints
         {
             RuleFor(x => x.Goal).NotNull();
             RuleFor(x => x.Goal.Title).NotEmpty().When(x => x.Goal != null);
-            RuleFor(x => x.Goal.Id).NotEmpty().When(x => x.Goal != null);
+            RuleFor(x => x.Goal.Id).Custom((id, context) =>
+            {
+                if(id == null || id.Equals(Guid.Empty))
+                {
+                    context.AddFailure("Id cannot be empty");
+                }
+            })
+            .When(x => x.Goal != null);
             RuleFor(x => x.Goal.SubTasks).Custom((subTasks, context) =>
             {
                 if (subTasks == null)

@@ -1,6 +1,7 @@
 ﻿using Achiever.Infrastucture.Endpoints;
 using Achiever.Infrastucture.Extensions;
 using Achiever.Services.Goals.Domain;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using static Achiever.Shared.Goals.Endpoints.GetGoalByIdRequestModel;
@@ -9,6 +10,14 @@ namespace Achiever.Services.Goals.Endpoints
 {
     public class GetGoalById(IGoalReadRepository database) : IEndpoint<GetGoalByIdRequest, GetGoalByIdResponse>
     {
+        public class GetGoalByIdValidator : AbstractValidator<GetGoalByIdRequest>
+        {
+            public GetGoalByIdValidator()
+            {
+                RuleFor(x => x.Id).NotEmpty();
+                RuleFor(x => x.Id).NotEqual(Guid.Empty);
+            }
+        }   
         public void Map(IEndpointRouteBuilder app) => app
             .MapGetFromQuery(this, nameof(GetGoalById))
             .WithSummary("Gets a goal by id")
