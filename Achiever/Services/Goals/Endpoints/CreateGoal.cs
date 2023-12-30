@@ -14,7 +14,8 @@ namespace Achiever.Services.Goals.Endpoints
     {
         public CreateGoalRequestValidator()
         {
-            RuleFor(x => x.Goal.Title).NotEmpty();
+            RuleFor(x => x.Goal).NotNull();
+            RuleFor(x => x.Goal.Title).NotEmpty().When(x => x.Goal != null);
         }
     }
 

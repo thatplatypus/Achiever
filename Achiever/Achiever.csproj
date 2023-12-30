@@ -24,4 +24,9 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="Achiever.Tests" />
+	</ItemGroup>
+
+
 </Project>
