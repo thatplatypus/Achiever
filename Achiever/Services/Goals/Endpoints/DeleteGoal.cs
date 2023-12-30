@@ -11,7 +11,6 @@ namespace Achiever.Services.Goals.Endpoints
     {
         public DeleteGoalRequestValidator()
         {
-            RuleFor(x => x.GoalId).NotNull();
             RuleFor(x => x.GoalId).NotEmpty();
             RuleFor(x => x.GoalId).NotEqual(Guid.Empty);
         }

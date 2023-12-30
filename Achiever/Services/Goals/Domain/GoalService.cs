@@ -51,7 +51,7 @@ namespace Achiever.Services.Goals.Domain
 
         public async Task<GoalEntity> GetByIdAsync(Guid id)
         {
-            return await _context.Goals.FindAsync(id);
+            return await _context.Goals.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<SubTaskEntity>> GetSubTasksByGoalIdAsync(Guid goalId)
