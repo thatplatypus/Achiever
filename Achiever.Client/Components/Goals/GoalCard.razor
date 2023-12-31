@@ -1,5 +1,6 @@
 ﻿@using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation;
 @using Color = Microsoft.FluentUI.AspNetCore.Components.Color;
+@using TooltipPosition = Microsoft.FluentUI.AspNetCore.Components.TooltipPosition;
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 
@@ -65,7 +66,12 @@
         <FluentDivider Class="w-100" Role="DividerRole.Separator" Orientation="Orientation.Horizontal" />
 
         <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End">
-            <FluentDivider />
+            @if(_estimatedHours > 0)
+            {
+                <h3 id="@($"est-hours-{Goal.Id}")" class="text-muted"><FluentIcon Icon="Icons.Regular.Size24.Clock" /> Hours @_estimatedHours</h3>
+                <FluentTooltip UseTooltipService="false" Anchor="@($"est-hours-{Goal.Id}")" Position=TooltipPosition.Right Delay="50">@_estimatedRemainingHours / @_estimatedHours Hours Remaining</FluentTooltip>
+            }
+            <FluentSpacer />
             <FluentButton Appearance="Appearance.Lightweight" OnClick="EditGoal" IconStart="@(new Icons.Regular.Size24.Edit())">Edit</FluentButton>
             <FluentButton Appearance="Appearance.Lightweight" OnClick="DeleteGoal" IconStart="@(new Icons.Regular.Size24.Delete())">Delete</FluentButton>
         </FluentStack>
@@ -98,13 +104,24 @@
 
     private decimal _percentage = 0;
 
+    private double _estimatedHours = 0;
+
+    private double _estimatedRemainingHours = 0;
+
     protected override void OnInitialized()
     {
-        _percentage = GetPercentage(Goal);
-
-        UpdateGraphSettings();
+        UpdateStateCalculations(Goal);
 
         base.OnInitialized();
+    }
+
+    private void UpdateStateCalculations(Goal goal)
+    {
+        _percentage = GetPercentage(goal);
+        _estimatedHours = GetEstimatedHours(goal);
+        _estimatedRemainingHours = GetRemainingEstimatedHours(goal);
+
+        UpdateGraphSettings();
     }
 
     private ApexChartOptions<GaugeValue> _options = new()
@@ -138,7 +155,7 @@
             Stroke = new()
             {
                 LineCap = LineCap.Round,
-            },            
+            },
         };
 
     protected async Task EditGoal()
@@ -197,11 +214,11 @@
     }
 
     private async Task HandleSubTaskDialog(DialogResult result)
-    {       
+    {
         if (result.Cancelled)
         {
-                Goal = _goalSnapshot;
-                _goalSnapshot = default!;
+            Goal = _goalSnapshot;
+            _goalSnapshot = default!;
 
             return;
         }
@@ -221,9 +238,7 @@
                 await OnSubTaskUpdated.InvokeAsync((subTask, _goalSnapshot));
             }
 
-            _percentage = GetPercentage(Goal);
-
-            UpdateGraphSettings();
+            UpdateStateCalculations(Goal); 
 
             await _chart.RenderAsync();
 
@@ -261,9 +276,45 @@
             _options.Colors = ["rgba(0, 143, 251, 0.85)"];
         }
     }
+
     private List<GaugeValue> GetItems()
+    {
+        return new List<GaugeValue> { new GaugeValue { Label = "Progress", Percentage = GetPercentage(Goal) } };
+    }
+
+    private double GetEstimatedHours(Goal goal)
+    {
+        double hours = 0;
+
+        if (goal.SubTasks == null || goal.SubTasks.Count == 0)
+            return hours;
+
+        foreach (var task in goal.SubTasks)
         {
-            return new List<GaugeValue> { new GaugeValue { Label = "Progress", Percentage = GetPercentage(Goal) } };
+            if (task.EstimatedHours.HasValue && task?.EstimatedHours > 0)
+            {
+                hours += task.EstimatedHours.Value;
+            }
         }
- 
+
+        return hours;
+    }
+
+    private double GetRemainingEstimatedHours(Goal goal)
+    {
+        double hours = 0;
+
+        if (goal.SubTasks == null || goal.SubTasks.Count == 0)
+            return hours;
+
+        foreach (var task in goal.SubTasks.Where(x => !x.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase)))
+        {
+            if (task.EstimatedHours.HasValue && task?.EstimatedHours > 0)
+            {
+                hours += task.EstimatedHours.Value;
+            }
+        }
+
+        return hours;
+    }
 }

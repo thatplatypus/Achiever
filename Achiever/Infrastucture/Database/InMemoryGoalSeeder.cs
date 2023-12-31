@@ -25,7 +25,8 @@ namespace Achiever.Infrastucture.Database
                         Title = "Backend Api",
                         GoalId = Guid.NewGuid(),
                         Status = "InProgress",
-                        LastModified = DateTime.UtcNow
+                        LastModified = DateTime.UtcNow,
+                        EstimatedHours = 8
                     },
                     new SubTaskEntity
                     {
@@ -33,7 +34,8 @@ namespace Achiever.Infrastucture.Database
                         Title = "Frontend App",
                         GoalId = Guid.NewGuid(),
                         Status = "InProgress",
-                        LastModified = DateTime.UtcNow
+                        LastModified = DateTime.UtcNow,
+                        EstimatedHours = 8
                     },
                     new SubTaskEntity
                     {
@@ -41,7 +43,8 @@ namespace Achiever.Infrastucture.Database
                         Title = "Setup GitHub Repo",
                         GoalId = Guid.NewGuid(),
                         Status = "Completed",
-                        LastModified = DateTime.UtcNow
+                        LastModified = DateTime.UtcNow,
+                        EstimatedHours = 1
                     },
                     new SubTaskEntity
                     {
@@ -49,7 +52,8 @@ namespace Achiever.Infrastucture.Database
                         Title = "Start ReadMe",
                         GoalId = Guid.NewGuid(),
                         Status = "New",
-                        LastModified = DateTime.UtcNow
+                        LastModified = DateTime.UtcNow,
+                        EstimatedHours = 0.5
                     }
                 ]   
             };
@@ -70,7 +74,8 @@ namespace Achiever.Infrastucture.Database
                         Title = "Install Development Environment",
                         GoalId = Guid.NewGuid(),
                         Status = "New",
-                        LastModified = DateTime.UtcNow
+                        LastModified = DateTime.UtcNow,
+                        EstimatedHours = 2.5
                     },
                     new SubTaskEntity
                     {
@@ -78,7 +83,8 @@ namespace Achiever.Infrastucture.Database
                         Title = "Read Official Docs",
                         GoalId = Guid.NewGuid(),
                         Status = "New",
-                        LastModified = DateTime.UtcNow
+                        LastModified = DateTime.UtcNow,
+                        EstimatedHours = 4
                     },
                     new SubTaskEntity
                     {
@@ -86,7 +92,8 @@ namespace Achiever.Infrastucture.Database
                         Title = "Create Hello World project",
                         GoalId = Guid.NewGuid(),
                         Status = "New",
-                        LastModified = DateTime.UtcNow
+                        LastModified = DateTime.UtcNow,
+                        EstimatedHours = 2
                     }
                 ]
             };
