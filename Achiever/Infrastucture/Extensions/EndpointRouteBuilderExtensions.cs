@@ -70,6 +70,7 @@ namespace Achiever.Infrastucture.Extensions
         {
             return builder
                 .AddEndpointFilter<RequestLoggingFilter<TRequest>>()
+                .AddEndpointFilter<AccountContextFilter<TRequest>>()
                 .AddEndpointFilter<RequestValidationFilter<TRequest>>();
         }
     }

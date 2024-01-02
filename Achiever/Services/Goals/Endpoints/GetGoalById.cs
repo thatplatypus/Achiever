@@ -1,4 +1,5 @@
-﻿using Achiever.Infrastucture.Endpoints;
+﻿using Achiever.Infrastucture.Database;
+using Achiever.Infrastucture.Endpoints;
 using Achiever.Infrastucture.Extensions;
 using Achiever.Services.Goals.Domain;
 using FluentValidation;
@@ -8,8 +9,9 @@ using static Achiever.Shared.Goals.Endpoints.GetGoalByIdRequestModel;
 
 namespace Achiever.Services.Goals.Endpoints
 {
-    public class GetGoalById(IGoalReadRepository database) : IEndpoint<GetGoalByIdRequest, GetGoalByIdResponse>
+    public class GetGoalById(IGoalReadRepository database, IAccountContext accountContext) : IEndpoint<GetGoalByIdRequest, GetGoalByIdResponse>
     {
+
         public class GetGoalByIdValidator : AbstractValidator<GetGoalByIdRequest>
         {
             public GetGoalByIdValidator()
@@ -25,6 +27,8 @@ namespace Achiever.Services.Goals.Endpoints
 
         public async Task<EndpointResult<GetGoalByIdResponse>> Handle(GetGoalByIdRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
         {
+            await database.SetReadContext(claimsPrincipal);
+
             var entityGoal = await database.GetByIdAsync(request.Id);
 
             if (entityGoal == null)

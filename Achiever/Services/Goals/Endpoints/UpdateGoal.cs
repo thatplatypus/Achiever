@@ -54,6 +54,8 @@ namespace Achiever.Services.Goals.Endpoints
 
         public async Task<EndpointResult<UpdateGoalResponse>> Handle(UpdateGoalRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
         {
+            await readRepository.SetReadContext(claimsPrincipal);
+
             var goal = await readRepository.GetByIdAsync(request.Goal.Id ?? Guid.Empty);
             if (goal == null)
             {
@@ -61,6 +63,8 @@ namespace Achiever.Services.Goals.Endpoints
             }
 
             UpdateFromRequestModel(goal, request.Goal);
+
+            await writeRepository.SetWriteContext(claimsPrincipal);
 
             await writeRepository.UpdateGoalAsync(goal);
             return new UpdateGoalResponse(goal.Id);

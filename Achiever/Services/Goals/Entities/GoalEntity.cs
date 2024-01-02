@@ -14,5 +14,7 @@ namespace Achiever.Services.Goals.Entities
         public List<SubTaskEntity>? SubTasks { get; set; }
         public Status? Status { get; set; }
         public DateTime? LastModified { get; set; }
+
+        public Guid AccountId { get; set; }
     }
 }

@@ -35,8 +35,8 @@ builder.Services.AddHttpClient(
     opt => opt.BaseAddress = new Uri(builder.Configuration["BackendUrl"] ?? "https://localhost:5001"))
     .AddHttpMessageHandler<CookieHandler>();
 
-builder.Services.AddHttpClient<GoalClient>("Goals", opt => opt.BaseAddress = new Uri(builder.Configuration["BackendUrl"] ?? "https://localhost:5001"));
-    //.AddHttpMessageHandler<CookieHandler>();
+builder.Services.AddHttpClient<GoalClient>("Goals", opt => opt.BaseAddress = new Uri(builder.Configuration["BackendUrl"] ?? "https://localhost:5001"))
+    .AddHttpMessageHandler<CookieHandler>();
 
 builder.Services.AddFluentUIComponents();
 

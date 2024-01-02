@@ -1,4 +1,5 @@
 ﻿using Achiever.Services.Goals.Entities;
+using System.Security.Claims;
 
 namespace Achiever.Services.Goals.Domain
 {
@@ -10,5 +11,6 @@ namespace Achiever.Services.Goals.Domain
         Task AddSubTaskAsync(SubTaskEntity subTask);
         Task UpdateSubTaskAsync(SubTaskEntity subTask);
         Task DeleteSubTaskAsync(Guid id);
+        Task SetWriteContext(ClaimsPrincipal claimsPrincipal);
     }
 }

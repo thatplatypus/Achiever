@@ -68,7 +68,7 @@
         <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End">
             @if(_estimatedHours > 0)
             {
-                <h3 id="@($"est-hours-{Goal.Id}")" class="text-muted"><FluentIcon Icon="Icons.Regular.Size24.Clock" /> Hours @_estimatedHours</h3>
+                <h3 id="@($"est-hours-{Goal.Id}")" class="text-muted"><FluentIcon Icon="Icons.Regular.Size24.Clock" Style="margin-bottom:0.25em;"/> @_estimatedHours Hours</h3>
                 <FluentTooltip UseTooltipService="false" Anchor="@($"est-hours-{Goal.Id}")" Position=TooltipPosition.Right Delay="50">@_estimatedRemainingHours / @_estimatedHours Hours Remaining</FluentTooltip>
             }
             <FluentSpacer />

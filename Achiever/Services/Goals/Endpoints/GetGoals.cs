@@ -1,4 +1,5 @@
-﻿using Achiever.Infrastucture.Endpoints;
+﻿using Achiever.Infrastucture.Database;
+using Achiever.Infrastucture.Endpoints;
 using Achiever.Infrastucture.Extensions;
 using Achiever.Services.Goals.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ using static Achiever.Shared.Goals.Endpoints.GetGoalsRequestModel;
 
 namespace Achiever.Services.Goals.Endpoints
 {
-    public class GetGoals(IGoalReadRepository database) : IEndpoint<GetGoalsRequest, GetGoalsResponse>
+    public class GetGoals(IGoalReadRepository database, IAccountContext accountContext, ILogger<GetGoals> logger) : IEndpoint<GetGoalsRequest, GetGoalsResponse>
     {
         public void Map(IEndpointRouteBuilder app) => app
             .MapGet(this)
@@ -16,6 +17,10 @@ namespace Achiever.Services.Goals.Endpoints
 
         public async Task<EndpointResult<GetGoalsResponse>> Handle([FromBody] GetGoalsRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
         {
+            logger.LogInformation("Retrieving goals for {Id}", accountContext.GetAccountId(claimsPrincipal));
+
+            await database.SetReadContext(claimsPrincipal);
+
             var entityGoals = await database.GetAllAsync();
 
             var goals = entityGoals.Select(x => x.ToViewModel());

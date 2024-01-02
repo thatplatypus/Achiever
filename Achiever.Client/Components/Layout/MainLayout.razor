@@ -8,7 +8,9 @@
             <FluentSpacer />
             <AuthorizeView>
                 <Authorized>
-                    Logged in as @context.User.Identity?.Name. <a href="logout"><span class="bi bi-door-closed-fill" aria-hidden="true" style="vertical-align:middle"></span> Logout</a>
+                    <FluentPersona Initials="@context.User.Identity?.Name[0].ToString()" title="@context.User.Identity?.Name">
+                    </FluentPersona>
+                    <a href="logout">Logout</a>
                 </Authorized>
                 <NotAuthorized>
                 <FluentNavLink Class="header-link" IconColor="Color.Fill" Icon="@(new Icons.Filled.Size32.Person())" Href="login" Tooltip="Login">Login</FluentNavLink>
@@ -18,7 +20,7 @@
     </Header>
     
     <Body>
-        <article class="content px-4 overflow-hidden" style="padding-top:5px;">
+        <article class="content px-4 overflow-hidden" style="padding-top:5px;min-height:90dvh;">
             @Body
         </article>
         <FluentToastProvider />

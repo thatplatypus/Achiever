@@ -10,7 +10,7 @@
 <FluentToolbar Class="p-2" Style="margin-bottom:1rem;border-radius:0.25rem;width:-webkit-fill-available;" id="toolbar-fluent-components">
     <h1>Goals</h1>
     <FluentSpacer />
-    <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size20.Trophy())" OnClick="CreateGoal" Disabled="@(_goals == null)">Create Goal</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size20.Trophy())" OnClick="CreateGoal">Create Goal</FluentButton>
 </FluentToolbar>
 
 @if (_goals == null)

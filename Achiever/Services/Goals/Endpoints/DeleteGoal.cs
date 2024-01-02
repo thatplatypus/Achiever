@@ -24,8 +24,11 @@ namespace Achiever.Services.Goals.Endpoints
             .WithDescription("Deletes an existing goal");
 
         public async Task<EndpointResult<DeleteGoalResponse>> Handle(DeleteGoalRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
-        {         
+        {
+            await repository.SetWriteContext(claimsPrincipal);
+
             await repository.DeleteGoalAsync(request.GoalId);
+
             return new DeleteGoalResponse(true);
         }
     }

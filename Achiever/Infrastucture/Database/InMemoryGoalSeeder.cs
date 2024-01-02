@@ -5,12 +5,13 @@ namespace Achiever.Infrastucture.Database
 {
     public static class InMemoryGoalSeeder
     {
-        public static void SeedGoalDatabase(AppDbContext context)
+        public static void SeedGoalDatabase(AppDbContext context, Guid id)
         {
             // Create a new goal
             var goal = new GoalEntity
             {
                 Id = Guid.NewGuid(),
+                AccountId = id,
                 Title = "Make Goals App",
                 StartDate = DateTimeOffset.UtcNow,
                 EndDate = DateTimeOffset.UtcNow.AddDays(7),
@@ -61,6 +62,7 @@ namespace Achiever.Infrastucture.Database
             var secondGoal = new GoalEntity
             {
                 Id = Guid.NewGuid(),
+                AccountId = id,
                 Title = "Learn Elixer Basics",
                 StartDate = DateTimeOffset.UtcNow,
                 TargetEndDate = DateTimeOffset.UtcNow.AddDays(3),

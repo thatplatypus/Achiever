@@ -1,4 +1,5 @@
-﻿using Achiever.Infrastucture.Endpoints;
+﻿using Achiever.Infrastucture.Database;
+using Achiever.Infrastucture.Endpoints;
 using Achiever.Infrastucture.Extensions;
 using Achiever.Services.Goals.Domain;
 using Achiever.Services.Goals.Entities;
@@ -19,7 +20,7 @@ namespace Achiever.Services.Goals.Endpoints
         }
     }
 
-    public class CreateGoal(IGoalWriteRepository repository) : IEndpoint<CreateGoalRequest, CreateGoalResponse>
+    public class CreateGoal(IGoalWriteRepository repository, IAccountContext accountContext) : IEndpoint<CreateGoalRequest, CreateGoalResponse>
     {
         public void Map(IEndpointRouteBuilder app) => app
             .MapPost(this)
@@ -35,8 +36,8 @@ namespace Achiever.Services.Goals.Endpoints
                 EndDate = request.Goal.EndDate,
                 TargetEndDate = request.Goal.TargetEndDate,
                 Status = (Status?)request?.Goal.Status ?? Status.New,
-                LastModified = DateTime.UtcNow
-               
+                LastModified = DateTime.UtcNow,
+                AccountId = accountContext.GetAccountId(claimsPrincipal),               
             };
 
             await repository.AddGoalAsync(goal);

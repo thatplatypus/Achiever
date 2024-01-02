@@ -1,15 +1,20 @@
-﻿using Achiever.Services.Goals.Entities;
+﻿using Achiever.Infrastucture.Database;
+using Achiever.Services.Goals.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Achiever.Services.Goals.Domain
 {
     public class GoalService : IGoalReadRepository, IGoalWriteRepository
     {
         private readonly AppDbContext _context;
+        private readonly IAccountContext _account;
+        private Guid _accountId;
 
-        public GoalService(AppDbContext context)
+        public GoalService(AppDbContext context, IAccountContext account)
         {
             _context = context;
+            _account = account;
         }
 
         public async Task AddGoalAsync(GoalEntity goal)
@@ -46,12 +51,12 @@ namespace Achiever.Services.Goals.Domain
 
         public async Task<IEnumerable<GoalEntity>> GetAllAsync()
         {
-            return await _context.Goals.ToListAsync();
+            return await _context.Goals.Where(x => x.AccountId == _accountId).ToListAsync();
         }
 
         public async Task<GoalEntity> GetByIdAsync(Guid id)
         {
-            return await _context.Goals.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Goals.FirstOrDefaultAsync(x => x.Id == id && x.AccountId == _accountId);
         }
 
         public async Task<IEnumerable<SubTaskEntity>> GetSubTasksByGoalIdAsync(Guid goalId)
@@ -71,6 +76,16 @@ namespace Achiever.Services.Goals.Domain
         {
             _context.SubTasks.Update(subTask);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task SetReadContext(ClaimsPrincipal claimsPrincipal)
+        {
+            _accountId = _account.GetAccountId(claimsPrincipal);
+        }
+
+        public async Task SetWriteContext(ClaimsPrincipal claimsPrincipal)
+        {
+            _accountId = _account.GetAccountId(claimsPrincipal);
         }
     }
 }

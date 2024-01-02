@@ -11,6 +11,8 @@ namespace Achiever.Client.Services.Identity
     /// </summary>
     public class CookieAuthenticationStateProvider : AuthenticationStateProvider, IAccountManagement
     {
+        private static bool _autoLogin = true;
+
         /// <summary>
         /// Map the JavaScript-formatted properties to C#-formatted classes.
         /// </summary>
@@ -135,6 +137,7 @@ namespace Achiever.Client.Services.Identity
                     // success!
                     return new FormResult { Succeeded = true };
                 }
+
             }
             catch { }
 
@@ -156,10 +159,13 @@ namespace Achiever.Client.Services.Identity
         /// <returns>The authentication state asynchronous request.</returns>
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            _authenticated = false;
-
-            // default to not authenticated
             var user = Unauthenticated;
+
+            if (!_authenticated && _autoLogin)
+            {
+                await LoginAsync("system@localhost", "Test123!");
+                _autoLogin = false;
+            }
 
             try
             {
@@ -202,6 +208,7 @@ namespace Achiever.Client.Services.Identity
         public async Task LogoutAsync()
         {
             await _httpClient.PostAsync("Logout", null);
+            _authenticated = false;
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
