@@ -26,6 +26,7 @@ else
                 <GoalCard Goal="@goal" OnGoalDelete="OnDeleteGoal" OnGoalEdit="OnEditGoal" OnSubTaskUpdated="OnSubTaskUpdated" />
             </FluentGridItem>
         }
+
     </FluentGrid>
 }
 
@@ -57,6 +58,7 @@ else
         {
             goal.Id = result.Value;
             _goals.Add(goal);
+            ToastService.ShowSuccess($"Successfully created goal");
         }
         else
         {
