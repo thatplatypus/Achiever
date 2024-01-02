@@ -11,6 +11,5 @@ namespace Achiever.Services.Goals.Domain
         Task AddSubTaskAsync(SubTaskEntity subTask);
         Task UpdateSubTaskAsync(SubTaskEntity subTask);
         Task DeleteSubTaskAsync(Guid id);
-        Task SetWriteContext(ClaimsPrincipal claimsPrincipal);
     }
 }

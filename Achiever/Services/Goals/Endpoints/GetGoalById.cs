@@ -27,8 +27,6 @@ namespace Achiever.Services.Goals.Endpoints
 
         public async Task<EndpointResult<GetGoalByIdResponse>> Handle(GetGoalByIdRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
         {
-            await database.SetReadContext(claimsPrincipal);
-
             var entityGoal = await database.GetByIdAsync(request.Id);
 
             if (entityGoal == null)

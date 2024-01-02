@@ -12,10 +12,11 @@ namespace Achiever.Infrastucture.Endpoints.Filters
             var user = await userManager.GetUserAsync(context.HttpContext.User);
 
             if(user != null)
-            { 
-                await accountContext.SetContext(userManager, context.HttpContext.User);
+            {
+                accountContext.AccountId = user.AccountId;
+
                 string currentTime = DateTime.Now.ToString("HH:mm:ss");
-                logger.LogInformation("[{Time}] {Request} account context set to {Id}", currentTime, typeof(TRequest).Name, accountContext.GetAccountId(context.HttpContext.User));
+                logger.LogInformation("[{Time}] {Request} account context set to {Id}", currentTime, typeof(TRequest).Name, accountContext.AccountId);
             }
 
             return await next(context);

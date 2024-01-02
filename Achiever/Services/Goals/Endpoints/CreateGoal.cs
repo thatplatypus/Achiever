@@ -37,7 +37,7 @@ namespace Achiever.Services.Goals.Endpoints
                 TargetEndDate = request.Goal.TargetEndDate,
                 Status = (Status?)request?.Goal.Status ?? Status.New,
                 LastModified = DateTime.UtcNow,
-                AccountId = accountContext.GetAccountId(claimsPrincipal),               
+                AccountId = accountContext.AccountId,               
             };
 
             await repository.AddGoalAsync(goal);

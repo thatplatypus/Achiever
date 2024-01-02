@@ -14,7 +14,10 @@ namespace Achiever.Infrastucture.Extensions
         public static RouteHandlerBuilder MapGet<TRequest, TResponse>(this IEndpointRouteBuilder app, IEndpoint<TRequest, TResponse> endpoint, string? path = null)
         {
             var endpointPath = GetEndpointPath<TRequest>(path);
-            return app.MapGet(endpointPath, ([FromBody] TRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken) => Handle(request, endpoint, claimsPrincipal, cancellationToken))
+            return app.MapGet(endpointPath, async ([FromBody] TRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken) =>
+                {
+                    return await Handle(request, endpoint, claimsPrincipal, cancellationToken);
+                 })
                 .AddEndpointFilterPipeline<TRequest>();
         }
 
