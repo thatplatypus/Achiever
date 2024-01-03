@@ -97,7 +97,7 @@
 
         var result = await Acct.RegisterAsync(email!, password!);
 
-        if (result.Succeeded)
+        if (result.IsSuccess)
         {
             success = true;
             email = password = confirmPassword = string.Empty;
@@ -105,7 +105,7 @@
         else
         {
             errors = true;
-            errorList = result.ErrorList;
+            errorList = errorList.Append(result.Message).ToArray();
         }
     }
 }

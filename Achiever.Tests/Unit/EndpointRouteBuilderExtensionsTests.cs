@@ -1,11 +1,11 @@
-﻿using Achiever.Infrastucture.Extensions;
-using Xunit;
+﻿using Xunit;
 using Moq;
 using System.Security.Claims;
 using System.Threading;
 using Achiever.Infrastucture.Endpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Achiever.Tests.Fakes;
+using Achiever.Api.Infrastucture.Endpoints;
 
 namespace Achiever.Tests.Unit
 {

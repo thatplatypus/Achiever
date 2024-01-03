@@ -1,6 +1,8 @@
 ﻿namespace Achiever.Infrastucture.Endpoints
 {
+    using System.Reflection;
     using System.Security.Claims;
+    using Achiever.Api.Infrastucture.Endpoints;
     using Microsoft.AspNetCore.Mvc;
     using OneOf;
 
@@ -14,11 +16,20 @@
         Task<EndpointResult<TResponse>> Handle(TRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken);
     }
 
+    public static class Extensions
+    {
+        public static IServiceCollection AddEndpoints(this IServiceCollection services)
+        {
+            var endpointTypes = Assembly.GetAssembly(typeof(Program)).GetTypes()
+                .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEndpoint<,>)) && !t.IsInterface && !t.IsAbstract)
+                .ToList();
 
-    [GenerateOneOf]
-    public partial class EndpointResult<TResponse> : OneOfBase<TResponse, ValidationError, Unauthorized> { }
+            foreach (var type in endpointTypes)
+            {
+                services.AddScoped(typeof(IEndpoint), type);
+            }
 
-    public record ValidationError(string Message);
-
-    public record Unauthorized;
+            return services;
+        }
+    }
 }

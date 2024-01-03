@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Achiever.Infrastucture.Database;
 using Achiever.Infrastucture.Endpoints;
-using Achiever.Infrastucture.Extensions;
 using Achiever.Services.Goals.Domain;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;

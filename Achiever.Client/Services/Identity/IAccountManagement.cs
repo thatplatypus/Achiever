@@ -1,4 +1,5 @@
-﻿using Achiever.Client.Services.Identity.Models;
+﻿using Achiever.Client.Models;
+using Achiever.Client.Services.Identity.Models;
 
 namespace Achiever.Client.Services.Identity
 {
@@ -13,7 +14,7 @@ namespace Achiever.Client.Services.Identity
         /// <param name="email">User's email.</param>
         /// <param name="password">User's password.</param>
         /// <returns>The result of the request serialized to <see cref="FormResult"/>.</returns>
-        public Task<FormResult> LoginAsync(string email, string password);
+        public Task<ClientResult<bool>> LoginAsync(string email, string password);
 
         /// <summary>
         /// Log out the logged in user.
@@ -27,7 +28,7 @@ namespace Achiever.Client.Services.Identity
         /// <param name="email">User's email.</param>
         /// <param name="password">User's password.</param>
         /// <returns>The result of the request serialized to <see cref="FormResult"/>.</returns>
-        public Task<FormResult> RegisterAsync(string email, string password);
+        public Task<ClientResult<bool>> RegisterAsync(string email, string password);
 
         public Task<bool> CheckAuthenticatedAsync();
     }

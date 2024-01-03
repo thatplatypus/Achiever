@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Net.Http.Json;
 using Achiever.Client.Services.Identity.Models;
+using Achiever.Client.Models;
 
 namespace Achiever.Client.Services.Identity
 {
@@ -50,9 +51,9 @@ namespace Achiever.Client.Services.Identity
         /// </summary>
         /// <param name="email">The user's email address.</param>
         /// <param name="password">The user's password.</param>
-        /// <returns>The result serialized to a <see cref="FormResult"/>.
+        /// <returns>The result serialized to a <see cref="ClientResult"/>.
         /// </returns>
-        public async Task<FormResult> RegisterAsync(string email, string password)
+        public async Task<ClientResult<bool>> RegisterAsync(string email, string password)
         {
             string[] defaultDetail = ["An unknown error prevented registration from succeeding."];
 
@@ -69,7 +70,7 @@ namespace Achiever.Client.Services.Identity
                 // successful?
                 if (result.IsSuccessStatusCode)
                 {
-                    return new FormResult { Succeeded = true };
+                    return new SuccessResult<bool>(true);
                 }
 
                 // body should contain details about why it failed
@@ -94,20 +95,12 @@ namespace Achiever.Client.Services.Identity
                 }
 
                 // return the error list
-                return new FormResult
-                {
-                    Succeeded = false,
-                    ErrorList = problemDetails == null ? defaultDetail : [.. errors]
-                };
+                return new ErrorResult<bool>(problemDetails == null ? defaultDetail.FirstOrDefault() : errors.First());
             }
             catch { }
 
             // unknown error
-            return new FormResult
-            {
-                Succeeded = false,
-                ErrorList = defaultDetail
-            };
+            return new ErrorResult<bool>(defaultDetail.FirstOrDefault());
         }
 
         /// <summary>
@@ -115,8 +108,8 @@ namespace Achiever.Client.Services.Identity
         /// </summary>
         /// <param name="email">The user's email address.</param>
         /// <param name="password">The user's password.</param>
-        /// <returns>The result of the login request serialized to a <see cref="FormResult"/>.</returns>
-        public async Task<FormResult> LoginAsync(string email, string password)
+        /// <returns>The result of the login request serialized to a <see cref="ClientResult"/>.</returns>
+        public async Task<ClientResult<bool>> LoginAsync(string email, string password)
         {
             try
             {
@@ -135,18 +128,14 @@ namespace Achiever.Client.Services.Identity
                     NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 
                     // success!
-                    return new FormResult { Succeeded = true };
+                    return new SuccessResult<bool>(true);
                 }
 
             }
             catch { }
 
             // unknown error
-            return new FormResult
-            {
-                Succeeded = false,
-                ErrorList = ["Invalid email and/or password."]
-            };
+            return new ErrorResult<bool>("Invalid email and/or password.");          
         }
 
         /// <summary>

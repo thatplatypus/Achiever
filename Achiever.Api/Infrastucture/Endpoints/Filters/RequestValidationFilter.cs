@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Achiever.Api.Infrastucture.Endpoints;
+using FluentValidation;
 
 namespace Achiever.Infrastucture.Endpoints.Filters
 {

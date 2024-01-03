@@ -1,5 +1,5 @@
-﻿using Achiever.Infrastucture.Endpoints;
-using Achiever.Infrastucture.Extensions;
+﻿using Achiever.Api.Infrastucture.Endpoints;
+using Achiever.Infrastucture.Endpoints;
 using Achiever.Services.Goals.Domain;
 using FluentValidation;
 using System.Security.Claims;

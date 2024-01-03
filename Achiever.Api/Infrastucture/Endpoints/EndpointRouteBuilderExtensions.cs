@@ -1,10 +1,11 @@
-﻿using Achiever.Infrastucture.Endpoints;
+﻿using Achiever.Api.Infrastucture.Endpoints;
+using Achiever.Infrastucture.Endpoints;
 using Achiever.Infrastucture.Endpoints.Filters;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Achiever.Infrastucture.Extensions
+namespace Achiever.Api.Infrastucture.Endpoints
 {
     public static class EndpointRouteBuilderExtensions
     {
@@ -17,7 +18,7 @@ namespace Achiever.Infrastucture.Extensions
             return app.MapGet(endpointPath, async ([FromBody] TRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken) =>
                 {
                     return await Handle(request, endpoint, claimsPrincipal, cancellationToken);
-                 })
+                })
                 .AddEndpointFilterPipeline<TRequest>();
         }
 
@@ -26,7 +27,7 @@ namespace Achiever.Infrastucture.Extensions
         /// </summary>
         public static RouteHandlerBuilder MapGetFromQuery<TRequest, TResponse>(this IEndpointRouteBuilder app, IEndpoint<TRequest, TResponse> endpoint, string? path = null)
         {
-            var endpointPath = GetEndpointPath<TRequest>(path); 
+            var endpointPath = GetEndpointPath<TRequest>(path);
             return app.MapGet(endpointPath, ([FromQuery] TRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken) => Handle(request, endpoint, claimsPrincipal, cancellationToken))
                 .AddEndpointFilterPipeline<TRequest>();
         }
@@ -57,7 +58,7 @@ namespace Achiever.Infrastucture.Extensions
             return result.Match<Results<Ok<TResponse>, BadRequest<ValidationError>, NotFound<ValidationError>, UnauthorizedHttpResult>>
             (
                 response => TypedResults.Ok(response),
-                validationError => validationError.Message.Contains("not found", StringComparison.OrdinalIgnoreCase) 
+                validationError => validationError.Message.Contains("not found", StringComparison.OrdinalIgnoreCase)
                     ? TypedResults.NotFound(validationError)
                     : TypedResults.BadRequest(validationError),
                 _ => TypedResults.Unauthorized()

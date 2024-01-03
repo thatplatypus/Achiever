@@ -67,7 +67,7 @@
 
         var result = await Acct.LoginAsync(email!, password!);
 
-        if (result.Succeeded)
+        if (result.IsSuccess)
         {
             success = true;
             email = password = string.Empty;
@@ -75,7 +75,7 @@
         else
         {
             errors = true;
-            errorList = result.ErrorList;
+            errorList = errorList.Append(result.Message).ToArray();
         }
     }
 }
