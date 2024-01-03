@@ -5,8 +5,6 @@ using Achiever.Services.Goals.Entities;
 using Achiever.Services.Goals.Models;
 using Achiever.Shared.Goals.ViewModels;
 using FluentValidation;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using static Achiever.Shared.Goals.Endpoints.UpdateGoalRequestModel;
 

@@ -8,8 +8,7 @@
             <FluentSpacer />
             <AuthorizeView>
                 <Authorized>
-                    <FluentPersona Initials="@context.User.Identity?.Name[0].ToString()" title="@context.User.Identity?.Name">
-                    </FluentPersona>
+                    <FluentPersona Initials="@context.User.Identity?.Name.Substring(0, context.User.Identity?.Name.IndexOf("@") ?? 3)" title="@context.User.Identity?.Name" />
                     <a href="logout">Logout</a>
                 </Authorized>
                 <NotAuthorized>
