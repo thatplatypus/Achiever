@@ -31,8 +31,7 @@ builder.Services.AddCors(
     options => options.AddPolicy(
         "wasm",
         policy => policy.WithOrigins([builder.Configuration["BackendUrl"] ?? "https://localhost:5001", 
-            builder.Configuration["FrontendUrl"] ?? "https://localhost:5002",
-                "https://localhost:7171", "https://localhost:7211", "*"])
+            builder.Configuration["FrontendUrl"] ?? "https://localhost:5002"])
             .AllowAnyMethod()
             .SetIsOriginAllowed(pol => true)
             .SetIsOriginAllowedToAllowWildcardSubdomains()
@@ -107,9 +106,6 @@ catch (Exception ex)
 {
     Console.WriteLine("An error occurred while seeding the database.", ex);
 }
-
-var confirmScope = app.Services.CreateScope();
-var users = confirmScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
 app.Run();
 
