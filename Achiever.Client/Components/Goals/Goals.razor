@@ -1,9 +1,11 @@
 ﻿@page "/goals"
 @using Achiever.Client.Services.Goals
+@using Achiever.Client.Services.Snapshot
 @inject GoalClient GoalClient
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject IToastService ToastService
+@inject ISnapshotService SnapshotService
 
 <PageTitle>Goals</PageTitle>
 
@@ -23,7 +25,7 @@ else
         @foreach (var goal in _goals)
         {
             <FluentGridItem>
-                <GoalCard Goal="@goal" OnGoalDelete="OnDeleteGoal" OnGoalEdit="OnEditGoal" OnSubTaskUpdated="OnSubTaskUpdated" />
+                <GoalCard Goal="@goal" OnGoalDelete="OnDeleteGoal" OnGoalEdit="OnEditGoal" OnGoalUpdated="OnGoalUpdated" OnSubTaskUpdated="OnSubTaskUpdated" />
             </FluentGridItem>
         }
 
@@ -120,6 +122,29 @@ else
             var title = x.snapshot.SubTasks.FirstOrDefault(st => st.Id == x.subTask.Id)?.Title ?? "Unknown Subtask";
 
             ToastService.ShowError($"Error updating subtask: {title}\n\n{result.Message}");
+
+            StateHasChanged();
+        }
+    }
+
+    protected async Task OnGoalUpdated(Goal goal)
+    {
+        var result = await GoalClient.UpdateGoalAsync(goal!);
+
+        if (result.IsSuccess)
+        {
+            ToastService.ShowSuccess($"Successfully updated goal: {goal.Title}");
+        }
+        else
+        {
+            var oldGoal = SnapshotService.GetSnapshot<Goal>(goal.Id!.Value);
+
+            var title = oldGoal.Title;
+
+            ToastService.ShowError($"Error updating goal: {title}\n\n{result.Message}");
+
+            var index = _goals.IndexOf(goal);
+            _goals[index] = oldGoal;
 
             StateHasChanged();
         }

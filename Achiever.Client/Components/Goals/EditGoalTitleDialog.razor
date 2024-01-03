@@ -1,0 +1,14 @@
+﻿@using Achiever.Client.Services.Goals
+@implements IDialogContentComponent<Goal>
+
+<FluentMessageBarProvider Section="Goals" MaxMessageCount="1" />
+
+<FluentTextField Size="100" @bind-Value="@Content.Title">Title</FluentTextField>
+
+@code {
+    [Parameter]
+    public Goal Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+}

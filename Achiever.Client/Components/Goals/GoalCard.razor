@@ -7,7 +7,7 @@
 <FluentCard class="achiever-card" Width="26rem" Height="21rem">
     <FluentStack Orientation="Orientation.Vertical">
         <div style="display:flex;width:100%;">
-            <h3>@Goal.Title</h3>
+            <h3 style="cursor:pointer;" @onclick="EditGoalTitle">@Goal.Title</h3>
             <FluentSpacer />
             <div>
                 <div class="text-muted">Target Date</div>
@@ -90,6 +90,9 @@
 
     [Parameter]
     public EventCallback<Goal> OnGoalDelete { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<Goal> OnGoalUpdated {get; set; } = default!;
 
     [Parameter]
     public EventCallback<(SubTask, Goal)> OnSubTaskUpdated { get; set; } = default!;
@@ -316,5 +319,49 @@
         }
 
         return hours;
+    }
+
+    private async void EditGoalTitle()
+    {
+        _goalSnapshot = Goal.Clone();
+
+        await DialogService.ShowDialogAsync<EditGoalTitleDialog>(Goal, new DialogParameters()
+            {
+                Title = $"{Goal.Title}",
+                OnDialogResult = DialogService.CreateDialogCallback(this, HandleEditGoalTitleDialog),
+                PrimaryAction = "Save",
+                PrimaryActionEnabled = true,
+                SecondaryAction = "Cancel",
+                Width = "500px",
+                TrapFocus = true,
+                Modal = true,
+            });
+    }
+
+    private async Task HandleEditGoalTitleDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            Goal = _goalSnapshot;
+            _goalSnapshot = default!;
+
+            return;
+        }
+
+        if (result.Data != null)
+        {
+            Goal? goal = result.Data as Goal;
+
+            if (OnGoalUpdated.HasDelegate)
+            {
+                await OnGoalUpdated.InvokeAsync(goal);
+            }
+
+            StateHasChanged();
+
+            _goalSnapshot = default!;
+
+            return;
+        }
     }
 }

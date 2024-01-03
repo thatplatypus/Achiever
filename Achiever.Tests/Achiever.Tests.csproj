@@ -29,7 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Achiever.Client\Achiever.Client.csproj" />
     <ProjectReference Include="..\Achiever.Shared\Achiever.Shared.csproj" />
-    <ProjectReference Include="..\Achiever\Achiever.Api.csproj" />
+    <ProjectReference Include="..\Achiever.Api\Achiever.Api.csproj" />
   </ItemGroup>
 
 </Project>
