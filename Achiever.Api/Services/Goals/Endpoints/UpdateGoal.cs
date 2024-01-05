@@ -71,6 +71,8 @@ namespace Achiever.Services.Goals.Endpoints
             goal.EndDate = viewModel.EndDate;
             goal.TargetEndDate = viewModel.TargetEndDate;
             goal.Status = (Status?)viewModel?.Status ?? Status.New;
+            //goal.SubTasks = viewModel?.SubTasks?.Select(x => x.ToEntity()).ToList();
+
             
             //Existing SubTasks
             goal.SubTasks ??= [];
@@ -80,6 +82,8 @@ namespace Achiever.Services.Goals.Endpoints
                 x.Status = task?.Status ?? "New";
                 x.Title = task?.Title ?? "New Subtask";
                 x.EstimatedHours = task?.EstimatedHours;
+                x.GoalId = goal.Id;
+                x.Goal = goal;             
             });
 
             //Append new
@@ -91,8 +95,10 @@ namespace Achiever.Services.Goals.Endpoints
                     Status = x.Status,
                     EstimatedHours = x.EstimatedHours,
                     GoalId = goal.Id,
-                });
+                    Goal = goal
             });
+            });
+           
         }
     }
 }

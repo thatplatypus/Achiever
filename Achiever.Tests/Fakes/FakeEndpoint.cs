@@ -1,4 +1,5 @@
-﻿using Achiever.Infrastucture.Endpoints;
+﻿using Achiever.Api.Infrastucture.Endpoints;
+using Achiever.Infrastucture.Endpoints;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,11 @@ namespace Achiever.Tests.Fakes
 
         public void Map(IEndpointRouteBuilder app)
         {
+        }
+
+        async Task<EndpointResult<MockResponse>> IEndpoint<MockRequest, MockResponse>.Handle(MockRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
+        {
+            return await Handle(request, claimsPrincipal, cancellationToken);
         }
     }
     public record MockRequest { }

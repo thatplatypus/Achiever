@@ -50,12 +50,17 @@ namespace Achiever.Services.Goals.Domain
 
         public async Task<IEnumerable<GoalEntity>> GetAllAsync()
         {
-            return await _context.Goals.Where(x => x.AccountId == _account.AccountId).ToListAsync();
+            return await _context.Goals
+                .Where(x => x.AccountId == _account.AccountId)
+                .Include(x => x.SubTasks)
+                .ToListAsync();
         }
 
         public async Task<GoalEntity> GetByIdAsync(Guid id)
         {
-            return await _context.Goals.FirstOrDefaultAsync(x => x.Id == id && x.AccountId == _account.AccountId);
+            return await _context.Goals
+                .Include(x => x.SubTasks)
+                .FirstOrDefaultAsync(x => x.Id == id && x.AccountId == _account.AccountId);
         }
 
         public async Task<IEnumerable<SubTaskEntity>> GetSubTasksByGoalIdAsync(Guid goalId)
@@ -68,6 +73,7 @@ namespace Achiever.Services.Goals.Domain
         public async Task UpdateGoalAsync(GoalEntity goal)
         {
             //_context.Goals.Update(goal);
+            //_context.SubTasks.UpdateRange(goal.SubTasks);
             await _context.SaveChangesAsync();
         }
 
