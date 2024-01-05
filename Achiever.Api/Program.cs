@@ -16,7 +16,7 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddIdent
 builder.Services.AddAuthorizationBuilder();
 
 // add the database (in memory for the sample)
-builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("AppDb"));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IGoalReadRepository, GoalService>();
 builder.Services.AddScoped<IGoalWriteRepository, GoalService>();
 builder.Services.AddSingleton<IAccountContext, AccountContext>();
@@ -96,11 +96,13 @@ foreach (var endpoint in endpoints)
 
 try
 {
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await context.Database.MigrateAsync();
+
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
     var id = await LocalUserSeeder.SeedLocalUser(userManager);
 
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    InMemoryGoalSeeder.SeedGoalDatabase(context, id);
+    //InMemoryGoalSeeder.SeedGoalDatabase(context, id);
 }
 catch (Exception ex)
 {
