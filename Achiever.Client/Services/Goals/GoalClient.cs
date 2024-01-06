@@ -12,6 +12,7 @@ using static Achiever.Shared.Goals.Endpoints.DeleteGoalRequestModel;
 using static Achiever.Shared.Goals.Endpoints.GetGoalByIdRequestModel;
 using static Achiever.Shared.Goals.Endpoints.GetGoalsRequestModel;
 using static Achiever.Shared.Goals.Endpoints.UpdateGoalRequestModel;
+using static Achiever.Shared.Goals.Requests.DeleteSubtaskRequestModels;
 
 namespace Achiever.Client.Services.Goals
 {
@@ -110,6 +111,28 @@ namespace Achiever.Client.Services.Goals
                     return new ErrorResult<bool?>($"failed with {response.StatusCode}");
 
                 var content = await response.Content.ReadFromJsonAsync<DeleteGoalResponse>();
+
+                return new SuccessResult<bool?>(content.Success);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex?.Message);
+                return new ErrorResult<bool?>(ex.Message);
+            }
+        }
+
+        public async Task<ClientResult<bool?>> DeleteSubTaskAsync(Guid subTaskId)
+        {
+            var request = new DeleteSubtaskRequest(subTaskId);
+
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("DeleteSubTask", request);
+
+                if (!response.IsSuccessStatusCode)
+                    return new ErrorResult<bool?>($"failed with {response.StatusCode}");
+
+                var content = await response.Content.ReadFromJsonAsync<DeleteSubtaskResponse>();
 
                 return new SuccessResult<bool?>(content.Success);
             }

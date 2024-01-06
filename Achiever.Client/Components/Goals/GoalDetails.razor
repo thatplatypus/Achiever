@@ -4,6 +4,7 @@
 @inject GoalClient GoalClient
 @inject IToastService ToastService
 @inject ISnapshotService SnapshotService
+@inject IDialogService DialogService
 
 <FluentToolbar Class="p-2" Style="margin-bottom:1rem;border-radius:0.25rem;width:-webkit-fill-available;" id="toolbar-fluent-components">
     <h1>@_goal?.Title</h1>
@@ -49,8 +50,15 @@
         var subtask = _goal.SubTasks.FirstOrDefault(st => st.Id.ToString() == e.Source.Id);
         if (subtask != null)
         {
-            subtask.Status = newStatus;
-            await UpdateGoalAsync(_goal);
+            if (subtask.Status.Equals(newStatus, StringComparison.OrdinalIgnoreCase))
+            {
+                await OpenSubTaskDetails(subtask);
+            }
+            else
+            {
+                subtask.Status = newStatus;
+                await UpdateGoalAsync(_goal);
+            }
         }
     }
 
@@ -59,8 +67,16 @@
         var index = _goal.SubTasks.FindIndex(st => st.Id == subTask.Id);
         if(index >= 0)
         {
-            _goal.SubTasks[index] = subTask;
-            await UpdateGoalAsync(_goal, SnapshotService.GetLatest<Goal>());
+            if(subTask.UserDeleted ?? false)
+            {
+                _goal.SubTasks.RemoveAt(index);
+                await DeleteSubTaskAsync(subTask);
+            }
+            else
+            {
+                _goal.SubTasks[index] = subTask;
+                await UpdateGoalAsync(_goal, SnapshotService.GetLatest<Goal>());
+            }
         }
         else
         {
@@ -102,5 +118,54 @@
         StateHasChanged();
     }
 
+    private async Task DeleteSubTaskAsync(SubTask subTask)
+    {
+        var result = await GoalClient.DeleteSubTaskAsync(subTask.Id);
 
+        if (result.IsSuccess)
+        {
+            ToastService.ShowSuccess($"{subTask.Title} deleted successfully");
+        }
+        else
+        {
+            ToastService.ShowError(result?.Message ?? "Unknown Error");
+            var goalSnapshot = SnapshotService.GetLatest<Goal>();
+            _goal = goalSnapshot ?? _goal;
+        }
+
+        StateHasChanged();
+    }
+
+    protected async Task OpenSubTaskDetails(SubTask subTask)
+    {
+        SnapshotService.Snapshot(_goal.SubTasks.Select(x => x.Clone()).ToList());
+
+        await DialogService.ShowDialogAsync<SubTaskDetailsDialog>(subTask, new DialogParameters()
+            {
+                Title = $"Edit Task",
+                OnDialogResult = DialogService.CreateDialogCallback(this, HandleSubTaskDialog),
+                PrimaryAction = "Save",
+                PrimaryActionEnabled = true,
+                SecondaryAction = "Cancel",
+                Width = "500px",
+                TrapFocus = true,
+                Modal = true,
+            });
+    }
+
+    private async Task HandleSubTaskDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            _goal.SubTasks = SnapshotService.GetLatest<List<SubTask>>();
+            return;
+        }
+
+        if (result.Data is not null)
+        {
+            SubTask? subTask = result.Data as SubTask;
+
+            await SubTaskUpdated(subTask);
+        }
+    }
 }

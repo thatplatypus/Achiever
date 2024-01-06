@@ -104,6 +104,23 @@ else
     {
         var goal = _goals?.FirstOrDefault(g => g.SubTasks.Any(st => st.Id == x.subTask.Id));
 
+        if(x.subTask.UserDeleted ?? false)
+        {
+            goal?.SubTasks.Remove(x.subTask);
+            var deleteResult = await GoalClient.DeleteSubTaskAsync(x.subTask.Id);
+            if(deleteResult.IsSuccess)
+            {
+                ToastService.ShowSuccess($"Successfully deleted subtask: {x.subTask.Title}");
+            }
+            else
+            {
+                var title = x.subTask.Title;
+                ToastService.ShowError($"Error deleting subtask: {title}\n\n{deleteResult.Message}");
+                goal = x.snapshot;
+            };
+            return;
+        }
+
         var result = await GoalClient.UpdateGoalAsync(goal!);
 
         if(result.IsSuccess)

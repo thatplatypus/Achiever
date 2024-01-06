@@ -30,7 +30,9 @@ namespace Achiever.Services.Goals.Domain
                 GoalId = entity.GoalId,
                 Status = entity.Status.ToString(),
                 LastModified = entity.LastModified,
-                EstimatedHours = entity.EstimatedHours
+                EstimatedHours = entity.EstimatedHours,
+                Note = entity.Note,
+                Order = entity.Order
             };
         }
         public static GoalEntity ToEntity(this Goal viewModel)
@@ -57,7 +59,9 @@ namespace Achiever.Services.Goals.Domain
                 GoalId = viewModel.GoalId,
                 Status = viewModel.Status,
                 LastModified = viewModel.LastModified,
-                EstimatedHours = viewModel.EstimatedHours
+                EstimatedHours = viewModel.EstimatedHours,
+                Note = viewModel.Note,
+                Order = viewModel.Order
             };
         }
     }
