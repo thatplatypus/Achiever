@@ -95,9 +95,19 @@
             Id = Guid.Empty,
         };
 
-        _goal?.SubTasks.Add(subTask);
+        var result = await GoalClient.CreateSubtaskAsync(_goal.Id!.Value, subTask);
 
-        await UpdateGoalAsync(_goal, SnapshotService.GetSnapshot<Goal>(id));
+        if (result.IsSuccess)
+        {
+            subTask.Id = result.Value;
+            _goal.SubTasks ??= new List<SubTask>();
+            _goal.SubTasks.Add(subTask);
+            ToastService.ShowSuccess($"Subtask created successfully");
+        }
+        else
+        {
+            ToastService.ShowError($"Error adding subtask");
+        }
     }
 
     private async Task UpdateGoalAsync(Goal goal, Goal snapshot = default!)
