@@ -40,6 +40,9 @@ namespace Achiever.Services.Goals.Endpoints
                 }
             })
             .When(x => x.Goal != null);
+            RuleFor(x => x.Goal.StartDate!.Value.Year).GreaterThan(1900).When(x => x.Goal != null && x.Goal.StartDate.HasValue);
+            RuleFor(x => x.Goal.EndDate!.Value.Year).GreaterThan(1900).When(x => x.Goal != null && x.Goal.EndDate.HasValue);
+            RuleFor(x => x.Goal.TargetEndDate!.Value.Year).GreaterThan(1900).When(x => x.Goal != null && x.Goal.TargetEndDate.HasValue);
         }
     }
 
@@ -69,7 +72,7 @@ namespace Achiever.Services.Goals.Endpoints
             goal.Title = viewModel.Title;
             goal.StartDate = viewModel.StartDate;
             goal.EndDate = viewModel.EndDate;
-            goal.TargetEndDate = viewModel.TargetEndDate;
+            goal.TargetEndDate = viewModel.TargetEndDate.HasValue ? viewModel.TargetEndDate.Value.ToUniversalTime() : null;
             goal.Status = (Status?)viewModel?.Status ?? Status.New;
             
             goal.SubTasks ??= [];

@@ -154,7 +154,7 @@ else
         }
         else
         {
-            var oldGoal = SnapshotService.GetSnapshot<Goal>(goal.Id!.Value);
+            var oldGoal = SnapshotService.GetLatest<Goal>();
 
             var title = oldGoal.Title;
 

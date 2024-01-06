@@ -18,7 +18,7 @@ namespace Achiever.Tests.Unit.Goals
                 Title = "Test Goal",
                 StartDate = DateTimeOffset.Now,
                 EndDate = DateTimeOffset.Now.AddDays(1),
-                TargetEndDate = DateTimeOffset.Now.AddDays(2),
+                TargetEndDate = DateTimeOffset.Now.DateTime.AddDays(2),
                 Status = Status.InProgress,
                 LastModified = DateTime.Now
             };

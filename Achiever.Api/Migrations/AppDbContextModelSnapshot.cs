@@ -117,7 +117,7 @@ namespace Achiever.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Goals");
+                    b.ToTable("Goals", (string)null);
                 });
 
             modelBuilder.Entity("Achiever.Services.Goals.Entities.SubTaskEntity", b =>
@@ -153,7 +153,7 @@ namespace Achiever.Api.Migrations
 
                     b.HasIndex("GoalId");
 
-                    b.ToTable("SubTasks");
+                    b.ToTable("SubTasks", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

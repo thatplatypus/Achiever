@@ -17,6 +17,9 @@ namespace Achiever.Services.Goals.Endpoints
         {
             RuleFor(x => x.Goal).NotNull();
             RuleFor(x => x.Goal.Title).NotEmpty().When(x => x.Goal != null);
+            RuleFor(x => x.Goal.StartDate!.Value.Year).GreaterThan(1900).When(x => x.Goal != null && x.Goal.StartDate.HasValue);
+            RuleFor(x => x.Goal.EndDate!.Value.Year).GreaterThan(1900).When(x => x.Goal != null && x.Goal.EndDate.HasValue);
+            RuleFor(x => x.Goal.TargetEndDate!.Value.Year).GreaterThan(1900).When(x => x.Goal != null && x.Goal.TargetEndDate.HasValue);
         }
     }
 

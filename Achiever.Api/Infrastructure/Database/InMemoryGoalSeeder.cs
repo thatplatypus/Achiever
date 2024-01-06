@@ -15,7 +15,7 @@ namespace Achiever.Infrastructure.Database
                 Title = "Make Goals App",
                 StartDate = DateTimeOffset.UtcNow,
                 EndDate = DateTimeOffset.UtcNow.AddDays(7),
-                TargetEndDate = DateTimeOffset.UtcNow.AddDays(7),
+                TargetEndDate = DateTimeOffset.UtcNow.AddDays(7).DateTime,
                 Status = Status.New,
                 LastModified = DateTime.UtcNow,
                 SubTasks =
@@ -65,7 +65,7 @@ namespace Achiever.Infrastructure.Database
                 AccountId = id,
                 Title = "Learn Elixer Basics",
                 StartDate = DateTimeOffset.UtcNow,
-                TargetEndDate = DateTimeOffset.UtcNow.AddDays(3),
+                TargetEndDate = DateTimeOffset.UtcNow.AddDays(3).DateTime,
                 Status = Status.New,
                 LastModified = DateTime.UtcNow,
                 SubTasks =

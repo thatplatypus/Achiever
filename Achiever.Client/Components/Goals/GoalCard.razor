@@ -1,17 +1,19 @@
-﻿@using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation;
+﻿@using Achiever.Client.Services.Snapshot
+@using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation;
 @using Color = Microsoft.FluentUI.AspNetCore.Components.Color;
 @using TooltipPosition = Microsoft.FluentUI.AspNetCore.Components.TooltipPosition;
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
+@inject ISnapshotService SnapshotService
 
 <FluentCard class="achiever-card" Width="26rem" Height="21rem">
     <FluentStack Orientation="Orientation.Vertical">
         <div style="display:flex;width:100%;">
             <h3 class="card-title" @onclick="EditGoalTitle">@Goal.Title</h3>
             <FluentSpacer />
-            <div>
+            <div class="card-title" @onclick="EditGoalTargetDate">
                 <div class="text-muted">Target Date</div>
-                <div style="@GetTargetDateStyle(Goal?.EndDate, Goal?.TargetEndDate)">@(Goal?.TargetEndDate.HasValue ?? false ? Goal?.TargetEndDate.Value.ToString("MMMM dd, yyyy") : "--")</div>
+                <div style="@GetTargetDateStyle(Goal?.EndDate, Goal?.TargetEndDate)">@((Goal?.TargetEndDate.HasValue ?? false) && Goal?.TargetEndDate.Value.Year > 1000 ? Goal?.TargetEndDate.Value.ToString("MMMM dd, yyyy") : "--")</div>
             </div>
         </div>
 
@@ -360,6 +362,49 @@
             StateHasChanged();
 
             _goalSnapshot = default!;
+
+            return;
+        }
+    }
+
+    private async Task EditGoalTargetDate()
+    {
+        _goalSnapshot = Goal.Clone();
+        SnapshotService.Snapshot<Goal>(_goalSnapshot);
+
+        await DialogService.ShowDialogAsync<EditGoalTargetDateDialog>(Goal, new DialogParameters()
+            {
+                Title = $"Edit Goal Target Date",
+                OnDialogResult = DialogService.CreateDialogCallback(this, HandleEditGoalTargetDateDialog),
+                PrimaryAction = "Save",
+                PrimaryActionEnabled = true,
+                SecondaryAction = "Cancel",
+                Width = "500px",
+                TrapFocus = true,
+                Modal = true,
+            });
+    }
+
+    private async Task HandleEditGoalTargetDateDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            Goal = _goalSnapshot;
+            _goalSnapshot = default!;
+
+            return;
+        }
+
+        if (result.Data != null)
+        {
+            Goal? goal = result.Data as Goal;
+
+            if (OnGoalUpdated.HasDelegate)
+            {
+                await OnGoalUpdated.InvokeAsync(goal);
+            }
+
+            StateHasChanged();
 
             return;
         }
