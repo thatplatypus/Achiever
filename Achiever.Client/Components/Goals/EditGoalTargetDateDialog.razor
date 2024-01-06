@@ -1,0 +1,14 @@
+﻿@using Achiever.Client.Services.Goals
+@implements IDialogContentComponent<Goal>
+
+<FluentMessageBarProvider Section="Goals" MaxMessageCount="1" />
+
+<FluentDatePicker Class="w-100" @bind-Value="@Content.TargetEndDate">Target Date</FluentDatePicker>
+
+@code {
+    [Parameter]
+    public Goal Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+}
