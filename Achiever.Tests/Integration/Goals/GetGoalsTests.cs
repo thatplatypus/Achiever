@@ -26,8 +26,8 @@ namespace Achiever.Tests.Integration.Goals
             };
             using var scope = _factory.Services.CreateScope();
             var writeRepository = scope.ServiceProvider.GetRequiredService<IGoalWriteRepository>();
-            await writeRepository.AddGoalAsync(goal1);
-            await writeRepository.AddGoalAsync(goal2);
+            await writeRepository.AddGoalAsync(goal1, CancellationToken.None);
+            await writeRepository.AddGoalAsync(goal2, CancellationToken.None);
 
             // Act
             var response = await client.GetAsync("GetGoals");

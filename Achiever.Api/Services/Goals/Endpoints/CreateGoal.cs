@@ -40,7 +40,7 @@ namespace Achiever.Services.Goals.Endpoints
                 AccountId = accountContext.AccountId,               
             };
 
-            await repository.AddGoalAsync(goal);
+            await repository.AddGoalAsync(goal, cancellationToken);
             return new CreateGoalResponse(goal.Id);
         }
     }

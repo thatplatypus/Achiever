@@ -52,7 +52,7 @@ namespace Achiever.Services.Goals.Endpoints
 
         public async Task<EndpointResult<UpdateGoalResponse>> Handle(UpdateGoalRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
         {
-            var goal = await readRepository.GetByIdAsync(request.Goal.Id ?? Guid.Empty);
+            var goal = await readRepository.GetByIdAsync(request.Goal.Id ?? Guid.Empty, cancellationToken);
             if (goal == null)
             {
                 return new EndpointResult<UpdateGoalResponse>(new ValidationError("Goal not found"));
@@ -60,7 +60,7 @@ namespace Achiever.Services.Goals.Endpoints
 
             UpdateFromRequestModel(goal, request.Goal);
 
-            await writeRepository.UpdateGoalAsync(goal);
+            await writeRepository.UpdateGoalAsync(goal, cancellationToken);
             return new UpdateGoalResponse(goal.Id);
         }
 
