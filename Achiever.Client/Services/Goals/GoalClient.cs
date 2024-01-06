@@ -8,6 +8,7 @@ using Achiever.Shared.Goals.Endpoints;
 using Achiever.Shared.Goals.ViewModels;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using static Achiever.Shared.Goals.Endpoints.CreateGoalRequestModel;
+using static Achiever.Shared.Goals.Endpoints.CreateSubtaskRequestModel;
 using static Achiever.Shared.Goals.Endpoints.DeleteGoalRequestModel;
 using static Achiever.Shared.Goals.Endpoints.GetGoalByIdRequestModel;
 using static Achiever.Shared.Goals.Endpoints.GetGoalsRequestModel;
@@ -140,6 +141,27 @@ namespace Achiever.Client.Services.Goals
             {
                 _logger.LogError(ex?.Message);
                 return new ErrorResult<bool?>(ex.Message);
+            }
+        }
+
+        public async Task<ClientResult<Guid>> CreateSubtaskAsync(Guid goalId, SubTask subTask)
+        {
+            var request = new CreateSubtaskRequest(goalId, subTask);
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("CreateSubTask", request);
+
+                if (!response.IsSuccessStatusCode)
+                    return new ErrorResult<Guid>($"failed with {response.StatusCode}");
+
+                var content = await response.Content.ReadFromJsonAsync<CreateSubtaskResponse>();
+
+                return new SuccessResult<Guid>(content!.SubtaskId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex?.Message);
+                return new ErrorResult<Guid>(ex?.Message ?? "Unknown error");
             }
         }
     }
