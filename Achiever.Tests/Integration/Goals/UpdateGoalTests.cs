@@ -29,7 +29,7 @@ namespace Achiever.Tests.Integration.Goals
             };
             using var scope = _factory.Services.CreateScope();
             var writeRepository = scope.ServiceProvider.GetRequiredService<IGoalWriteRepository>();
-            await writeRepository.AddGoalAsync(goal);
+            await writeRepository.AddGoalAsync(goal, CancellationToken.None);
 
             var updatedGoal = new Goal()
             {
@@ -42,7 +42,7 @@ namespace Achiever.Tests.Integration.Goals
             
             var newScope = _factory.Services.CreateScope();
             var readRepository = newScope.ServiceProvider.GetRequiredService<IGoalReadRepository>();
-            var repoGoal = await readRepository.GetByIdAsync(goal.Id);
+            var repoGoal = await readRepository.GetByIdAsync(goal.Id, CancellationToken.None);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -66,7 +66,7 @@ namespace Achiever.Tests.Integration.Goals
             };
             using var scope = _factory.Services.CreateScope();
             var writeRepository = scope.ServiceProvider.GetRequiredService<IGoalWriteRepository>();
-            await writeRepository.AddGoalAsync(goal);
+            await writeRepository.AddGoalAsync(goal, CancellationToken.None);
 
             var updatedGoal = new Goal()
             {
@@ -93,7 +93,7 @@ namespace Achiever.Tests.Integration.Goals
             };
             using var scope = _factory.Services.CreateScope();
             var writeRepository = scope.ServiceProvider.GetRequiredService<IGoalWriteRepository>();
-            await writeRepository.AddGoalAsync(goal);
+            await writeRepository.AddGoalAsync(goal, CancellationToken.None);
 
             var updatedGoal = new Goal()
             {
@@ -121,7 +121,7 @@ namespace Achiever.Tests.Integration.Goals
             };
             using var scope = _factory.Services.CreateScope();
             var writeRepository = scope.ServiceProvider.GetRequiredService<IGoalWriteRepository>();
-            await writeRepository.AddGoalAsync(goal);
+            await writeRepository.AddGoalAsync(goal, CancellationToken.None);
 
             var updatedGoal = new Goal()
             {

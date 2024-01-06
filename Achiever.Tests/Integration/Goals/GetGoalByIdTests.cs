@@ -23,7 +23,7 @@ namespace Achiever.Tests.Integration.Goals
             };
             using var scope = _factory.Services.CreateScope();
             var writeRepository = scope.ServiceProvider.GetRequiredService<IGoalWriteRepository>();
-            await writeRepository.AddGoalAsync(goal);
+            await writeRepository.AddGoalAsync(goal, CancellationToken.None);
 
             // Act
             var response = await client.GetAsync($"GetGoalById?request={JsonSerializer.Serialize(new GetGoalByIdRequest(goal.Id))}");

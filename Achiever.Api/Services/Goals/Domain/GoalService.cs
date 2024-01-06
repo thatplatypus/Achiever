@@ -2,6 +2,7 @@
 using Achiever.Services.Goals.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Threading;
 
 namespace Achiever.Services.Goals.Domain
 {
@@ -16,71 +17,71 @@ namespace Achiever.Services.Goals.Domain
             _account = account;
         }
 
-        public async Task AddGoalAsync(GoalEntity goal)
+        public async Task AddGoalAsync(GoalEntity goal, CancellationToken cancellationToken)
         {
             _context.Goals.Add(goal);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task AddSubTaskAsync(SubTaskEntity subTask)
+        public async Task AddSubTaskAsync(SubTaskEntity subTask, CancellationToken cancellationToken)
         {
             _context.SubTasks.Add(subTask);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteGoalAsync(Guid id)
+        public async Task DeleteGoalAsync(Guid id, CancellationToken cancellationToken)
         {
-            var goal = await _context.Goals.FindAsync(id);
+            var goal = await _context.Goals.FindAsync(new object[] { id }, cancellationToken);
             if (goal != null)
             {
                 _context.Goals.Remove(goal);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
 
-        public async Task DeleteSubTaskAsync(Guid id)
+        public async Task DeleteSubTaskAsync(Guid id, CancellationToken cancellationToken)
         {
-            var subTask = await _context.SubTasks.FindAsync(id);
+            var subTask = await _context.SubTasks.FindAsync(new object[] { id }, cancellationToken);
             if (subTask != null)
             {
                 _context.SubTasks.Remove(subTask);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
 
-        public async Task<IEnumerable<GoalEntity>> GetAllAsync()
+        public async Task<IEnumerable<GoalEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Goals
                 .Where(x => x.AccountId == _account.AccountId)
                 .Include(x => x.SubTasks)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<GoalEntity> GetByIdAsync(Guid id)
+        public async Task<GoalEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _context.Goals
                 .Include(x => x.SubTasks)
-                .FirstOrDefaultAsync(x => x.Id == id && x.AccountId == _account.AccountId);
+                .FirstOrDefaultAsync(x => x.Id == id && x.AccountId == _account.AccountId, cancellationToken);
         }
 
-        public async Task<IEnumerable<SubTaskEntity>> GetSubTasksByGoalIdAsync(Guid goalId)
+        public async Task<IEnumerable<SubTaskEntity>> GetSubTasksByGoalIdAsync(Guid goalId, CancellationToken cancellationToken)
         {
             return await _context.SubTasks
                 .Where(st => st.GoalId == goalId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task UpdateGoalAsync(GoalEntity goal)
+        public async Task UpdateGoalAsync(GoalEntity goal, CancellationToken cancellationToken)
         {
             //_context.Goals.Update(goal);
             //_context.SubTasks.UpdateRange(goal.SubTasks);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task UpdateSubTaskAsync(SubTaskEntity subTask)
+        public async Task UpdateSubTaskAsync(SubTaskEntity subTask, CancellationToken cancellationToken)
         {
             _context.SubTasks.Update(subTask);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Achiever.Api.Services.Goals.Endpoints
 
         public async Task<EndpointResult<DeleteSubtaskResponse>> Handle(DeleteSubtaskRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
         {
-            await repository.DeleteSubTaskAsync(request.SubtaskId);
+            await repository.DeleteSubTaskAsync(request.SubtaskId, cancellationToken);
 
             return new DeleteSubtaskResponse(true);
         }

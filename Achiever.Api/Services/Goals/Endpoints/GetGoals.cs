@@ -18,7 +18,7 @@ namespace Achiever.Services.Goals.Endpoints
 
         public async Task<EndpointResult<GetGoalsResponse>> Handle([FromBody] GetGoalsRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
         {
-            var entityGoals = await database.GetAllAsync();
+            var entityGoals = await database.GetAllAsync(cancellationToken);
 
             var goals = entityGoals.Select(x => x.ToViewModel());
 

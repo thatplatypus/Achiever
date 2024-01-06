@@ -21,7 +21,7 @@ namespace Achiever.Tests.Integration.Goals
             };
             using var scope = _factory.Services.CreateScope();
             var writeRepository = scope.ServiceProvider.GetRequiredService<IGoalWriteRepository>();
-            await writeRepository.AddGoalAsync(goal);
+            await writeRepository.AddGoalAsync(goal, CancellationToken.None);
 
             // Act
             var response = await client.PostAsJsonAsync($"DeleteGoal", new DeleteGoalRequest(goal.Id));
@@ -35,7 +35,7 @@ namespace Achiever.Tests.Integration.Goals
             // Check that the goal was actually deleted
             var newScope = _factory.Services.CreateScope();
             var readRepository = newScope.ServiceProvider.GetRequiredService<IGoalReadRepository>();
-            var deletedGoal = await readRepository.GetByIdAsync(goal.Id);
+            var deletedGoal = await readRepository.GetByIdAsync(goal.Id, CancellationToken.None);
             deletedGoal.Should().BeNull();
         }
 
