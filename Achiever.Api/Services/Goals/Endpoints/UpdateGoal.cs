@@ -1,5 +1,5 @@
-﻿using Achiever.Api.Infrastucture.Endpoints;
-using Achiever.Infrastucture.Endpoints;
+﻿using Achiever.Api.Infrastructure.Endpoints;
+using Achiever.Infrastructure.Endpoints;
 using Achiever.Services.Goals.Domain;
 using Achiever.Services.Goals.Entities;
 using Achiever.Services.Goals.Models;
@@ -71,10 +71,7 @@ namespace Achiever.Services.Goals.Endpoints
             goal.EndDate = viewModel.EndDate;
             goal.TargetEndDate = viewModel.TargetEndDate;
             goal.Status = (Status?)viewModel?.Status ?? Status.New;
-            //goal.SubTasks = viewModel?.SubTasks?.Select(x => x.ToEntity()).ToList();
-
             
-            //Existing SubTasks
             goal.SubTasks ??= [];
             goal.SubTasks.ForEach(x =>
             {
@@ -86,7 +83,6 @@ namespace Achiever.Services.Goals.Endpoints
                 x.Goal = goal;             
             });
 
-            //Append new
             viewModel?.SubTasks?.Where(x => x.Id == Guid.Empty).ToList().ForEach(x =>
             {
                 goal.SubTasks.Add(new SubTaskEntity
@@ -96,7 +92,7 @@ namespace Achiever.Services.Goals.Endpoints
                     EstimatedHours = x.EstimatedHours,
                     GoalId = goal.Id,
                     Goal = goal
-            });
+                });
             });
            
         }

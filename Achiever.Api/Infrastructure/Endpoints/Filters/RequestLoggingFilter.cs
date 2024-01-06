@@ -1,4 +1,4 @@
-﻿namespace Achiever.Infrastucture.Endpoints.Filters
+﻿namespace Achiever.Infrastructure.Endpoints.Filters
 {
     public class RequestLoggingFilter<TRequest>(ILogger<RequestLoggingFilter<TRequest>> logger) : IEndpointFilter
     {

@@ -20,10 +20,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (await Acct.CheckAuthenticatedAsync())
+        try
         {
-            await Acct.LogoutAsync();
+            if (await Acct.CheckAuthenticatedAsync())
+            {
+                await Acct.LogoutAsync();
+            }
         }
+        catch
+        { }
 
         await base.OnInitializedAsync();
     }

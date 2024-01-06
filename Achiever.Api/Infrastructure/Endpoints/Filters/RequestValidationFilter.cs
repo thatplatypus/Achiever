@@ -1,7 +1,7 @@
-﻿using Achiever.Api.Infrastucture.Endpoints;
+﻿using Achiever.Api.Infrastructure.Endpoints;
 using FluentValidation;
 
-namespace Achiever.Infrastucture.Endpoints.Filters
+namespace Achiever.Infrastructure.Endpoints.Filters
 {
 
     public class RequestValidationFilter<TRequest>(

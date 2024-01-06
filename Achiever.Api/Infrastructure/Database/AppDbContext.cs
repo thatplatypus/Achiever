@@ -1,4 +1,4 @@
-﻿using Achiever.Infrastucture.Database;
+﻿using Achiever.Infrastructure.Database;
 using Achiever.Services.Goals.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

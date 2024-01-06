@@ -1,6 +1,6 @@
 ﻿using OneOf;
 
-namespace Achiever.Api.Infrastucture.Endpoints
+namespace Achiever.Api.Infrastructure.Endpoints
 {
 
     [GenerateOneOf]

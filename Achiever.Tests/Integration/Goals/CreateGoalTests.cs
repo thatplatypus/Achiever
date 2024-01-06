@@ -7,8 +7,8 @@ using Achiever.Shared.Goals.Endpoints;
 using Achiever.Shared.Goals.ViewModels;
 using static Achiever.Shared.Goals.Endpoints.CreateGoalRequestModel;
 using FluentAssertions;
-using Achiever.Infrastucture.Endpoints;
-using Achiever.Api.Infrastucture.Endpoints;
+using Achiever.Infrastructure.Endpoints;
+using Achiever.Api.Infrastructure.Endpoints;
 
 namespace Achiever.Tests.Integration.Goals
 {

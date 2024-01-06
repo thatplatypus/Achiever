@@ -1,5 +1,5 @@
-﻿using Achiever.Api.Infrastucture.Endpoints;
-using Achiever.Infrastucture.Endpoints;
+﻿using Achiever.Api.Infrastructure.Endpoints;
+using Achiever.Infrastructure.Endpoints;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;

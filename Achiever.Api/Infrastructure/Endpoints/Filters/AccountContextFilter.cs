@@ -1,9 +1,9 @@
 ﻿
-using Achiever.Infrastucture.Database;
+using Achiever.Infrastructure.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Achiever.Infrastucture.Endpoints.Filters
+namespace Achiever.Infrastructure.Endpoints.Filters
 {
     public class AccountContextFilter<TRequest>(ILogger<AccountContextFilter<TRequest>> logger, UserManager<AppUser> userManager, IAccountContext accountContext) : IEndpointFilter
     {

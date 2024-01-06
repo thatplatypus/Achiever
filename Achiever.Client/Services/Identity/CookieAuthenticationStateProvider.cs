@@ -4,62 +4,45 @@ using System.Text.Json;
 using System.Net.Http.Json;
 using Achiever.Client.Services.Identity.Models;
 using Achiever.Client.Models;
+using System.Text;
 
 namespace Achiever.Client.Services.Identity
 {
     /// <summary>
     /// Handles state for cookie-based auth.
     /// </summary>
-    public class CookieAuthenticationStateProvider : AuthenticationStateProvider, IAccountManagement
+    /// <remarks>
+    /// Create a new instance of the auth provider.
+    /// </remarks>
+    /// <param name="httpClientFactory">Factory to retrieve auth client.</param>
+    public class CookieAuthenticationStateProvider(IHttpClientFactory httpClientFactory) : AuthenticationStateProvider, IAccountManagement
     {
         private static bool _autoLogin = true;
 
-        /// <summary>
-        /// Map the JavaScript-formatted properties to C#-formatted classes.
-        /// </summary>
-        private readonly JsonSerializerOptions jsonSerializerOptions =
+        private readonly JsonSerializerOptions _jsonSerializerOptions =
             new()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
 
-        /// <summary>
-        /// Special auth client.
-        /// </summary>
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient = httpClientFactory.CreateClient("Auth");
 
-        /// <summary>
-        /// Authentication state.
-        /// </summary>
         private bool _authenticated = false;
 
-        /// <summary>
-        /// Default principal for anonymous (not authenticated) users.
-        /// </summary>
-        private readonly ClaimsPrincipal Unauthenticated =
+        private readonly ClaimsPrincipal _unauthenticated =
             new(new ClaimsIdentity());
-
-        /// <summary>
-        /// Create a new instance of the auth provider.
-        /// </summary>
-        /// <param name="httpClientFactory">Factory to retrieve auth client.</param>
-        public CookieAuthenticationStateProvider(IHttpClientFactory httpClientFactory)
-            => _httpClient = httpClientFactory.CreateClient("Auth");
 
         /// <summary>
         /// Register a new user.
         /// </summary>
         /// <param name="email">The user's email address.</param>
         /// <param name="password">The user's password.</param>
-        /// <returns>The result serialized to a <see cref="ClientResult"/>.
-        /// </returns>
         public async Task<ClientResult<bool>> RegisterAsync(string email, string password)
         {
             string[] defaultDetail = ["An unknown error prevented registration from succeeding."];
 
             try
             {
-                // make the request
                 var result = await _httpClient.PostAsJsonAsync(
                     "register", new
                     {
@@ -67,13 +50,11 @@ namespace Achiever.Client.Services.Identity
                         password
                     });
 
-                // successful?
                 if (result.IsSuccessStatusCode)
                 {
                     return new SuccessResult<bool>(true);
                 }
 
-                // body should contain details about why it failed
                 var details = await result.Content.ReadAsStringAsync();
                 var problemDetails = JsonDocument.Parse(details);
                 var errors = new List<string>();
@@ -94,13 +75,11 @@ namespace Achiever.Client.Services.Identity
                     }
                 }
 
-                // return the error list
-                return new ErrorResult<bool>(problemDetails == null ? defaultDetail.FirstOrDefault() : errors.First());
+                return new ErrorResult<bool>((problemDetails == null ? defaultDetail.FirstOrDefault() : errors.First()) ?? "Unknown Error");
             }
             catch { }
 
-            // unknown error
-            return new ErrorResult<bool>(defaultDetail.FirstOrDefault());
+            return new ErrorResult<bool>(defaultDetail.FirstOrDefault() ?? "Unknown Error");
         }
 
         /// <summary>
@@ -108,7 +87,6 @@ namespace Achiever.Client.Services.Identity
         /// </summary>
         /// <param name="email">The user's email address.</param>
         /// <param name="password">The user's password.</param>
-        /// <returns>The result of the login request serialized to a <see cref="ClientResult"/>.</returns>
         public async Task<ClientResult<bool>> LoginAsync(string email, string password)
         {
             try
@@ -121,20 +99,16 @@ namespace Achiever.Client.Services.Identity
                         password
                     });
 
-                // success?
                 if (result.IsSuccessStatusCode)
                 {
-                    // need to refresh auth state
                     NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 
-                    // success!
                     return new SuccessResult<bool>(true);
                 }
 
             }
             catch { }
 
-            // unknown error
             return new ErrorResult<bool>("Invalid email and/or password.");          
         }
 
@@ -145,10 +119,9 @@ namespace Achiever.Client.Services.Identity
         /// Called by Blazor anytime and authentication-based decision needs to be made, then cached
         /// until the changed state notification is raised.
         /// </remarks>
-        /// <returns>The authentication state asynchronous request.</returns>
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var user = Unauthenticated;
+            var user = _unauthenticated;
 
             if (!_authenticated && _autoLogin)
             {
@@ -158,31 +131,25 @@ namespace Achiever.Client.Services.Identity
 
             try
             {
-                // the user info endpoint is secured, so if the user isn't logged in this will fail
                 var userResponse = await _httpClient.GetAsync("manage/info");
 
-                // throw if user info wasn't retrieved
                 userResponse.EnsureSuccessStatusCode();
 
-                // user is authenticated,so let's build their authenticated identity
                 var userJson = await userResponse.Content.ReadAsStringAsync();
-                var userInfo = JsonSerializer.Deserialize<Models.UserInfo>(userJson, jsonSerializerOptions);
+                var userInfo = JsonSerializer.Deserialize<Models.UserInfo>(userJson, _jsonSerializerOptions);
 
                 if (userInfo != null)
                 {
-                    // in our system name and email are the same
                     var claims = new List<Claim>
                     {
                         new(ClaimTypes.Name, userInfo.Email),
                         new(ClaimTypes.Email, userInfo.Email)
                     };
 
-                    // add any additional claims
                     claims.AddRange(
                         userInfo.Claims.Where(c => c.Key != ClaimTypes.Name && c.Key != ClaimTypes.Email)
                             .Select(c => new Claim(c.Key, c.Value)));
 
-                    // set the principal
                     var id = new ClaimsIdentity(claims, nameof(CookieAuthenticationStateProvider));
                     user = new ClaimsPrincipal(id);
                     _authenticated = true;
@@ -190,14 +157,12 @@ namespace Achiever.Client.Services.Identity
             }
             catch { }
 
-            // return the state
             return new AuthenticationState(user);
         }
 
         public async Task LogoutAsync()
         {
-            await _httpClient.PostAsync("Logout", null);
-            _authenticated = false;
+            await _httpClient.PostAsync("Logout", new StringContent("{}", Encoding.UTF8, "application/json"));
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 

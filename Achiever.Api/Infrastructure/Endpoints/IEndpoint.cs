@@ -1,8 +1,8 @@
-﻿namespace Achiever.Infrastucture.Endpoints
+﻿namespace Achiever.Infrastructure.Endpoints
 {
     using System.Reflection;
     using System.Security.Claims;
-    using Achiever.Api.Infrastucture.Endpoints;
+    using Achiever.Api.Infrastructure.Endpoints;
     using Microsoft.AspNetCore.Mvc;
     using OneOf;
 

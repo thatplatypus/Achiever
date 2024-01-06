@@ -1,11 +1,11 @@
-﻿using Achiever.Api.Infrastucture.Endpoints;
-using Achiever.Infrastucture.Endpoints;
-using Achiever.Infrastucture.Endpoints.Filters;
+﻿using Achiever.Api.Infrastructure.Endpoints;
+using Achiever.Infrastructure.Endpoints;
+using Achiever.Infrastructure.Endpoints.Filters;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Achiever.Api.Infrastucture.Endpoints
+namespace Achiever.Api.Infrastructure.Endpoints
 {
     public static class EndpointRouteBuilderExtensions
     {
