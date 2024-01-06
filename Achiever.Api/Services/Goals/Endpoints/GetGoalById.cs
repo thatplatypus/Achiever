@@ -1,6 +1,6 @@
-﻿using Achiever.Api.Infrastucture.Endpoints;
-using Achiever.Infrastucture.Database;
-using Achiever.Infrastucture.Endpoints;
+﻿using Achiever.Api.Infrastructure.Endpoints;
+using Achiever.Infrastructure.Database;
+using Achiever.Infrastructure.Endpoints;
 using Achiever.Services.Goals.Domain;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using static Achiever.Shared.Goals.Endpoints.GetGoalByIdRequestModel;
 
 namespace Achiever.Services.Goals.Endpoints
 {
-    public class GetGoalById(IGoalReadRepository database, IAccountContext accountContext) : IEndpoint<GetGoalByIdRequest, GetGoalByIdResponse>
+    public class GetGoalById(IGoalReadRepository database) : IEndpoint<GetGoalByIdRequest, GetGoalByIdResponse>
     {
 
         public class GetGoalByIdValidator : AbstractValidator<GetGoalByIdRequest>

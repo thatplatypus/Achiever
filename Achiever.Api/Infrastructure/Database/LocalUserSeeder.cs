@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 
-namespace Achiever.Infrastucture.Database
+namespace Achiever.Infrastructure.Database
 {
     public class LocalUserSeeder
     {
-        public static async Task<Guid> SeedLocalUser(UserManager<AppUser> userManager)
+        public static async Task<Guid> SeedLocalUserIfNotExists(UserManager<AppUser> userManager)
         {
             var systemUserId = await CreateUserIfNotExistsAsync(userManager, "system@localhost", "Test123!");
             var testUserId = await CreateUserIfNotExistsAsync(userManager, "test@test", "Test123!");
 
-            // Return the ID of the last created user, or Guid.Empty if no users were created.
             return systemUserId != Guid.Empty ? systemUserId : testUserId;
         }
 

@@ -1,7 +1,7 @@
 ﻿using Achiever.Services.Goals.Entities;
 using Achiever.Services.Goals.Models;
 
-namespace Achiever.Infrastucture.Database
+namespace Achiever.Infrastructure.Database
 {
     public static class InMemoryGoalSeeder
     {

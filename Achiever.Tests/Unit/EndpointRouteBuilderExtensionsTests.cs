@@ -2,10 +2,10 @@
 using Moq;
 using System.Security.Claims;
 using System.Threading;
-using Achiever.Infrastucture.Endpoints;
+using Achiever.Infrastructure.Endpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Achiever.Tests.Fakes;
-using Achiever.Api.Infrastucture.Endpoints;
+using Achiever.Api.Infrastructure.Endpoints;
 
 namespace Achiever.Tests.Unit
 {

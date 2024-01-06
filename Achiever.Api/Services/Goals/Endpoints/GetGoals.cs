@@ -1,6 +1,6 @@
-﻿using Achiever.Api.Infrastucture.Endpoints;
-using Achiever.Infrastucture.Database;
-using Achiever.Infrastucture.Endpoints;
+﻿using Achiever.Api.Infrastructure.Endpoints;
+using Achiever.Infrastructure.Database;
+using Achiever.Infrastructure.Endpoints;
 using Achiever.Services.Goals.Domain;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

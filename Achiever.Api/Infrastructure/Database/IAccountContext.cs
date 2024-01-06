@@ -1,4 +1,4 @@
-﻿namespace Achiever.Infrastucture.Database
+﻿namespace Achiever.Infrastructure.Database
 {
     public interface IAccountContext
     {

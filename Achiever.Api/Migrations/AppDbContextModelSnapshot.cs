@@ -21,7 +21,7 @@ namespace Achiever.Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Achiever.Infrastucture.Database.AppUser", b =>
+            modelBuilder.Entity("Achiever.Infrastructure.Database.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -310,7 +310,7 @@ namespace Achiever.Api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Achiever.Infrastucture.Database.AppUser", null)
+                    b.HasOne("Achiever.Infrastructure.Database.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -319,7 +319,7 @@ namespace Achiever.Api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Achiever.Infrastucture.Database.AppUser", null)
+                    b.HasOne("Achiever.Infrastructure.Database.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -334,7 +334,7 @@ namespace Achiever.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Achiever.Infrastucture.Database.AppUser", null)
+                    b.HasOne("Achiever.Infrastructure.Database.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -343,7 +343,7 @@ namespace Achiever.Api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Achiever.Infrastucture.Database.AppUser", null)
+                    b.HasOne("Achiever.Infrastructure.Database.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

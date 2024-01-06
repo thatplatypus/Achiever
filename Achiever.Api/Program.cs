@@ -1,9 +1,10 @@
 using System.Security.Claims;
-using Achiever.Infrastucture.Database;
-using Achiever.Infrastucture.Endpoints;
+using Achiever.Infrastructure.Database;
+using Achiever.Infrastructure.Endpoints;
 using Achiever.Services.Goals.Domain;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -61,14 +62,15 @@ var app = builder.Build();
 // create routes for the identity endpoints
 app.MapIdentityApi<AppUser>();
 
-// provide an end point to clear the cookie for logout
-// NOTE: This logout code will be updated shortly.
-//       https://github.com/dotnet/blazor-samples/issues/132
-app.MapPost("/Logout", async (ClaimsPrincipal user, SignInManager<AppUser> signInManager) =>
+app.MapPost("/Logout", async (SignInManager<AppUser> signInManager, [FromBody] object empty) =>
 {
-    await signInManager.SignOutAsync();
-    return TypedResults.Ok();
-});
+    if (empty != null)
+    {
+        await signInManager.SignOutAsync();
+        return Results.Ok();
+    }
+    return Results.Unauthorized();
+}).RequireAuthorization();
 
 // activate the CORS policy
 app.UseCors("wasm");
@@ -100,9 +102,7 @@ try
     await context.Database.MigrateAsync();
 
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-    var id = await LocalUserSeeder.SeedLocalUser(userManager);
-
-    //InMemoryGoalSeeder.SeedGoalDatabase(context, id);
+    var id = await LocalUserSeeder.SeedLocalUserIfNotExists(userManager);
 }
 catch (Exception ex)
 {

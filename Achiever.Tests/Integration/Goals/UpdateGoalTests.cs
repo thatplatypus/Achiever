@@ -7,7 +7,7 @@ using Achiever.Shared.Goals.Endpoints;
 using Achiever.Shared.Goals.ViewModels;
 using static Achiever.Shared.Goals.Endpoints.UpdateGoalRequestModel;
 using FluentAssertions;
-using Achiever.Infrastucture.Endpoints;
+using Achiever.Infrastructure.Endpoints;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 
