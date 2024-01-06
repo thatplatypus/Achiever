@@ -1,18 +1,36 @@
 ﻿@using Achiever.Client.Services.Goals
 @implements IDialogContentComponent<SubTask>
 
-<FluentMessageBarProvider Section="Goals" MaxMessageCount="1" />
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.Edit())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+        <FluentSpacer />
+        <FluentButton OnClick="DeleteAsync" Appearance="Appearance.Stealth" IconStart="new Icons.Regular.Size24.Delete()">
+            Delete
+        </FluentButton>
+    </FluentStack>
+</FluentDialogHeader>
 
-<FluentTextField @bind-Value="@Content.Title">Title</FluentTextField>
-<FluentSelect TOption="KeyValuePair<string, string>"
-              Label="Select status"
-              Items="@SubTaskDisplay.Statuses.ToArray()"
-              Id="subtask-statuses-listbox"
-              Width="200px"
-              OptionValue="@(x => x.Key)"
-              OptionText="@(x => x.Value)"
-              @bind-Value="@Content.Status"/>
-<FluentNumberField @bind-Value="@Content.EstimatedHours">Estimated Hours</FluentNumberField>
+<FluentDialogBody>
+    <FluentTextField @bind-Value="@Content.Title">Title</FluentTextField>
+    <FluentSelect TOption="KeyValuePair<string, string>"
+                  Label="Select status"
+                  Items="@SubTaskDisplay.Statuses.ToArray()"
+                  Id="subtask-statuses-listbox"
+                  Width="200px"
+                  OptionValue="@(x => x.Key)"
+                  OptionText="@(x => x.Value)"
+                  @bind-Value="@Content.Status" />
+    <FluentNumberField @bind-Value="@Content.EstimatedHours">Estimated Hours</FluentNumberField>
+</FluentDialogBody>
+
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@SaveAsync">Save</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+</FluentDialogFooter>
 
 @code {
     [Parameter]
@@ -20,4 +38,20 @@
 
     [CascadingParameter]
     public FluentDialog? Dialog { get; set; }
+
+    private async Task SaveAsync()
+    {
+        await Dialog.CloseAsync(Content);
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
+
+    private async Task DeleteAsync()
+    {
+        Content.UserDeleted = true;
+        await Dialog.CloseAsync(Content);
+    }
 }

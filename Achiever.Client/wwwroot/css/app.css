@@ -151,3 +151,13 @@ input {
 .achiever-card:hover {
     background-color: var(--neutral-layer-1);
 }
+
+.card-title {
+    cursor: pointer;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+}
+
+    .card-title:hover {
+        background-color: var(--neutral-fill-stealth-rest);
+    }

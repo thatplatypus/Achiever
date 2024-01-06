@@ -12,6 +12,7 @@ namespace Achiever.Services.Goals.Endpoints
     {
         public void Map(IEndpointRouteBuilder app) => app
             .MapGet(this)
+            .RequireAuthorization()
             .WithSummary("Gets all goals")
             .WithDescription("Gets all goals");
 

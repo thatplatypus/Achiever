@@ -7,7 +7,7 @@
 <FluentCard class="achiever-card" Width="26rem" Height="21rem">
     <FluentStack Orientation="Orientation.Vertical">
         <div style="display:flex;width:100%;">
-            <h3 style="cursor:pointer;" @onclick="EditGoalTitle">@Goal.Title</h3>
+            <h3 class="card-title" @onclick="EditGoalTitle">@Goal.Title</h3>
             <FluentSpacer />
             <div>
                 <div class="text-muted">Target Date</div>
@@ -327,7 +327,7 @@
 
         await DialogService.ShowDialogAsync<EditGoalTitleDialog>(Goal, new DialogParameters()
             {
-                Title = $"{Goal.Title}",
+                Title = $"Edit Goal Title",
                 OnDialogResult = DialogService.CreateDialogCallback(this, HandleEditGoalTitleDialog),
                 PrimaryAction = "Save",
                 PrimaryActionEnabled = true,

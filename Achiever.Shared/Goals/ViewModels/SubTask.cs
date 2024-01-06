@@ -9,9 +9,15 @@
 
         public Guid GoalId { get; set; }
 
-        public Goal Goal { get; set; }
+        public Goal? Goal { get; set; }
 
         public double? EstimatedHours { get; set; }
+
+        public string? Note { get; set; }
+
+        public int? Order { get; set; }
+
+        public bool? UserDeleted { get; set; }
     }
 
     public static class SubTaskExtensions
@@ -25,7 +31,9 @@
                 Status = subTask.Status,
                 LastModified = subTask.LastModified,
                 GoalId = subTask.GoalId,
-                EstimatedHours = subTask.EstimatedHours
+                EstimatedHours = subTask.EstimatedHours,
+                Note = subTask.Note,
+                Order = subTask.Order
             };
         }
     }
