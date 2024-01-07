@@ -329,7 +329,7 @@
 
         await DialogService.ShowDialogAsync<EditGoalTitleDialog>(Goal, new DialogParameters()
             {
-                Title = $"Edit Goal Title",
+                Title = $"Edit Title",
                 OnDialogResult = DialogService.CreateDialogCallback(this, HandleEditGoalTitleDialog),
                 PrimaryAction = "Save",
                 PrimaryActionEnabled = true,
@@ -374,7 +374,7 @@
 
         await DialogService.ShowDialogAsync<EditGoalTargetDateDialog>(Goal, new DialogParameters()
             {
-                Title = $"Edit Goal Target Date",
+                Title = $"Edit Target Date",
                 OnDialogResult = DialogService.CreateDialogCallback(this, HandleEditGoalTargetDateDialog),
                 PrimaryAction = "Save",
                 PrimaryActionEnabled = true,
