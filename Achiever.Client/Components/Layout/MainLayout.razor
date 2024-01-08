@@ -1,19 +1,55 @@
 ﻿@using Color = Microsoft.FluentUI.AspNetCore.Components.Color
 @using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation
 @inherits LayoutComponentBase
-<div style="background-color: var(--neutral-layer-card-container);min-height:100dvh;">
+@inject NavigationManager NavigationManager
+<div style="background-color: var(--neutral-layer-card-container);min-height:100dvh;overflow-x:hidden;">
 <FluentMainLayout>
     <Header>
             <h3>Achiever</h3>
             <FluentSpacer />
             <AuthorizeView>
                 <Authorized>
-                    <FluentPersona Initials="@context.User.Identity?.Name.Substring(0, context.User.Identity?.Name.IndexOf("@") ?? 3)" title="@context.User.Identity?.Name" />
-                    <a href="logout">Logout</a>
+                    <FluentStack Orientation="Orientation.Horizontal">
+                    <FluentSpacer />
+                    @if(_darkMode)
+                    {
+                        <div id="dark-mode-icon" @onclick="ToggleTheme" class="user-menu-icon">
+                            <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.WeatherMoon())" Color="Color.Custom" CustomColor="var(--neutral-layer-2)" />
+                        </div>
+                        <FluentTooltip Delay="1" Anchor="dark-mode-icon">
+                            Toggle Theme
+                        </FluentTooltip>
+                    }
+                    else
+                    {
+                        <div id="light-mode-icon" @onclick="ToggleTheme" class="user-menu-icon">
+                            <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.WeatherSunny())" Color="Color.Custom" CustomColor="var(--neutral-layer-2)" />
+                        </div>
+                        <FluentTooltip Delay="1" Anchor="light-mode-icon">
+                                Toggle Theme
+                            </FluentTooltip>
+                    }
+                    <div @onclick="ToggleMenu" id="account-icon" class="user-menu-icon">
+                            <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.Person())" Color="Color.Custom" CustomColor="var(--neutral-layer-2)" />
+                    </div>
+                    <FluentTooltip Delay="1" Anchor="account-icon">
+                        Account
+                    </FluentTooltip>
+                    <FluentMenu Anchor="account-icon" @bind-Open="@_open" Anchored="true" >
+                        <FluentMenuItem Label="Item 1" />   
+                        <FluentMenuItem Label="Logout" OnClick="@(() => NavigationManager.NavigateTo("/logout"))"></FluentMenuItem>
+                    </FluentMenu>
+                    <div id="settings-icon" @onclick="OpenSettings" class="user-menu-icon">
+                            <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.Settings())" Color="Color.Custom" CustomColor="var(--neutral-layer-2)" />
+                    </div>
+                    <FluentTooltip Delay="1" Anchor="settings-icon">
+                        Settings
+                    </FluentTooltip>
+                    </FluentStack>
                 </Authorized>
                 <NotAuthorized>
-                <FluentNavLink Class="header-link" IconColor="Color.Fill" Icon="@(new Icons.Filled.Size32.Person())" Href="login" Tooltip="Login">Login</FluentNavLink>
-                <FluentNavLink Class="header-link" IconColor="Color.Fill" Icon="@(new Icons.Filled.Size32.Signature())" Href="register" Tooltip="Register">Register</FluentNavLink>
+                <FluentNavLink Class="header-link" IconColor="Color.Fill" Icon="@(new Icons.Regular.Size32.Person())" Href="login" Tooltip="Login">Login</FluentNavLink>
+                <FluentNavLink Class="header-link" IconColor="Color.Fill" Icon="@(new Icons.Regular.Size32.Signature())" Href="register" Tooltip="Register">Register</FluentNavLink>
             </NotAuthorized>
             </AuthorizeView>
     </Header>
@@ -27,10 +63,41 @@
         <FluentTooltipProvider />
         <FluentMessageBarProvider />
     </Body>
-
-    <NavMenuContent>
-        <FluentNavLink Icon="@(new Icons.Regular.Size24.Home())" Match="NavLinkMatch.All" Href="/" Tooltip="Home">Home</FluentNavLink>
-        <FluentNavLink Icon="@(new Icons.Regular.Size24.Trophy())" Href="goals" Tooltip="Goals">Goals</FluentNavLink>
-    </NavMenuContent>
 </FluentMainLayout>
+<FluentDesignTheme Mode="_themeMode" />
 </div>
+
+@code {
+    private bool _open = false;
+
+    private bool _darkMode = true;
+
+    private DesignThemeModes _themeMode = DesignThemeModes.Dark;
+
+    private void ToggleMenu()
+    {
+        _open = !_open;
+        Console.WriteLine(_open);
+        StateHasChanged();
+    }
+
+    private void ToggleTheme()
+    {
+        _darkMode = !_darkMode;
+        if(_darkMode)
+        {
+            _themeMode = DesignThemeModes.Dark;
+        }
+        else
+        {
+            _themeMode = DesignThemeModes.Light;
+        }
+        StateHasChanged();
+    }
+
+    private void OpenSettings()
+    {
+        
+
+    }
+}        

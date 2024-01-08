@@ -160,10 +160,18 @@ else
 
             ToastService.ShowError($"Error updating goal: {title}\n\n{result.Message}");
 
-            var index = _goals.IndexOf(goal);
-            _goals[index] = oldGoal;
+            try
+            {
+                var index = _goals.IndexOf(goal);
+                if(index >= 0)
+                    _goals[index] = oldGoal;
 
-            StateHasChanged();
+                StateHasChanged();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
