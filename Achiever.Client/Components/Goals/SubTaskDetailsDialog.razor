@@ -8,8 +8,9 @@
             @Dialog.Instance.Parameters.Title
         </FluentLabel>
         <FluentSpacer />
-        <FluentButton OnClick="DeleteAsync" Appearance="Appearance.Stealth" IconStart="new Icons.Regular.Size24.Delete()">
+        <FluentButton OnClick="DeleteAsync" Appearance="Appearance.Stealth">
             Delete
+            <FluentIcon Value="new Icons.Regular.Size24.Delete()" Color="Microsoft.FluentUI.AspNetCore.Components.Color.Error" />
         </FluentButton>
     </FluentStack>
 </FluentDialogHeader>

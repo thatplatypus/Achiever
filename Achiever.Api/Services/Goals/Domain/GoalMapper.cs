@@ -14,7 +14,7 @@ namespace Achiever.Services.Goals.Domain
                 Title = entity.Title,
                 StartDate = entity.StartDate,
                 EndDate = entity.EndDate,
-                TargetEndDate = entity.TargetEndDate.HasValue ? entity.TargetEndDate.Value : default!,
+                TargetEndDate = entity.TargetEndDate.HasValue ? entity.TargetEndDate.Value : null,
                 SubTasks = entity?.SubTasks?.Select(x => x.ToViewModel()).ToList() ?? [],
                 Status = (int?)entity?.Status,
                 LastModified = entity?.LastModified

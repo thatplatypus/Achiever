@@ -1,9 +1,18 @@
 ﻿@using Achiever.Client.Services.Goals
 @implements IDialogContentComponent<Goal>
 
-<FluentMessageBarProvider Section="Goals" MaxMessageCount="1" />
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.Edit())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
 
-<FluentDatePicker Class="w-100" @bind-Value="@Content.TargetEndDate">Target Date</FluentDatePicker>
+<FluentDialogBody>
+    <FluentDatePicker Class="w-100" @bind-Value="@Content.TargetEndDate">Target Date</FluentDatePicker>
+</FluentDialogBody>
 
 @code {
     [Parameter]

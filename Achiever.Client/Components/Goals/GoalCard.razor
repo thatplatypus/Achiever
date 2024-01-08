@@ -45,9 +45,8 @@
             </FluentStack>
             <FluentDivider Style="height:80%;margin-top:auto;margin-bottom:auto;" Role="DividerRole.Presentation" Orientation="Orientation.Vertical" />
             <div style="width:18rem;">
-                @if (_chartLoaded)
-                {
-                    <ApexChart @ref="_chart" TItem="GaugeValue" Title="" Options="_options">
+                <div class="@(_chartLoaded ? "visible" : "invisible")">
+                    <ApexChart @ref="_chart" OnRendered="ChartRendered" TItem="GaugeValue" Title="" Options="_options">
 
                         <ApexPointSeries TItem="GaugeValue"
                                          SeriesType=SeriesType.RadialBar
@@ -56,12 +55,10 @@
                                          XValue="@(e => e.Label)"
                                          YValue="@(e => e.Percentage)" />
                     </ApexChart>
-                }
-                else
-                {
-                    <p>Loading...</p>
-                    <FluentSkeleton Height="200px" Width="200px" Shape="SkeletonShape.Circle"></FluentSkeleton>
-                }
+                </div>
+                <div class="@(!_chartLoaded ? "visible" : "invisible")">
+                    <FluentSkeleton Style="margin-top:1em;" Height="145px" Width="145px" Shimmer="true" Shape="SkeletonShape.Circle"></FluentSkeleton>
+                </div>
             </div>
         </FluentStack>
 
@@ -104,8 +101,7 @@
 
     private ApexChart<GaugeValue> _chart = default!;
 
-    //Figure out how to introduce a better loading state later
-    private bool _chartLoaded = true;
+    private bool _chartLoaded = false;
 
     private decimal _percentage = 0;
 
@@ -127,6 +123,12 @@
         _estimatedRemainingHours = GetRemainingEstimatedHours(goal);
 
         UpdateGraphSettings();
+    }
+
+    private void ChartRendered()
+    {
+        _chartLoaded = true;
+        StateHasChanged();
     }
 
     private ApexChartOptions<GaugeValue> _options = new()
@@ -329,7 +331,7 @@
 
         await DialogService.ShowDialogAsync<EditGoalTitleDialog>(Goal, new DialogParameters()
             {
-                Title = $"Edit Goal Title",
+                Title = $"Edit Title",
                 OnDialogResult = DialogService.CreateDialogCallback(this, HandleEditGoalTitleDialog),
                 PrimaryAction = "Save",
                 PrimaryActionEnabled = true,
@@ -374,7 +376,7 @@
 
         await DialogService.ShowDialogAsync<EditGoalTargetDateDialog>(Goal, new DialogParameters()
             {
-                Title = $"Edit Goal Target Date",
+                Title = $"Edit Target Date",
                 OnDialogResult = DialogService.CreateDialogCallback(this, HandleEditGoalTargetDateDialog),
                 PrimaryAction = "Save",
                 PrimaryActionEnabled = true,
