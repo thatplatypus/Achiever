@@ -46,7 +46,7 @@ main {
 }
 
     .user-menu-icon:hover {
-        background-color: var(--neutral-fill-stealth-focus);
+        background-color: var(--accent-fill-hover);
     }
 
 @media (max-width: 640.98px) {

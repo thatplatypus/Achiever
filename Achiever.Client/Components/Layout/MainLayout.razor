@@ -1,7 +1,11 @@
-﻿@using Color = Microsoft.FluentUI.AspNetCore.Components.Color
+﻿@using Achiever.Client.Components.Account
+@using Color = Microsoft.FluentUI.AspNetCore.Components.Color
 @using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+
 <div style="background-color: var(--neutral-layer-card-container);min-height:100dvh;overflow-x:hidden;">
 <FluentMainLayout>
     <Header>
@@ -14,7 +18,7 @@
                     @if(_darkMode)
                     {
                         <div id="dark-mode-icon" @onclick="ToggleTheme" class="user-menu-icon">
-                            <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.WeatherMoon())" Color="Color.Custom" CustomColor="var(--neutral-layer-2)" />
+                                <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.WeatherMoon())" Color="Color.Fill" />
                         </div>
                         <FluentTooltip Delay="1" Anchor="dark-mode-icon">
                             Toggle Theme
@@ -23,14 +27,14 @@
                     else
                     {
                         <div id="light-mode-icon" @onclick="ToggleTheme" class="user-menu-icon">
-                            <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.WeatherSunny())" Color="Color.Custom" CustomColor="var(--neutral-layer-2)" />
+                                <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.WeatherSunny())" Color="Color.Fill" />
                         </div>
                         <FluentTooltip Delay="1" Anchor="light-mode-icon">
                                 Toggle Theme
                             </FluentTooltip>
                     }
                     <div @onclick="ToggleMenu" id="account-icon" class="user-menu-icon">
-                            <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.Person())" Color="Color.Custom" CustomColor="var(--neutral-layer-2)" />
+                            <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.Person())" Color="Color.Fill" />
                     </div>
                     <FluentTooltip Delay="1" Anchor="account-icon">
                         Account
@@ -40,7 +44,7 @@
                         <FluentMenuItem Label="Logout" OnClick="@(() => NavigationManager.NavigateTo("/logout"))"></FluentMenuItem>
                     </FluentMenu>
                     <div id="settings-icon" @onclick="OpenSettings" class="user-menu-icon">
-                            <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.Settings())" Color="Color.Custom" CustomColor="var(--neutral-layer-2)" />
+                            <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.Settings())" Color="Color.Fill" />
                     </div>
                     <FluentTooltip Delay="1" Anchor="settings-icon">
                         Settings
@@ -64,7 +68,7 @@
         <FluentMessageBarProvider />
     </Body>
 </FluentMainLayout>
-<FluentDesignTheme Mode="_themeMode" />
+<FluentDesignTheme @ref="_theme" @bind-Mode="_themeMode" @bind-CustomColor="_color" />
 </div>
 
 @code {
@@ -73,6 +77,11 @@
     private bool _darkMode = true;
 
     private DesignThemeModes _themeMode = DesignThemeModes.Dark;
+
+    private FluentDesignTheme _theme = default!;
+
+    private string _color = "#0078d4";
+    private string __color = "";
 
     private void ToggleMenu()
     {
@@ -95,9 +104,40 @@
         StateHasChanged();
     }
 
-    private void OpenSettings()
+    private async Task OpenSettings()
     {
-        
+        var color = _color + "";
+        __color = _color + "";
+        await DialogService.ShowDialogAsync<SettingsDialog>(color, new DialogParameters()
+            {
+                Title = $"Settings",
+                OnDialogResult = DialogService.CreateDialogCallback(this, HandleSettingsDialog),
+                PrimaryAction = "Save",
+                PrimaryActionEnabled = true,
+                SecondaryAction = "Cancel",
+                Width = "500px",
+                Modal = true,
+            });
+    }
 
+    private async Task HandleSettingsDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            _color = __color;
+
+            StateHasChanged();
+
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(result.Data as string))
+        {
+            _color = result.Data as string;
+
+            StateHasChanged();
+
+            return;
+        }
     }
 }        
