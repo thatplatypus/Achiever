@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,7 +6,16 @@
     <Nullable>enable</Nullable>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
     <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\manifest.webmanifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\manifest.webmanifest" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Blazor-ApexCharts" Version="2.2.1" />

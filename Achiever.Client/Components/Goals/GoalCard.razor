@@ -209,13 +209,12 @@
 
         await DialogService.ShowDialogAsync<SubTaskDetailsDialog>(subTask, new DialogParameters()
             {
-                Title = $"{subTask.Title}",
+                Title = $"Edit Task",
                 OnDialogResult = DialogService.CreateDialogCallback(this, HandleSubTaskDialog),
                 PrimaryAction = "Save",
                 PrimaryActionEnabled = true,
                 SecondaryAction = "Cancel",
                 Width = "500px",
-                TrapFocus = true,
                 Modal = true,
             });
     }
@@ -337,7 +336,6 @@
                 PrimaryActionEnabled = true,
                 SecondaryAction = "Cancel",
                 Width = "500px",
-                TrapFocus = true,
                 Modal = true,
             });
     }
@@ -382,7 +380,6 @@
                 PrimaryActionEnabled = true,
                 SecondaryAction = "Cancel",
                 Width = "500px",
-                TrapFocus = true,
                 Modal = true,
             });
     }
