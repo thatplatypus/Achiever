@@ -9,7 +9,7 @@
         </FluentLabel>
         <FluentSpacer />
         <FluentButton OnClick="DeleteAsync" Appearance="Appearance.Stealth">
-            <FluentIcon Value="new Icons.Regular.Size24.Delete()" Color="Microsoft.FluentUI.AspNetCore.Components.Color.Error" />
+            <FluentIcon Value="new Icons.Regular.Size20.Delete()" Color="Microsoft.FluentUI.AspNetCore.Components.Color.Error" />
             Delete
         </FluentButton>
         <FluentDivider Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Vertical" />
@@ -17,16 +17,23 @@
 </FluentDialogHeader>
 
 <FluentDialogBody>
-    <FluentTextField @bind-Value="@Content.Title">Title</FluentTextField>
-    <FluentSelect TOption="KeyValuePair<string, string>"
-                  Label="Select status"
-                  Items="@SubTaskDisplay.Statuses.ToArray()"
-                  Id="subtask-statuses-listbox"
-                  Width="200px"
-                  OptionValue="@(x => x.Key)"
-                  OptionText="@(x => x.Value)"
-                  @bind-Value="@Content.Status" />
-    <FluentNumberField @bind-Value="@Content.EstimatedHours">Estimated Hours</FluentNumberField>
+    <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal">
+        <FluentTextField @bind-Value="@Content.Title">Title</FluentTextField>
+        <div style="margin-top:-0.15em;">
+        <FluentSelect TOption="KeyValuePair<string, string>"
+                      Label="Status"
+                      Items="@SubTaskDisplay.Statuses.ToArray()"
+                      OptionValue="@(x => x.Key)"
+                      OptionText="@(x => x.Value)"
+                      @bind-Value="@Content.Status" />
+        </div>
+    </FluentStack>
+    <FluentSpacer />
+    <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal">
+        <FluentNumberField @bind-Value="@Content.EstimatedHours">Estimated Hours</FluentNumberField>
+    </FluentStack>
+    <FluentSpacer />
+    <FluentTextArea @bind-Value="@Content.Note" Class="w-100">Notes</FluentTextArea>
 </FluentDialogBody>
 
 <FluentDialogFooter>

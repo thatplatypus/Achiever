@@ -87,7 +87,6 @@ app.UseHttpsRedirection();
 var allEndpointsGroup = app.MapGroup("");
 allEndpointsGroup.WithOpenApi();
 
-
 var scope = app.Services.CreateScope();
 
 var endpoints = scope.ServiceProvider.GetServices<IEndpoint>();

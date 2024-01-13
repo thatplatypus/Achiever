@@ -4,7 +4,7 @@
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
-
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div style="background-color: var(--neutral-layer-card-container);min-height:100dvh;overflow-x:hidden;">
 <FluentMainLayout>
@@ -40,8 +40,9 @@
                         Account
                     </FluentTooltip>
                     <FluentMenu Anchor="account-icon" @bind-Open="@_open" Anchored="true" >
-                        <FluentMenuItem Label="Item 1" />   
-                        <FluentMenuItem Label="Logout" OnClick="@(() => NavigationManager.NavigateTo("/logout"))"></FluentMenuItem>
+                        <FluentTextField Label="User" Value="@(context?.User?.Identity?.Name)" ReadOnly="true" />
+                        <FluentDivider />
+                        <FluentMenuItem  Label="Logout" OnClick="@(() => NavigationManager.NavigateTo("/logout"))"><FluentIcon Value="@(new Icons.Regular.Size20.ArrowExit())" /></FluentMenuItem>
                     </FluentMenu>
                     <div id="settings-icon" @onclick="OpenSettings" class="user-menu-icon">
                             <FluentIcon Style="margin-top:0.25em;" Value="@(new Icons.Filled.Size24.Settings())" Color="Color.Fill" />
