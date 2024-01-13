@@ -1,6 +1,8 @@
 ﻿@page "/login"
 @using Achiever.Client.Services.Identity
 @inject IAccountManagement Acct
+@inject NavigationManager NavigationManager
+@inject IToastService ToastService
 
 <PageTitle>Login</PageTitle>
 
@@ -32,7 +34,7 @@
                 <input required id="password" name="passwordInput" placeholder="Enter your password" type="password" @bind-value="password" />
             </div>
             <div>
-                <button class="btn btn-primary" @onclick="DoLoginAsync">Login</button>
+                <button class="btn btn-primary" @onclick="LoginAsync">Login</button>
             </div>
         </div>
     </NotAuthorized>
@@ -44,7 +46,7 @@
     private string password = string.Empty;
     private string[] errorList = [];
 
-    public async Task DoLoginAsync()
+    public async Task LoginAsync()
     {
         success = errors = false;
         errorList = [];
@@ -71,6 +73,8 @@
         {
             success = true;
             email = password = string.Empty;
+            NavigationManager.NavigateTo("/goals");
+            ToastService.ShowSuccess("Logged in successfully");
         }
         else
         {

@@ -7,7 +7,15 @@
 @inject IDialogService DialogService
 
 <FluentToolbar Class="p-2" Style="margin-bottom:1rem;border-radius:0.25rem;width:-webkit-fill-available;" id="toolbar-fluent-components">
-    <h1>@_goal?.Title</h1>
+    <FluentBreadcrumb>
+        <FluentBreadcrumbItem Href="/goals">
+            <h4>All Goals</h4>
+            <FluentIcon style="margin-top:-0.5em;" Value="@(new Icons.Regular.Size24.ChevronRight())" Slot="separator" />
+        </FluentBreadcrumbItem>
+        <FluentBreadcrumbItem Target="_self" Href="@($"/goals/{_goal?.Id}")">
+            <h4>@_goal?.Title</h4>
+        </FluentBreadcrumbItem>
+        </FluentBreadcrumb>
     <FluentSpacer />
     <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size20.Add())" OnClick="AddSubTask">Add Task</FluentButton>
 </FluentToolbar>
@@ -158,7 +166,6 @@
                 PrimaryActionEnabled = true,
                 SecondaryAction = "Cancel",
                 Width = "500px",
-                TrapFocus = true,
                 Modal = true,
             });
     }
