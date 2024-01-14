@@ -21,10 +21,10 @@
 }
 else
 {
-       <FluentGrid Justify="JustifyContent.Center" Spacing="10">
+       <FluentGrid Justify="JustifyContent.FlexStart" Spacing="5">
         @foreach (var goal in _goals)
         {
-            <FluentGridItem>
+            <FluentGridItem xs="12" md="6" lg="4" xl="3">
                 <GoalCard Goal="@goal" OnGoalDelete="OnDeleteGoal" OnGoalEdit="OnEditGoal" OnGoalUpdated="OnGoalUpdated" OnSubTaskUpdated="OnSubTaskUpdated" />
             </FluentGridItem>
         }
