@@ -6,7 +6,7 @@
 @inject IDialogService DialogService
 @inject ISnapshotService SnapshotService
 
-<FluentCard class="achiever-card" Width="26rem" Height="21rem">
+<FluentCard class="achiever-card" style="min-height:21rem;min-width:24rem;">
     <FluentStack Orientation="Orientation.Vertical">
         <div style="display:flex;width:100%;">
             <h3 class="card-title" @onclick="EditGoalTitle">@Goal.Title</h3>
