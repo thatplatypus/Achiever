@@ -1,0 +1,4 @@
+{
+	AuthBaseUrl = "http://localhost:7211";
+	AchieverBaseUrl = "http://localhost:7211";
+}
