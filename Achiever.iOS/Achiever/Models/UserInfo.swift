@@ -10,5 +10,5 @@ import Foundation
 struct UserInfo: Codable {
     let email: String
     let isEmailConfirmed: Bool
-    let claims: [String: String]
+    let claims: [String: String]?
 }

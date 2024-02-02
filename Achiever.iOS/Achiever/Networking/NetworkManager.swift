@@ -8,14 +8,12 @@
 import Foundation
 
 class NetworkManager {
-    let url: URL
     
-    init(url: URL) {
-        self.url = url
+    init() {
     }
     
-    func get(completion: @escaping (Result<Data, Error>) -> Void) {
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+    func get(request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) {
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 completion(.failure(error))
             } else if let data = data {

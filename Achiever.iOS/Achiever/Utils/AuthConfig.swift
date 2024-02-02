@@ -8,5 +8,5 @@
 import Foundation
 
 struct AuthConfig {
-    static let baseURL = Bundle.main.infoDictionary?["AuthBaseUrl"] as? String ?? "http://localhost:7211"
+    static let baseURL = "http://localhost:5266"
 }
