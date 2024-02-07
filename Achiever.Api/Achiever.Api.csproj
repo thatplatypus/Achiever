@@ -7,6 +7,8 @@
     <UserSecretsId>aspnet-Achiever-8ec41d72-a938-4120-8832-9953fdb5f065</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <ProjectReference Include="..\Achiever.Client\Achiever.Client.csproj" />
     <PackageReference Include="FluentValidation" Version="11.9.0" />
