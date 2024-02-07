@@ -9,45 +9,27 @@ import Foundation
 import SwiftUI
 
 struct GoalOverviewView: View {
-    @State private var goals = [Goal]()
-    @State private var isLoading = false
-    let goalClient = GoalClient(networkManager: NetworkManager())
+    @StateObject var goalData = GoalData()
 
     var body: some View {
         VStack {
-            if isLoading {
+            if goalData.isLoading {
                 ProgressView("Loading...")
             } else {
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 200))]) {
-                        ForEach(goals) { goal in
+                        ForEach(goalData.goals) { goal in
                             GoalCardView(goal: goal)
+                                .padding(.horizontal, 16)
                         }
                     }
                 }
             }
         }
-        .onAppear(perform: loadGoals)
         .navigationBarTitle("Goals", displayMode: .inline)
-        .navigationBarItems(trailing: Button(action: logout) {
-            Text("Logout")
+        .navigationBarItems(trailing: NavigationLink(destination: SettingsView()) {
+            Image(systemName: "gearshape")
         })
     }
-    
-    func loadGoals() {
-        isLoading = true
-        goalClient.fetchGoals { result in
-            isLoading = false
-            switch result {
-            case .success(let fetchedGoals):
-                goals = fetchedGoals
-            case .failure(let error):
-                print("Failed to fetch goals: \(error)")
-            }
-        }
-    }
-    
-    func logout() {
-        // Implement logout functionality
-    }
 }
+    

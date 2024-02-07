@@ -29,7 +29,7 @@ class AuthenticationClient {
         loginRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         // Use the network manager to make the request
-        networkManager.post(request: loginRequest) { result in
+        networkManager.send(request: loginRequest) { result in
             switch result {
             case .success(let data):
                 // Log the data

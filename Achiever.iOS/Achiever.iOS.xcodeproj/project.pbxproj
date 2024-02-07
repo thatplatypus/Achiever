@@ -22,6 +22,15 @@
 		CF956DEE2B6C862D00DF3737 /* GoalClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DED2B6C862D00DF3737 /* GoalClient.swift */; };
 		CF956DF02B6C981500DF3737 /* GoalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DEF2B6C981500DF3737 /* GoalCardView.swift */; };
 		CF956DF22B6C9BDD00DF3737 /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DF12B6C9BDD00DF3737 /* BadgeView.swift */; };
+		CF956DF42B6CA32B00DF3737 /* DonutChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DF32B6CA32B00DF3737 /* DonutChartView.swift */; };
+		CF956DF62B6D7AA600DF3737 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DF52B6D7AA600DF3737 /* SettingsView.swift */; };
+		CF956DF82B6DA82800DF3737 /* GoalDetailViewDragAndDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DF72B6DA82800DF3737 /* GoalDetailViewDragAndDrop.swift */; };
+		CF956DFA2B6DB49D00DF3737 /* GoalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DF92B6DB49D00DF3737 /* GoalData.swift */; };
+		CF956DFC2B6DD2E400DF3737 /* GoalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DFB2B6DD2E400DF3737 /* GoalDetailView.swift */; };
+		CF956DFE2B6DD2F600DF3737 /* SubtaskDetailModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DFD2B6DD2F600DF3737 /* SubtaskDetailModal.swift */; };
+		CF956E002B6FEF7500DF3737 /* SubtaskCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DFF2B6FEF7500DF3737 /* SubtaskCardView.swift */; };
+		CF956E042B705F1200DF3737 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956E032B705F1100DF3737 /* ProgressBar.swift */; };
+		CF956E062B708C5700DF3737 /* SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956E052B708C5700DF3737 /* SignInWithAppleView.swift */; };
 		CFF265982B6B4B2C0084197D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFF265972B6B4B2C0084197D /* NetworkManager.swift */; };
 		CFF2659A2B6B4B570084197D /* AuthenticationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFF265992B6B4B570084197D /* AuthenticationClient.swift */; };
 		CFF2659C2B6B4BDC0084197D /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFF2659B2B6B4BDC0084197D /* UserInfo.swift */; };
@@ -66,6 +75,15 @@
 		CF956DED2B6C862D00DF3737 /* GoalClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalClient.swift; sourceTree = "<group>"; };
 		CF956DEF2B6C981500DF3737 /* GoalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCardView.swift; sourceTree = "<group>"; };
 		CF956DF12B6C9BDD00DF3737 /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
+		CF956DF32B6CA32B00DF3737 /* DonutChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonutChartView.swift; sourceTree = "<group>"; };
+		CF956DF52B6D7AA600DF3737 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		CF956DF72B6DA82800DF3737 /* GoalDetailViewDragAndDrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetailViewDragAndDrop.swift; sourceTree = "<group>"; };
+		CF956DF92B6DB49D00DF3737 /* GoalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalData.swift; sourceTree = "<group>"; };
+		CF956DFB2B6DD2E400DF3737 /* GoalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetailView.swift; sourceTree = "<group>"; };
+		CF956DFD2B6DD2F600DF3737 /* SubtaskDetailModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtaskDetailModal.swift; sourceTree = "<group>"; };
+		CF956DFF2B6FEF7500DF3737 /* SubtaskCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtaskCardView.swift; sourceTree = "<group>"; };
+		CF956E032B705F1100DF3737 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		CF956E052B708C5700DF3737 /* SignInWithAppleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
 		CFF265972B6B4B2C0084197D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		CFF265992B6B4B570084197D /* AuthenticationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationClient.swift; sourceTree = "<group>"; };
 		CFF2659B2B6B4BDC0084197D /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
@@ -166,6 +184,7 @@
 				CF956DE32B6C683200DF3737 /* LoginRequest.swift */,
 				CF956DE92B6C85BE00DF3737 /* Goal.swift */,
 				CF956DEB2B6C85D100DF3737 /* SubTask.swift */,
+				CF956DF92B6DB49D00DF3737 /* GoalData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -178,6 +197,14 @@
 				CF956DE72B6C854400DF3737 /* GoalOverviewView.swift */,
 				CF956DEF2B6C981500DF3737 /* GoalCardView.swift */,
 				CF956DF12B6C9BDD00DF3737 /* BadgeView.swift */,
+				CF956DF32B6CA32B00DF3737 /* DonutChartView.swift */,
+				CF956DF52B6D7AA600DF3737 /* SettingsView.swift */,
+				CF956DF72B6DA82800DF3737 /* GoalDetailViewDragAndDrop.swift */,
+				CF956DFB2B6DD2E400DF3737 /* GoalDetailView.swift */,
+				CF956DFD2B6DD2F600DF3737 /* SubtaskDetailModal.swift */,
+				CF956DFF2B6FEF7500DF3737 /* SubtaskCardView.swift */,
+				CF956E032B705F1100DF3737 /* ProgressBar.swift */,
+				CF956E052B708C5700DF3737 /* SignInWithAppleView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -343,13 +370,22 @@
 				CFF2659A2B6B4B570084197D /* AuthenticationClient.swift in Sources */,
 				CFF265982B6B4B2C0084197D /* NetworkManager.swift in Sources */,
 				CFF265A02B6B4E5C0084197D /* AuthConfig.swift in Sources */,
+				CF956E062B708C5700DF3737 /* SignInWithAppleView.swift in Sources */,
+				CF956DF62B6D7AA600DF3737 /* SettingsView.swift in Sources */,
+				CF956DF82B6DA82800DF3737 /* GoalDetailViewDragAndDrop.swift in Sources */,
 				CF956DE62B6C80B300DF3737 /* LoginView.swift in Sources */,
+				CF956E042B705F1200DF3737 /* ProgressBar.swift in Sources */,
+				CF956DFA2B6DB49D00DF3737 /* GoalData.swift in Sources */,
+				CF956DF42B6CA32B00DF3737 /* DonutChartView.swift in Sources */,
 				CF956DF22B6C9BDD00DF3737 /* BadgeView.swift in Sources */,
 				CF867FE12B6B3A3900998339 /* ContentView.swift in Sources */,
 				CF956DF02B6C981500DF3737 /* GoalCardView.swift in Sources */,
 				CF956DEA2B6C85BE00DF3737 /* Goal.swift in Sources */,
 				CFF2659E2B6B4D4D0084197D /* NetworkError.swift in Sources */,
+				CF956DFE2B6DD2F600DF3737 /* SubtaskDetailModal.swift in Sources */,
 				CFF2659C2B6B4BDC0084197D /* UserInfo.swift in Sources */,
+				CF956DFC2B6DD2E400DF3737 /* GoalDetailView.swift in Sources */,
+				CF956E002B6FEF7500DF3737 /* SubtaskCardView.swift in Sources */,
 				CF956DEC2B6C85D100DF3737 /* SubTask.swift in Sources */,
 				CF867FDF2B6B3A3900998339 /* AchieverApp.swift in Sources */,
 				CF956DE42B6C683200DF3737 /* LoginRequest.swift in Sources */,

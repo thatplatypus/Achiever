@@ -23,7 +23,7 @@ class NetworkManager {
         task.resume()
     }
     
-    func post(request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) {
+    func send(request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) {
           var request = request
           request.httpMethod = "POST"
           

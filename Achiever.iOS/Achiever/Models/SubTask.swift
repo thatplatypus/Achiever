@@ -8,14 +8,14 @@
 import Foundation
 struct SubTask: Codable, Identifiable {
     let id: UUID
-    let title: String?
-    let status: String?
-    let lastModified: Date?
+    var title: String?
+    var status: String?
+    var lastModified: Date?
     let goalId: UUID
-    let estimatedHours: Double?
-    let note: String?
-    let order: Int?
-    let userDeleted: Bool?
+    var estimatedHours: Double?
+    var note: String?
+    var order: Int?
+    var userDeleted: Bool?
     
     enum CodingKeys: String, CodingKey {
            case id, title, status, lastModified, goalId, estimatedHours, note, order, userDeleted

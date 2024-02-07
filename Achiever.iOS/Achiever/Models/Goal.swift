@@ -8,8 +8,8 @@
 import Foundation
 struct Goal: Codable, Identifiable {
     let id: UUID
-    let title: String?
-    let startDate, endDate, targetEndDate, lastModified: Date?
-    let subTasks: [SubTask]?
-    let status: Int?
+    var title: String?
+    var startDate, endDate, targetEndDate, lastModified: Date?
+    var subTasks: [SubTask]?
+    var status: Int?
 }
