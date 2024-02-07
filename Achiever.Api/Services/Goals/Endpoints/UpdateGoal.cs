@@ -83,7 +83,9 @@ namespace Achiever.Services.Goals.Endpoints
                 x.Title = task?.Title ?? "New Subtask";
                 x.EstimatedHours = task?.EstimatedHours;
                 x.GoalId = goal.Id;
-                x.Goal = goal;             
+                x.Goal = goal;
+                x.Note = task?.Note;
+                x.Order = task?.Order;
             });
 
             viewModel?.SubTasks?.Where(x => x.Id == Guid.Empty).ToList().ForEach(x =>
@@ -94,7 +96,9 @@ namespace Achiever.Services.Goals.Endpoints
                     Status = x.Status,
                     EstimatedHours = x.EstimatedHours,
                     GoalId = goal.Id,
-                    Goal = goal
+                    Goal = goal,
+                    Note = x.Note,
+                    Order = x.Order
                 });
             });
            
