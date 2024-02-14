@@ -11,18 +11,13 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.colorScheme) var colorScheme
     @AppStorage("isDarkMode") var isDarkMode: Bool = false
-    @AppStorage("viewType") var viewType: String = "card"
-    @State var isBadgeDisplay: Bool
-    
-    init() {
-            _isBadgeDisplay = State(initialValue: UserDefaults.standard.string(forKey: "viewType") == "badge")
-        }
+    @AppStorage("userEmail") var storedEmail: String = ""
     
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("User Information")) {
-                    // Display user information here
+                    Text(storedEmail)
                 }
                 
                 Section(header: Text("Settings")) {
@@ -30,13 +25,6 @@ struct SettingsView: View {
                         Text("Dark Mode")
                     }
                     
-                    Toggle(isOn: $isBadgeDisplay) {
-                                            Text("Use badge view")
-                                        }
-                                        .onChange(of: isBadgeDisplay) { newValue in
-                                            viewType = newValue ? "badge" : "card"
-                                            print(viewType)
-                                        }
                 }
                 
                 Section {

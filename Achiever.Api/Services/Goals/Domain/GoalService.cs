@@ -10,11 +10,13 @@ namespace Achiever.Services.Goals.Domain
     {
         private readonly AppDbContext _context;
         private readonly IAccountContext _account;
+        private readonly ILogger<GoalService> _logger;
 
-        public GoalService(AppDbContext context, IAccountContext account)
+        public GoalService(AppDbContext context, IAccountContext account, ILogger<GoalService> logger)
         {
             _context = context;
             _account = account;
+            _logger = logger;
         }
 
         public async Task AddGoalAsync(GoalEntity goal, CancellationToken cancellationToken)
@@ -73,9 +75,10 @@ namespace Achiever.Services.Goals.Domain
 
         public async Task UpdateGoalAsync(GoalEntity goal, CancellationToken cancellationToken)
         {
-            //_context.Goals.Update(goal);
-            //_context.SubTasks.UpdateRange(goal.SubTasks);
-            await _context.SaveChangesAsync(cancellationToken);
+            _context.Goals.Update(goal);
+            _context.SubTasks.UpdateRange(goal.SubTasks);
+            int count = await _context.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation("Updated {Count} entities", count);
         }
 
         public async Task UpdateSubTaskAsync(SubTaskEntity subTask, CancellationToken cancellationToken)

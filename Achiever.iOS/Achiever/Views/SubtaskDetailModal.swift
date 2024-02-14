@@ -12,12 +12,16 @@ struct SubtaskDetailModal: View {
     @Binding var goal: Goal
     @Binding var subTask: SubTask
     @State var showingDeleteAlert: Bool = false
+    @State private var sliderValue: Double
+    var onSave: ((Goal) -> Void) =  {_ in}
     @Environment(\.presentationMode) var presentationMode
-
+    let goalClient = GoalClient(networkManager: NetworkManager())
+    
     @State private var draftSubTask: EditableSubTask
     let statuses = ["New", "InProgress", "Completed"]
-
-        init(goal: Binding<Goal>, subTask: Binding<SubTask>) {
+    let displayStatuses = ["New", "In Progress", "Completed"]
+    
+    init(goal: Binding<Goal>, subTask: Binding<SubTask>, onSave: @escaping (Goal) -> Void = { _ in })  {
         _goal = goal
         _subTask = subTask
         _draftSubTask = State(initialValue: EditableSubTask(
@@ -26,42 +30,98 @@ struct SubtaskDetailModal: View {
             estimatedHours: subTask.wrappedValue.estimatedHours ?? 0,
             note: subTask.wrappedValue.note ?? ""
         ))
+        _sliderValue = State(initialValue: subTask.wrappedValue.estimatedHours ?? 0)
+        self.onSave = onSave
     }
-
+    
+    func toDisplayStatus(status: String) -> String {
+        if(status == "InProgress"){
+            return "In Progress"
+        }
+            
+        return status
+    }
+    
     var body: some View {
         NavigationView {
             Form {
-                HStack {
-                    Label("Title", systemImage: "")
-                        .fixedSize(horizontal: true, vertical: false)
-                            .lineLimit(1)
+                VStack(alignment: .leading) {
+                    Text("Title")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
                     TextField("Title", text: $draftSubTask.title)
                 }
-
+                
                 Picker("Status", selection: $draftSubTask.status) {
                     ForEach(statuses, id: \.self) {
-                        Text($0).tag($0)
+                        Text(toDisplayStatus(status: $0)).tag($0)
                     }
                 }
+                
+                VStack(alignment: .leading) {
+                    Text("Estimated Hours")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        
+                    HStack {
+                        Image(systemName: "clock")
+                            .resizable()
+                            .foregroundColor(Color.accentColor)
+                            .frame(width: 20, height: 20)
+                        Text("\(sliderValue, specifier: "%.1f")")
+                        Slider(value: $sliderValue, in: 0...12, step: 0.5)
+                            .padding(4)
+                        Spacer()
+                        Button(action: {
+                                   if sliderValue > 0 {
+                                       sliderValue -= 0.5
+                                   }
+                               }) {
+                                   Image(systemName: "minus.circle")
+                                       .resizable()
+                                       .frame(width: 20, height: 20)
+                               }
+                               .buttonStyle(.borderless)
+                               Button(action: {
+                                   if sliderValue < 12 {
+                                       sliderValue += 0.5
+                                   }
+                               }) {
+                                   Image(systemName: "plus.circle")
+                                       .resizable()
+                                       .frame(width: 20, height: 20)
+                               }
+                               .buttonStyle(.borderless)
+                    }
 
-                    TextField("Estimated hours", value: $draftSubTask.estimatedHours, formatter: {
-                        let formatter = NumberFormatter()
-                        formatter.numberStyle = .decimal
-                        formatter.minimumSignificantDigits = 2
-                        return formatter
-                    }())
-                    
-
-                HStack {
+                    HStack {
+                        Spacer()
+                        ForEach([0.5, 1, 2, 4, 8], id: \.self) { value in
+                            let presetValue = value
+                            Button(action: { sliderValue = presetValue }) {
+                                Text("\(presetValue, specifier: "%.2g")")
+                                    .foregroundColor(.white)
+                                    .frame(width: 35, height: 2)
+                                    .font(.footnote)
+                                    .padding(10)
+                                    .background(Color.accentColor)
+                                    .cornerRadius(10)
+                            }
+                            .buttonStyle(.borderless)
+                        }
+                        Spacer()
+                    }
+                }
+                
+                
+                VStack(alignment: .leading) {
                     Label("Note", systemImage: "note.text")
+                        .padding(1)
                     TextEditor(text: $draftSubTask.note)
                         .frame(minHeight:100)
                 }
-                
-                
-                                
             }
-            .navigationTitle("Edit")
+            .navigationTitle("Edit Task")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
@@ -71,22 +131,60 @@ struct SubtaskDetailModal: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         if let index = goal.subTasks?.firstIndex(where: { $0.id == subTask.id }) {
-                            goal.subTasks?[index].title = draftSubTask.title
-                            goal.subTasks?[index].status = draftSubTask.status
-                            goal.subTasks?[index].estimatedHours = draftSubTask.estimatedHours
-                            goal.subTasks?[index].note = draftSubTask.note
-                            // Update goal
+                            draftSubTask.estimatedHours = sliderValue
+                            subTask.title = draftSubTask.title
+                            subTask.status = draftSubTask.status
+                            subTask.estimatedHours = draftSubTask.estimatedHours
+                            subTask.note = draftSubTask.note
+                            
+                            goal.subTasks?[index] = subTask
+                                                        
+                            goalClient.updateGoal(goal: goal){ result in
+                                switch result {
+                                case .success(let updatedGoal):
+                                    print("Goal updated: \(updatedGoal)")
+                                    onSave(goal)
+                                case .failure(let error):
+                                    print("Failed to update goal: \(error)")
+                                }
+                                
+                                presentationMode.wrappedValue.dismiss()
+                            }
                         }
                     }
                 }
             }
         }
+        
+        Button(action: {
+            showingDeleteAlert = true
+        }) {
+            HStack {
+                Spacer()
+                Text("Delete")
+                    .foregroundColor(.white)
+                Image(systemName: "trash")
+                    .foregroundColor(.white)
+                Spacer()
+            }
+        }
+        .padding(16)
+        .background(Color.red)
+        .cornerRadius(10)
+        .alert(isPresented: $showingDeleteAlert) {
+            Alert(title: Text("Are you sure you want to delete this task?"),
+                  primaryButton: .destructive(Text("Delete")) {
+                      // Implement your delete logic here
+                  },
+                  secondaryButton: .cancel())
+        }
     }
-}
-
-struct EditableSubTask {
-    var title: String
-    var status: String
-    var estimatedHours: Double
-    var note: String
+    
+    
+    struct EditableSubTask {
+        var title: String
+        var status: String
+        var estimatedHours: Double
+        var note: String
+    }
 }

@@ -55,4 +55,17 @@ struct SubTask: Codable, Identifiable {
 
 
      }
+
+        init() {
+        self.id = UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
+        self.title = nil
+        self.status = nil
+        self.lastModified = nil
+        self.goalId = UUID()
+        self.estimatedHours = nil
+        self.note = nil
+        self.order = nil
+        self.userDeleted = nil
+    }
+
 }

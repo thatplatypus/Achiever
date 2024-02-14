@@ -33,6 +33,7 @@ struct DonutChartView: View {
                 .bold()
         }
         .frame(width: width, height: height)
+        .padding(4)
     }
 }
 
