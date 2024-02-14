@@ -12,4 +12,6 @@ The solution is structured into four projects:
 
 4. **Test**: This project contains tests for the Api and Client projects. It helps ensure the reliability and correctness of the application's code.
 
+5. **iOS**: This project contains a native SwiftUI iOS app for the Api backend. 
+
 Achiever demonstrates how to build a modern, full-stack web application with .NET and Blazor. It's a great starting point for anyone interested in a full-stack c# app with newer .Net features like Minimal API Endpoints and the latest identity practices with a wasm client.
