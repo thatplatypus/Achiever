@@ -88,7 +88,11 @@ struct SubTaskCard: View {
             showingDetail = true
         }
         .sheet(isPresented: $showingDetail) {
-            SubtaskDetailModal(goal: $goal, subTask: $subTask)
+            SubtaskDetailModal(goal: $goal, subTask: $subTask, onSave: { updatedGoal in
+                print(updatedGoal)
+                goal = updatedGoal
+            })
+            }
         }
     }
-}
+

@@ -24,11 +24,10 @@ struct GoalClient {
             case .success(let data):
                 let decoder = JSONDecoder()
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
                 decoder.dateDecodingStrategy = .formatted(dateFormatter)
                 
                 do {
-                    let jsonString = String(data: data, encoding: .utf8)
                     let response = try decoder.decode(GetGoalsResponse.self, from: data)
                     completion(.success(response.goals))
                 } catch {
@@ -54,7 +53,7 @@ struct GoalClient {
             case .success(let data):
                 let decoder = JSONDecoder()
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.ssZ"
                 decoder.dateDecodingStrategy = .formatted(dateFormatter)
                 
                 do {
@@ -78,8 +77,9 @@ struct GoalClient {
         }
 
         var request = URLRequest(url: url)
+        var requestBody = CreateGoalRequest(goal: goal)
         request.httpMethod = "POST"
-        request.httpBody = try? JSONEncoder().encode(goal)
+        request.httpBody = try? JSONEncoder().encode(requestBody)
 
         networkManager.send(request: request) { result in
             switch result {
@@ -99,13 +99,14 @@ struct GoalClient {
 
     var request = URLRequest(url: url)
         let goalWrapper = GoalWrapper(goal: goal)
-        let encodedGoal = try? JSONEncoder().encode(goalWrapper)
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encodedGoal = try? encoder.encode(goalWrapper)
         let jsonString = String(data: encodedGoal!, encoding: .utf8) ?? ""
 
-        request.httpMethod = "PUT"
         request.httpBody = jsonString.data(using: .utf8)
         
-        networkManager.send(request: request) { result in
+        networkManager.send(request: request, method: "PUT") { result in
             switch result {
             case .success(let data):
                 print(data)
@@ -124,6 +125,10 @@ struct GoalClient {
             }
         }
 }
+}
+
+struct CreateGoalRequest: Codable {
+    let goal: Goal
 }
 
 struct GetGoalsResponse: Codable {

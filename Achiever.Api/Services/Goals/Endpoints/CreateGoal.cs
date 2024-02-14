@@ -40,7 +40,20 @@ namespace Achiever.Services.Goals.Endpoints
                 TargetEndDate = request.Goal.TargetEndDate,
                 Status = (Status?)request?.Goal.Status ?? Status.New,
                 LastModified = DateTime.UtcNow,
-                AccountId = accountContext.AccountId,               
+                AccountId = accountContext.AccountId,
+                SubTasks = request?.Goal?.SubTasks?.Select(x =>
+                {
+                    return new SubTaskEntity
+                    {
+                        Title = x.Title,
+                        Status = x.Status,
+                        EstimatedHours = x.EstimatedHours,
+                        LastModified = DateTime.UtcNow,
+                        Note = x.Note,
+                        Order = x.Order
+                    };
+                })
+                .ToList()
             };
 
             await repository.AddGoalAsync(goal, cancellationToken);

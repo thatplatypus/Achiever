@@ -9,14 +9,15 @@ import Foundation
 import SwiftUI
 
 struct GoalCardView: View {
-    var goal: Goal;
+    @ObservedObject var baseGoal: ObservableGoal = ObservableGoal();
     @State private var showingDetail = false
     @ObservedObject private var selectedSubTask = SelectedSubTask()
-    @State private var selectedGoal: Goal? = nil
+    @ObservedObject private var selectedGoal = ObservableGoal()
     @State private var scrollProgress: CGFloat = 0
     @AppStorage("viewType") var viewType: String?
     @AppStorage("isDarkMode") var isDarkMode: Bool = false
     
+    var goal: Goal
     
     let displayDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -24,20 +25,26 @@ struct GoalCardView: View {
         return formatter
     }()
     
+    init(goal: Goal)
+    {
+        self.goal = goal
+        self.baseGoal.goal = self.goal
+    }
+    
     var body: some View {
         NavigationLink(destination: GoalDetailView(goal: goal)) {
             let selectedGoal = goal
             VStack(alignment: .leading) {
                 HStack {
-                        Text(goal.title!)
-                        Spacer()
-                        if let targetDate = goal.targetEndDate {
-                            Text("Target: \(displayDateFormatter.string(from: targetDate))")
-                                .font(.footnote)
-                                .foregroundColor(targetDate < Date() && ((goal.subTasks?.contains(where: { $0.status != "Completed" })) != nil) ? .red : .gray)
-                        }
+                    Text(baseGoal.goal.title!)
+                    Spacer()
+                    if let targetDate = baseGoal.goal.targetEndDate {
+                        Text("Target: \(displayDateFormatter.string(from: targetDate))")
+                            .font(.footnote)
+                            .foregroundColor(targetDate < Date() && ((goal.subTasks?.contains(where: { $0.status != "Completed" })) != nil) ? .red : .gray)
                     }
-                if let subTasks = goal.subTasks, !subTasks.isEmpty {
+                }
+                if let subTasks = baseGoal.goal.subTasks, !subTasks.isEmpty {
                     let completedTasks = subTasks.filter({ $0.status?.lowercased() == "completed" }).count
                     Text("\(completedTasks) / \(subTasks.count) Complete")
                         .font(.footnote)
@@ -50,31 +57,25 @@ struct GoalCardView: View {
                                     HStack {
                                         ForEach(subTasks) { subTask in
                                             Button(action: {
-                                                    self.selectedSubTask.subTask = subTask
-                                                    self.showingDetail = true
+                                                self.selectedGoal.goal = baseGoal.goal
+                                                self.selectedSubTask.subTask = subTask
+                                                self.showingDetail = true
                                             }) {
-                                                if(viewType == "badge")
-                                                {
-                                                    BadgeView(text: subTask.title!, color: getColorForStatus(subTask.status))
-                                                }
-                                                else
-                                                {
                                                     SubtaskCardView(title: subTask.title!,
                                                                     hours: subTask.estimatedHours ?? 0,
                                                                     status: subTask.status ?? "New",
                                                                     hasNotes: subTask.note != nil && subTask.note != "",
                                                                     color: getColorForStatus(subTask.status))
-                                                    .padding(4)
+                                                    .padding(1)
                                                     .shadow(radius: 6)
-                                                }
                                             }
                                         }
                                     }
                                 }
                                 .frame(width: geometry.size.width * 0.7)
                                 .cornerRadius(4)
-                                .padding(4)
-
+                                .padding(2)
+                                
                                 let ratio = Double(completedTasks) / Double(subTasks.count)
                                 DonutChartView(ratio: ratio, height: 75, width: 75)
                                     .frame(width: geometry.size.width * 0.3)
@@ -88,16 +89,16 @@ struct GoalCardView: View {
                 
                 Spacer()
                 
-                if let totalHours = goal.subTasks?.reduce(0, { $0 + ($1.estimatedHours ?? 0) }), totalHours > 0 {
-                    let completedHours = goal.subTasks?.filter({ $0.status?.lowercased() == "completed" }).reduce(0, { $0 + ($1.estimatedHours ?? 0) }) ?? 0
+                if let totalHours = baseGoal.goal.subTasks?.reduce(0, { $0 + ($1.estimatedHours ?? 0) }), totalHours > 0 {
+                    let completedHours = baseGoal.goal.subTasks?.filter({ $0.status?.lowercased() == "completed" }).reduce(0, { $0 + ($1.estimatedHours ?? 0) }) ?? 0
                     let remainingHours = totalHours - completedHours
                     HStack {
-                            Image(systemName: "clock")
-                                .foregroundColor(.gray)
+                        Image(systemName: "clock")
+                            .foregroundColor(.gray)
                         Text("\(String(format: "%.2g", remainingHours))/\(String(format: "%.2g", totalHours)) hours remaining")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
-                        }
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                    }
                     .padding(8)
                 }
             }
@@ -109,28 +110,43 @@ struct GoalCardView: View {
         }
         .preferredColorScheme(isDarkMode ? .dark : .light)
         .buttonStyle(PlainButtonStyle())
-        .popover(isPresented: $showingDetail) {
-            if let selectedSubTask = selectedSubTask.subTask{
-                SubtaskDetailModal(goal: .constant(goal), subTask: .constant(selectedSubTask))
+        .popover(isPresented: $showingDetail){
+            if selectedSubTask.subTask.title != nil {
+                SubtaskDetailModal(goal: $selectedGoal.goal, subTask: $selectedSubTask.subTask, onSave: { updatedGoal in
+                    DispatchQueue.main.async {
+                        baseGoal.goal = updatedGoal
+                        let id = selectedSubTask.subTask.id
+                        if let updatedSubTasks = baseGoal.goal.subTasks?.map({ $0.id == id ? selectedSubTask.subTask : $0 }) {
+                            baseGoal.goal.subTasks = updatedSubTasks
+                        }
+                    }
+                    })
             }
-        }
-    }
-    
-    
-    func getColorForStatus(_ status: String?) -> Color {
-        switch status?.lowercased() {
-        case "new":
-            return .gray
-        case "inprogress":
-            return .cyan
-        case "completed":
-            return .green
-        default:
-            return .gray
         }
     }
 }
 
-class SelectedSubTask: ObservableObject {
-    @Published var subTask: SubTask? = nil
+        
+        
+        func getColorForStatus(_ status: String?) -> Color {
+            switch status?.lowercased() {
+            case "new":
+                return .gray
+            case "inprogress":
+                return .cyan
+            case "completed":
+                return .green
+            default:
+                return .gray
+            }
+        }
+    
+    
+    class SelectedSubTask: ObservableObject {
+        @Published var subTask: SubTask = SubTask()
+    }
+
+class ObservableGoal: ObservableObject {
+    @Published var goal: Goal = Goal()
 }
+

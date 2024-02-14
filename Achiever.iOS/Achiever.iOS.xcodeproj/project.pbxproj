@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF75B7EE2B7876F800DCC55B /* AddNewGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF75B7ED2B7876F800DCC55B /* AddNewGoalView.swift */; };
+		CF75B7F02B798C3D00DCC55B /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF75B7EF2B798C3D00DCC55B /* FilterView.swift */; };
+		CF75B7F22B798C4500DCC55B /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF75B7F12B798C4500DCC55B /* SearchBar.swift */; };
+		CF75B7F42B79EC7F00DCC55B /* 68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CF75B7F32B79EC7F00DCC55B /* 68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg */; };
 		CF867FDF2B6B3A3900998339 /* AchieverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF867FDE2B6B3A3900998339 /* AchieverApp.swift */; };
 		CF867FE12B6B3A3900998339 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF867FE02B6B3A3900998339 /* ContentView.swift */; };
 		CF867FE32B6B3A3A00998339 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF867FE22B6B3A3A00998339 /* Assets.xcassets */; };
@@ -14,6 +18,8 @@
 		CF867FF02B6B3A3A00998339 /* AchieverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF867FEF2B6B3A3A00998339 /* AchieverTests.swift */; };
 		CF867FFA2B6B3A3A00998339 /* AchieverUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF867FF92B6B3A3A00998339 /* AchieverUITests.swift */; };
 		CF867FFC2B6B3A3A00998339 /* AchieverUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF867FFB2B6B3A3A00998339 /* AchieverUITestsLaunchTests.swift */; };
+		CF92C98E2B75AFF40087D5F3 /* SkeletonCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF92C98D2B75AFF40087D5F3 /* SkeletonCard.swift */; };
+		CF92C9902B75B0190087D5F3 /* GoalOverviewLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF92C98F2B75B0190087D5F3 /* GoalOverviewLoadingView.swift */; };
 		CF956DE42B6C683200DF3737 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DE32B6C683200DF3737 /* LoginRequest.swift */; };
 		CF956DE62B6C80B300DF3737 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DE52B6C80B300DF3737 /* LoginView.swift */; };
 		CF956DE82B6C854400DF3737 /* GoalOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF956DE72B6C854400DF3737 /* GoalOverviewView.swift */; };
@@ -56,6 +62,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CF75B7EC2B78609E00DCC55B /* 694E6CAC-F6DE-4CAD-9241-F5F8A9DB64BF.heic */ = {isa = PBXFileReference; lastKnownFileType = file; name = "694E6CAC-F6DE-4CAD-9241-F5F8A9DB64BF.heic"; path = "../../../../../Pictures/Photos Library.photoslibrary/originals/6/694E6CAC-F6DE-4CAD-9241-F5F8A9DB64BF.heic"; sourceTree = "<group>"; };
+		CF75B7ED2B7876F800DCC55B /* AddNewGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewGoalView.swift; sourceTree = "<group>"; };
+		CF75B7EF2B798C3D00DCC55B /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
+		CF75B7F12B798C4500DCC55B /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		CF75B7F32B79EC7F00DCC55B /* 68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg"; path = "../../../../../Pictures/Photos Library.photoslibrary/resources/derivatives/6/68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg"; sourceTree = "<group>"; };
 		CF867FDB2B6B3A3900998339 /* Achiever.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Achiever.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF867FDE2B6B3A3900998339 /* AchieverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieverApp.swift; sourceTree = "<group>"; };
 		CF867FE02B6B3A3900998339 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -66,6 +77,8 @@
 		CF867FF52B6B3A3A00998339 /* AchieverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AchieverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF867FF92B6B3A3A00998339 /* AchieverUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieverUITests.swift; sourceTree = "<group>"; };
 		CF867FFB2B6B3A3A00998339 /* AchieverUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieverUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		CF92C98D2B75AFF40087D5F3 /* SkeletonCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonCard.swift; sourceTree = "<group>"; };
+		CF92C98F2B75B0190087D5F3 /* GoalOverviewLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalOverviewLoadingView.swift; sourceTree = "<group>"; };
 		CF956DE22B6C63E500DF3737 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CF956DE32B6C683200DF3737 /* LoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 		CF956DE52B6C80B300DF3737 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -116,6 +129,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CF75B7EB2B78606C00DCC55B /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				CF75B7F32B79EC7F00DCC55B /* 68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg */,
+				CF75B7EC2B78609E00DCC55B /* 694E6CAC-F6DE-4CAD-9241-F5F8A9DB64BF.heic */,
+			);
+			path = Icons;
+			sourceTree = "<group>";
+		};
 		CF867FD22B6B3A3900998339 = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +161,7 @@
 		CF867FDD2B6B3A3900998339 /* Achiever */ = {
 			isa = PBXGroup;
 			children = (
+				CF75B7EB2B78606C00DCC55B /* Icons */,
 				CF956DE22B6C63E500DF3737 /* Info.plist */,
 				CFF265962B6B4B050084197D /* Utils */,
 				CFF265952B6B4AFC0084197D /* Networking */,
@@ -205,6 +228,11 @@
 				CF956DFF2B6FEF7500DF3737 /* SubtaskCardView.swift */,
 				CF956E032B705F1100DF3737 /* ProgressBar.swift */,
 				CF956E052B708C5700DF3737 /* SignInWithAppleView.swift */,
+				CF92C98D2B75AFF40087D5F3 /* SkeletonCard.swift */,
+				CF92C98F2B75B0190087D5F3 /* GoalOverviewLoadingView.swift */,
+				CF75B7ED2B7876F800DCC55B /* AddNewGoalView.swift */,
+				CF75B7EF2B798C3D00DCC55B /* FilterView.swift */,
+				CF75B7F12B798C4500DCC55B /* SearchBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -300,6 +328,7 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
+				ORGANIZATIONNAME = Brewer;
 				TargetAttributes = {
 					CF867FDA2B6B3A3900998339 = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -339,6 +368,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF75B7F42B79EC7F00DCC55B /* 68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg in Resources */,
 				CF867FE62B6B3A3A00998339 /* Preview Assets.xcassets in Resources */,
 				CF867FE32B6B3A3A00998339 /* Assets.xcassets in Resources */,
 			);
@@ -365,20 +395,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF75B7F02B798C3D00DCC55B /* FilterView.swift in Sources */,
 				CF956DEE2B6C862D00DF3737 /* GoalClient.swift in Sources */,
 				CF956DE82B6C854400DF3737 /* GoalOverviewView.swift in Sources */,
+				CF92C98E2B75AFF40087D5F3 /* SkeletonCard.swift in Sources */,
 				CFF2659A2B6B4B570084197D /* AuthenticationClient.swift in Sources */,
 				CFF265982B6B4B2C0084197D /* NetworkManager.swift in Sources */,
 				CFF265A02B6B4E5C0084197D /* AuthConfig.swift in Sources */,
 				CF956E062B708C5700DF3737 /* SignInWithAppleView.swift in Sources */,
 				CF956DF62B6D7AA600DF3737 /* SettingsView.swift in Sources */,
 				CF956DF82B6DA82800DF3737 /* GoalDetailViewDragAndDrop.swift in Sources */,
+				CF75B7EE2B7876F800DCC55B /* AddNewGoalView.swift in Sources */,
+				CF92C9902B75B0190087D5F3 /* GoalOverviewLoadingView.swift in Sources */,
 				CF956DE62B6C80B300DF3737 /* LoginView.swift in Sources */,
 				CF956E042B705F1200DF3737 /* ProgressBar.swift in Sources */,
 				CF956DFA2B6DB49D00DF3737 /* GoalData.swift in Sources */,
 				CF956DF42B6CA32B00DF3737 /* DonutChartView.swift in Sources */,
 				CF956DF22B6C9BDD00DF3737 /* BadgeView.swift in Sources */,
 				CF867FE12B6B3A3900998339 /* ContentView.swift in Sources */,
+				CF75B7F22B798C4500DCC55B /* SearchBar.swift in Sources */,
 				CF956DF02B6C981500DF3737 /* GoalCardView.swift in Sources */,
 				CF956DEA2B6C85BE00DF3737 /* Goal.swift in Sources */,
 				CFF2659E2B6B4D4D0084197D /* NetworkError.swift in Sources */,
@@ -547,6 +582,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Achiever/Preview Content\"";
+				DEVELOPMENT_TEAM = 59VU5JWNL2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Achiever/Info.plist;
@@ -576,6 +612,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Achiever/Preview Content\"";
+				DEVELOPMENT_TEAM = 59VU5JWNL2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Achiever/Info.plist;

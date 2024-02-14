@@ -23,7 +23,7 @@ struct SubtaskCardView: View {
                     .font(.footnote)
                     .lineLimit(1)
                     .truncationMode(.tail)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.primary)
 
                 BadgeView(text: convertStatus(status: status), color: color)
                 Spacer()
@@ -35,12 +35,12 @@ struct SubtaskCardView: View {
                     Text("\(String(format: "%.2g", hours))")
                         .font(.subheadline)
                         .font(.system(size: 10))
-                        .foregroundColor(.gray)
+                        .foregroundColor(hours > 0 ? .primary : .gray)
                 }
             }
             .padding(4)
             .frame(width: 95, height: 100)
-            .background(Color(UIColor.systemBackground))
+            .background(Color(UIColor.tertiarySystemBackground))
             .cornerRadius(5)
         }
     
