@@ -74,7 +74,7 @@ namespace Achiever.Services.Goals.Endpoints
             goal.EndDate = viewModel.EndDate;
             goal.TargetEndDate = viewModel.TargetEndDate.HasValue ? viewModel.TargetEndDate.Value.ToUniversalTime() : null;
             goal.Status = (Status?)viewModel?.Status ?? Status.New;
-            
+            goal.LastModified = DateTime.UtcNow;
             goal.SubTasks ??= [];
             goal.SubTasks.ForEach(x =>
             {

@@ -29,6 +29,8 @@ struct Goal: Codable, Identifiable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
         title = try container.decodeIfPresent(String.self, forKey: .title)
+          let dateFormatter = DateFormatter()
+
         
           do {
               startDate = try container.decodeIfPresent(Date.self, forKey: .startDate)
@@ -40,21 +42,27 @@ struct Goal: Codable, Identifiable {
           do {
               endDate = try container.decodeIfPresent(Date.self, forKey: .endDate)
           } catch {
-              //print("Error decoding endDate: \(error), \(try container.decodeIfPresent(String.self, forKey: .endDate))")
+              print("Error decoding endDate: \(error), \(try container.decodeIfPresent(String.self, forKey: .endDate))")
               endDate = nil
           }
 
           do {
               targetEndDate = try container.decodeIfPresent(Date.self, forKey: .targetEndDate)
           } catch {
-              print("Error decoding targetEndDate: \(error), \(try container.decodeIfPresent(String.self, forKey: .targetEndDate))")
+              print("Error decoding targetEndDate: \(error), \(try container.decodeIfPresent(String.self, forKey: .targetEndDate) ?? "Unknown key")")
               targetEndDate = nil
           }
-
           do {
-              lastModified = try container.decodeIfPresent(Date.self, forKey: .lastModified)
+              let lastModifiedString = try container.decodeIfPresent(String.self, forKey: .lastModified)
+
+              dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                      if let dateString = lastModifiedString {
+                          lastModified = dateFormatter.date(from: dateString)
+                      } else {
+                          lastModified = nil
+                      }
           } catch {
-              //print("Error decoding lastModified: \(error)")
+              print("Error decoding lastModified: \(error)")
               lastModified = nil
           }
         

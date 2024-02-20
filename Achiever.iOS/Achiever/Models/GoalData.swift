@@ -38,7 +38,14 @@ class GoalData: ObservableObject {
         }
         
            if searchText.isEmpty {
-               return filtered
+               filtered.sort { (goal1, goal2) -> Bool in
+        guard let date1 = goal1.lastModified, let date2 = goal2.lastModified else {
+            return false
+        }
+        return date1 > date2
+    }
+
+    return filtered
            } else {
                return filtered.filter { goal in
                    goal.title!.contains(searchText)

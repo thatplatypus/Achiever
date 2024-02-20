@@ -40,20 +40,17 @@ struct GoalOverviewView: View {
                 .preferredColorScheme(isDarkMode ? .dark : .light)
             }
         }
-        
         .navigationBarTitle("Goals", displayMode: .inline)
         .navigationBarItems(
-            leading: NavigationLink(destination: SettingsView()) {
-                Image(systemName: "gearshape")
-            },
-            trailing: 
+            leading:
+                Button(action: { showingFilter = true }) {
+                    Image(systemName: "line.horizontal.3.decrease")
+                }
+                .popover(isPresented: $showingFilter) {
+                    FilterView(sortOption: $goalData.sortOption, hideCompletedGoals: $goalData.hideCompletedGoals, hidePastGoals: $goalData.hidePastGoals)
+                },
+            trailing:
                 HStack {
-                    Button(action: { showingFilter = true }) {
-                        Image(systemName: "line.horizontal.3.decrease.circle")
-                    }
-                    .popover(isPresented: $showingFilter) {
-                        FilterView(sortOption: $goalData.sortOption, hideCompletedGoals: $goalData.hideCompletedGoals, hidePastGoals: $goalData.hidePastGoals)
-                    }
                     Button(action: { showingPopover = true }) {
                         Image(systemName: "plus")
                     }
@@ -78,6 +75,9 @@ struct GoalOverviewView: View {
                             })
                             self.showingPopover = false
                         })
+                    }
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "gearshape")
                     }
                 }
         )

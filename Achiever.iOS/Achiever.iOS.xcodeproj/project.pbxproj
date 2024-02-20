@@ -11,6 +11,8 @@
 		CF75B7F02B798C3D00DCC55B /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF75B7EF2B798C3D00DCC55B /* FilterView.swift */; };
 		CF75B7F22B798C4500DCC55B /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF75B7F12B798C4500DCC55B /* SearchBar.swift */; };
 		CF75B7F42B79EC7F00DCC55B /* 68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CF75B7F32B79EC7F00DCC55B /* 68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg */; };
+		CF75B7FD2B81CC9500DCC55B /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CF75B7FC2B81CC9500DCC55B /* KeychainSwift */; };
+		CF75B7FF2B82B7AB00DCC55B /* blue-purple-simple-background-gradient-wallpaper.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CF75B7FE2B82B7AA00DCC55B /* blue-purple-simple-background-gradient-wallpaper.jpg */; };
 		CF867FDF2B6B3A3900998339 /* AchieverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF867FDE2B6B3A3900998339 /* AchieverApp.swift */; };
 		CF867FE12B6B3A3900998339 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF867FE02B6B3A3900998339 /* ContentView.swift */; };
 		CF867FE32B6B3A3A00998339 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF867FE22B6B3A3A00998339 /* Assets.xcassets */; };
@@ -67,6 +69,7 @@
 		CF75B7EF2B798C3D00DCC55B /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		CF75B7F12B798C4500DCC55B /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		CF75B7F32B79EC7F00DCC55B /* 68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg"; path = "../../../../../Pictures/Photos Library.photoslibrary/resources/derivatives/6/68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg"; sourceTree = "<group>"; };
+		CF75B7FE2B82B7AA00DCC55B /* blue-purple-simple-background-gradient-wallpaper.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "blue-purple-simple-background-gradient-wallpaper.jpg"; sourceTree = "<group>"; };
 		CF867FDB2B6B3A3900998339 /* Achiever.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Achiever.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF867FDE2B6B3A3900998339 /* AchieverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchieverApp.swift; sourceTree = "<group>"; };
 		CF867FE02B6B3A3900998339 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -109,6 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF75B7FD2B81CC9500DCC55B /* KeychainSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +136,7 @@
 		CF75B7EB2B78606C00DCC55B /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				CF75B7FE2B82B7AA00DCC55B /* blue-purple-simple-background-gradient-wallpaper.jpg */,
 				CF75B7F32B79EC7F00DCC55B /* 68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg */,
 				CF75B7EC2B78609E00DCC55B /* 694E6CAC-F6DE-4CAD-9241-F5F8A9DB64BF.heic */,
 			);
@@ -279,6 +284,9 @@
 			dependencies = (
 			);
 			name = Achiever;
+			packageProductDependencies = (
+				CF75B7FC2B81CC9500DCC55B /* KeychainSwift */,
+			);
 			productName = Achiever;
 			productReference = CF867FDB2B6B3A3900998339 /* Achiever.app */;
 			productType = "com.apple.product-type.application";
@@ -352,6 +360,9 @@
 				Base,
 			);
 			mainGroup = CF867FD22B6B3A3900998339;
+			packageReferences = (
+				CF75B7FB2B81CC9500DCC55B /* XCRemoteSwiftPackageReference "keychain-swift" */,
+			);
 			productRefGroup = CF867FDC2B6B3A3900998339 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -368,6 +379,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF75B7FF2B82B7AB00DCC55B /* blue-purple-simple-background-gradient-wallpaper.jpg in Resources */,
 				CF75B7F42B79EC7F00DCC55B /* 68D43CB7-B0A5-490D-ABA4-435D4D065EEC_1_105_c.jpeg in Resources */,
 				CF867FE62B6B3A3A00998339 /* Preview Assets.xcassets in Resources */,
 				CF867FE32B6B3A3A00998339 /* Assets.xcassets in Resources */,
@@ -746,6 +758,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CF75B7FB2B81CC9500DCC55B /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 21.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CF75B7FC2B81CC9500DCC55B /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CF75B7FB2B81CC9500DCC55B /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CF867FD32B6B3A3900998339 /* Project object */;
 }

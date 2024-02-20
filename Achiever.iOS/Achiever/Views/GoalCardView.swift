@@ -33,16 +33,15 @@ struct GoalCardView: View {
     
     var body: some View {
         NavigationLink(destination: GoalDetailView(goal: goal)) {
-            let selectedGoal = goal
             VStack(alignment: .leading) {
                 HStack {
                     Text(baseGoal.goal.title!)
                     Spacer()
-                    if let targetDate = baseGoal.goal.targetEndDate {
+                    if let targetDate = baseGoal.goal.targetEndDate{
                         Text("Target: \(displayDateFormatter.string(from: targetDate))")
                             .font(.footnote)
-                            .foregroundColor(targetDate < Date() && ((goal.subTasks?.contains(where: { $0.status != "Completed" })) != nil) ? .red : .gray)
-                    }
+                            .foregroundColor(.gray)
+                        }
                 }
                 if let subTasks = baseGoal.goal.subTasks, !subTasks.isEmpty {
                     let completedTasks = subTasks.filter({ $0.status?.lowercased() == "completed" }).count

@@ -40,7 +40,20 @@ struct GoalClient {
     }
 
     func getGoalById(id: UUID, completion: @escaping (Result<Goal, Error>) -> Void) {
-        guard let url = URL(string: AuthConfig.baseURL + "/GetGoalById?request=\(id.uuidString)") else {
+        do {
+            let requestObject = ["Id": id.uuidString]
+            let requestData = try JSONSerialization.data(withJSONObject: requestObject)
+            guard let requestString = String(data: requestData, encoding: .utf8) else {
+                completion(.failure(NetworkError.invalidURL))
+                return
+            }
+
+            guard let url = URL(string: AuthConfig.baseURL + "/GetGoalById?request=\(requestString)") else {
+                completion(.failure(NetworkError.invalidURL))
+                return
+            }
+        
+        guard let url = URL(string: AuthConfig.baseURL + "/GetGoalById?request=\(requestString)") else {
             completion(.failure(NetworkError.invalidURL))
             return
         }
@@ -67,6 +80,9 @@ struct GoalClient {
             case .failure(let error):
                 completion(.failure(error))
             }
+        }
+        } catch {
+            completion(.failure(NetworkError.networkRequestFailed))
         }
     }
 

@@ -13,6 +13,7 @@ struct GoalDetailView: View {
     @State private var newSubTasks: [SubTask]
     @State private var inProgressSubTasks: [SubTask]
     @State private var completedSubTasks: [SubTask]
+    @State private var showingAddSubtaskModal = false
 
 
     init(goal: Goal) {
@@ -59,9 +60,28 @@ struct GoalDetailView: View {
             }
         }
         .navigationTitle(goal.title ?? "")
-        .toolbar {
-            EditButton()
-        }
+                .toolbar {
+                    Button(action: { showingAddSubtaskModal = true }) {
+                        Image(systemName: "plus")
+                    }
+                }
+                .sheet(isPresented: $showingAddSubtaskModal) {
+                    SubtaskDetailModal(goal: $goal, subTask: .constant(SubTask()), onSave: { updatedGoal in
+                        print(updatedGoal)
+                        goal = updatedGoal
+                        let newSubTask = goal.subTasks!.last!
+                        switch newSubTask.status?.lowercased() {
+                        case "new":
+                            newSubTasks.append(newSubTask)
+                        case "inprogress":
+                            inProgressSubTasks.append(newSubTask)
+                        case "completed":
+                            completedSubTasks.append(newSubTask)
+                        default:
+                            break
+                        }
+                    })
+                }
     }
 }
 

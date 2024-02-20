@@ -1,20 +1,20 @@
 import SwiftUI
 struct ContentView: View {
-    @State private var userEmail = "guest"
+    @EnvironmentObject var userSettings: UserSettings
 
-    var body: some View {
-        NavigationView {
-            VStack {
-                if userEmail == "guest" {
-                    LoginView(userEmail: $userEmail)
-                } else {
-                    GoalOverviewView()
-                }
-            }
-        }
-    }
-    
-    func logout() {
-        userEmail = "guest"
-    }
+       var body: some View {
+           NavigationView {
+               VStack {
+                   if userSettings.userEmail == "guest" {
+                       LoginView()
+                   } else {
+                       GoalOverviewView()
+                   }
+               }
+           }
+       }
+}
+
+class UserSettings: ObservableObject {
+    @Published var userEmail: String = "guest"
 }
