@@ -14,15 +14,16 @@ struct GoalDetailView: View {
     @State private var inProgressSubTasks: [SubTask]
     @State private var completedSubTasks: [SubTask]
     @State private var showingAddSubtaskModal = false
+    var goalUpdated: (Goal) -> Void
 
 
-    init(goal: Goal) {
+    init(goal: Goal, onGoalUpdated: @escaping (Goal) -> Void = { _ in }) {
         _goal = State(initialValue: goal)
         let subTasks = goal.subTasks ?? []
         _newSubTasks = State(initialValue: subTasks.filter { $0.status?.lowercased() == "new" })
         _inProgressSubTasks = State(initialValue: subTasks.filter { $0.status?.lowercased() == "inprogress" })
         _completedSubTasks = State(initialValue: subTasks.filter { $0.status?.lowercased() == "completed" })
-
+        self.goalUpdated = onGoalUpdated
     }
 
     var body: some View {
@@ -69,6 +70,7 @@ struct GoalDetailView: View {
                     SubtaskDetailModal(goal: $goal, subTask: .constant(SubTask()), onSave: { updatedGoal in
                         print(updatedGoal)
                         goal = updatedGoal
+                        goalUpdated(goal)
                         let newSubTask = goal.subTasks!.last!
                         switch newSubTask.status?.lowercased() {
                         case "new":

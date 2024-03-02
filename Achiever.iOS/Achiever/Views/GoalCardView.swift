@@ -18,21 +18,23 @@ struct GoalCardView: View {
     @AppStorage("isDarkMode") var isDarkMode: Bool = false
     
     var goal: Goal
-    
+    var goalUpdated: (Goal) -> Void = { _ in }
+
     let displayDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         return formatter
     }()
     
-    init(goal: Goal)
+    init(goal: Goal, onGoalUpdated: @escaping (Goal) -> Void = { _ in })
     {
         self.goal = goal
         self.baseGoal.goal = self.goal
+        self.goalUpdated = onGoalUpdated
     }
     
     var body: some View {
-        NavigationLink(destination: GoalDetailView(goal: goal)) {
+        NavigationLink(destination: GoalDetailView(goal: goal, onGoalUpdated: goalUpdated)) {
             VStack(alignment: .leading) {
                 HStack {
                     Text(baseGoal.goal.title!)
@@ -118,8 +120,9 @@ struct GoalCardView: View {
                         if let updatedSubTasks = baseGoal.goal.subTasks?.map({ $0.id == id ? selectedSubTask.subTask : $0 }) {
                             baseGoal.goal.subTasks = updatedSubTasks
                         }
+                        goalUpdated(updatedGoal)
                     }
-                    })
+                })
             }
         }
     }
@@ -139,7 +142,6 @@ struct GoalCardView: View {
                 return .gray
             }
         }
-    
     
     class SelectedSubTask: ObservableObject {
         @Published var subTask: SubTask = SubTask()

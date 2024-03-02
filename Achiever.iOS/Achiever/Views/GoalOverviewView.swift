@@ -27,8 +27,12 @@ struct GoalOverviewView: View {
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 200))]) {
                             ForEach(goalData.filteredGoals) { goal in
-                                GoalCardView(goal: goal)
-                                    .padding(.horizontal, 16)
+                                GoalCardView(goal: goal){ updatedGoal in
+                                    if let index = goalData.goals.firstIndex(where: { $0.id == updatedGoal.id }) {
+                                            goalData.goals[index] = updatedGoal
+                                    }
+                                }
+                                 .padding(.horizontal, 16)
                             }
                         }
                     }
