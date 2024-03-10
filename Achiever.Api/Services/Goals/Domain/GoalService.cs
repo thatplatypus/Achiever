@@ -62,8 +62,9 @@ namespace Achiever.Services.Goals.Domain
         public async Task<GoalEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _context.Goals
+                .Where(x => x.AccountId == _account.AccountId)
                 .Include(x => x.SubTasks)
-                .FirstOrDefaultAsync(x => x.Id == id && x.AccountId == _account.AccountId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         public async Task<IEnumerable<SubTaskEntity>> GetSubTasksByGoalIdAsync(Guid goalId, CancellationToken cancellationToken)

@@ -146,6 +146,10 @@ struct GoalCardView: View {
                         }
                         goalUpdated(updatedGoal)
                     }
+                },
+                onDelete: { subtaskDeletedId in
+                    baseGoal.goal.subTasks?.removeAll(where: {$0.id == subtaskDeletedId})
+                    goalUpdated(baseGoal.goal)
                 })
             }
         }

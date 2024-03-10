@@ -52,11 +52,6 @@ struct GoalClient {
                 completion(.failure(NetworkError.invalidURL))
                 return
             }
-        
-        guard let url = URL(string: AuthConfig.baseURL + "/GetGoalById?request=\(requestString)") else {
-            completion(.failure(NetworkError.invalidURL))
-            return
-        }
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -70,8 +65,6 @@ struct GoalClient {
                 decoder.dateDecodingStrategy = .formatted(dateFormatter)
                 
                 do {
-                    let jsonString = String(data: data, encoding: .utf8)
-                    
                     let response = try decoder.decode(GetGoalByIdResponse.self, from: data)
                     completion(.success(response.goal))
                 } catch {
@@ -100,7 +93,14 @@ struct GoalClient {
         networkManager.send(request: request) { result in
             switch result {
             case .success(let data):
-                completion(.success(UUID.init()))
+                do {
+                    let decoder = JSONDecoder()
+                    let response = try decoder.decode(CreateGoalResponse.self, from: data)
+                    completion(.success(response.id))
+                }
+                catch {
+                    completion(.failure(error))
+                }
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -187,6 +187,10 @@ struct GoalClient {
 
 struct CreateGoalRequest: Codable {
     let goal: Goal
+}
+
+struct CreateGoalResponse: Codable {
+    let id: UUID
 }
 
 struct GetGoalsResponse: Codable {

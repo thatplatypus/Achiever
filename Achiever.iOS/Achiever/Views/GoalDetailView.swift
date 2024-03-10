@@ -36,6 +36,9 @@ struct GoalDetailView: View {
                         SubTaskCard(subTask: $newSubTasks[index], goal: $goal, color: .gray, subtaskUpdated: { goal in
                             goalUpdated(goal)
                             newSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "new" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000") } ?? []
+                            inProgressSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "inprogress" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000")} ?? []
+                            completedSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "completed" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000")} ?? []
+
                         }, subtaskDeleted: {subtaskId in
                                 goal.subTasks?.removeAll(where: {$0.id == subtaskId})
                                 goalUpdated(goal)
@@ -51,7 +54,9 @@ struct GoalDetailView: View {
                 } else {
                     ForEach(Array(inProgressSubTasks.enumerated()), id: \.element.id) { index, _ in
                         SubTaskCard(subTask: $inProgressSubTasks[index], goal: $goal, color: .cyan, subtaskUpdated: {goal in
+                            newSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "new" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000") } ?? []
                             inProgressSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "inprogress" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000")} ?? []
+                            completedSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "completed" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000")} ?? []
                             goalUpdated(goal)}, subtaskDeleted: {subtaskId in
                                 goal.subTasks?.removeAll(where: {$0.id == subtaskId})
                                 goalUpdated(goal)
@@ -67,7 +72,10 @@ struct GoalDetailView: View {
                 } else {
                     ForEach(Array(completedSubTasks.enumerated()), id: \.element.id) { index, _ in
                         SubTaskCard(subTask: $completedSubTasks[index], goal: $goal, color: .green, subtaskUpdated: {goal in
+                            newSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "new" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000") } ?? []
+                            inProgressSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "inprogress" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000")} ?? []
                             completedSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "completed" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000")} ?? []
+
                             goalUpdated(goal)}, subtaskDeleted: {subtaskId in
                                 goal.subTasks?.removeAll(where: {$0.id == subtaskId})
                                 goalUpdated(goal)

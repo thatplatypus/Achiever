@@ -9,7 +9,7 @@ using static Achiever.Shared.Goals.Endpoints.GetGoalByIdRequestModel;
 
 namespace Achiever.Services.Goals.Endpoints
 {
-    public class GetGoalById(IGoalReadRepository database) : IEndpoint<GetGoalByIdRequest, GetGoalByIdResponse>
+    public class GetGoalById(IGoalReadRepository database, ILogger<GetGoalById> logger) : IEndpoint<GetGoalByIdRequest, GetGoalByIdResponse>
     {
 
         public class GetGoalByIdValidator : AbstractValidator<GetGoalByIdRequest>
@@ -27,6 +27,8 @@ namespace Achiever.Services.Goals.Endpoints
 
         public async Task<EndpointResult<GetGoalByIdResponse>> Handle(GetGoalByIdRequest request, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
         {
+            logger.LogInformation("Retreiving {GoalId}", request.Id);
+
             var entityGoal = await database.GetByIdAsync(request.Id, cancellationToken);
 
             if (entityGoal == null)
