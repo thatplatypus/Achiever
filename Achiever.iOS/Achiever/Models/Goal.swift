@@ -42,7 +42,7 @@ struct Goal: Codable, Identifiable {
           do {
               endDate = try container.decodeIfPresent(Date.self, forKey: .endDate)
           } catch {
-              print("Error decoding endDate: \(error), \(try container.decodeIfPresent(String.self, forKey: .endDate))")
+              print("Error decoding endDate: \(error), \(try container.decodeIfPresent(String.self, forKey: .endDate) ?? "")")
               endDate = nil
           }
 

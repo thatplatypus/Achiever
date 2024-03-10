@@ -93,7 +93,7 @@ struct GoalClient {
         }
 
         var request = URLRequest(url: url)
-        var requestBody = CreateGoalRequest(goal: goal)
+        let requestBody = CreateGoalRequest(goal: goal)
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder().encode(requestBody)
 
@@ -141,6 +141,48 @@ struct GoalClient {
             }
         }
 }
+    
+    func deleteGoal(id: UUID, completion: @escaping(Result<Bool, Error>) -> Void){
+        guard let url = URL(string: AuthConfig.baseURL + "/DeleteGoal") else {
+            completion(.failure(NetworkError.invalidURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        var requestBody = DeleteGoalRequest(goalId: id)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder().encode(requestBody)
+
+        networkManager.send(request: request) { result in
+            switch result {
+            case .success(let data):
+                completion(.success(true))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func deleteSubtask(id: UUID, completion: @escaping(Result<Bool, Error>) -> Void){
+        guard let url = URL(string: AuthConfig.baseURL + "/DeleteSubtask") else {
+            completion(.failure(NetworkError.invalidURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        var requestBody = DeleteSubtaskRequest(id: id)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder().encode(requestBody)
+
+        networkManager.send(request: request) { result in
+            switch result {
+            case .success(let data):
+                completion(.success(true))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }
 
 struct CreateGoalRequest: Codable {
@@ -156,6 +198,14 @@ struct GetGoalByIdResponse: Codable {
 }
 
 struct UpdateGoalResponse: Codable {
+    let id: UUID
+}
+
+struct DeleteGoalRequest: Codable {
+    let goalId: UUID
+}
+
+struct DeleteSubtaskRequest: Codable {
     let id: UUID
 }
 

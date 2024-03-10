@@ -11,6 +11,7 @@ import SwiftUI
 struct GoalCardView: View {
     @ObservedObject var baseGoal: ObservableGoal = ObservableGoal();
     @State private var showingDetail = false
+    @State private var showingDeleteAlert = false
     @ObservedObject private var selectedSubTask = SelectedSubTask()
     @ObservedObject private var selectedGoal = ObservableGoal()
     @State private var scrollProgress: CGFloat = 0
@@ -19,6 +20,7 @@ struct GoalCardView: View {
     
     var goal: Goal
     var goalUpdated: (Goal) -> Void = { _ in }
+    var goalDeleted: (UUID) -> Void = { _ in }
 
     let displayDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -26,11 +28,12 @@ struct GoalCardView: View {
         return formatter
     }()
     
-    init(goal: Goal, onGoalUpdated: @escaping (Goal) -> Void = { _ in })
+    init(goal: Goal, onGoalUpdated: @escaping (Goal) -> Void = { _ in }, onGoalDeleted: @escaping (UUID) -> Void = { _ in })
     {
         self.goal = goal
         self.baseGoal.goal = self.goal
         self.goalUpdated = onGoalUpdated
+        self.goalDeleted = onGoalDeleted
     }
     
     var body: some View {
@@ -99,8 +102,29 @@ struct GoalCardView: View {
                         Text("\(String(format: "%.2g", remainingHours))/\(String(format: "%.2g", totalHours)) hours remaining")
                             .font(.footnote)
                             .foregroundColor(.gray)
+                        
+                        Spacer()
+                          Button(action: {
+                    showingDeleteAlert = true
+                }) {
+                    HStack {
+                        Image(systemName: "trash")
+                            .font(.footnote)
+                            .foregroundStyle(.red)
+                        Text("Delete")
+                            .font(.footnote)
+                            .foregroundStyle(.red)
                     }
-                    .padding(8)
+                }
+                .alert(isPresented: $showingDeleteAlert) {
+                    Alert(title: Text("Are you sure you want to delete this goal?"),
+                          primaryButton: .destructive(Text("Delete")) {
+                            goalDeleted(baseGoal.goal.id)
+                          },
+                          secondaryButton: .cancel())
+                }
+            }
+            .padding(8)
                 }
             }
             .padding()

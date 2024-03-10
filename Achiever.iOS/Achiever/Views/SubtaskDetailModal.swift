@@ -131,20 +131,24 @@ struct SubtaskDetailModal: View {
                     }) {
                         HStack {
                             Spacer()
-                            Text("Delete")
+                            Text(subTask.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000") ? "Delete" : "Save")
                                 .foregroundColor(.white)
-                            Image(systemName: "trash")
+                            Image(systemName: subTask.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000") ? "trash" : "")
                                 .foregroundColor(.white)
                             Spacer()
                         }
                     }
                     .padding(16)
-                    .background(Color.red)
+                    .background(subTask.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000") ? Color.red : Color.accentColor)
                     .cornerRadius(10)
                     .alert(isPresented: $showingDeleteAlert) {
-                        Alert(title: Text("Are you sure you want to delete this task?"),
-                              primaryButton: .destructive(Text("Delete")) {
-                            // Implement your delete logic here
+                        Alert(title: Text(subTask.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000") ? "Are you sure you want to delete this task?" : "Save task?"),
+                              primaryButton: .destructive(Text(subTask.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000") ? "Delete" : "Save")) {
+                            if(subTask.id == UUID(uuidString: "00000000-0000-0000-0000-000000000000")) {
+                                Save()
+                            } else {
+                                //Delete
+                            }
                         },
                               secondaryButton: .cancel())
                     }
@@ -159,40 +163,43 @@ struct SubtaskDetailModal: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        draftSubTask.estimatedHours = sliderValue
-                        subTask.title = draftSubTask.title
-                        subTask.status = draftSubTask.status
-                        subTask.estimatedHours = draftSubTask.estimatedHours
-                        subTask.note = draftSubTask.note
-
-                        if let index = goal.subTasks?.firstIndex(where: { $0.id == subTask.id }) {
-                            goal.subTasks?[index] = subTask
-                        } else {
-                            var s = SubTask()
-                            s.title = draftSubTask.title
-                            s.status = draftSubTask.status
-                            s.estimatedHours = draftSubTask.estimatedHours
-                            s.note = draftSubTask.note
-                            goal.subTasks?.append(s)
-                        }
-
-                        goalClient.updateGoal(goal: goal){ result in
-                            switch result {
-                            case .success(let updatedGoal):
-                                print("Goal updated: \(updatedGoal)")
-                                onSave(goal)
-                            case .failure(let error):
-                                print("Failed to update goal: \(error)")
-                            }
-
-                            presentationMode.wrappedValue.dismiss()
-                        }
+                      Save()
                     }
                 }
             }          
         }
     }
     
+    func Save() {
+        draftSubTask.estimatedHours = sliderValue
+        subTask.title = draftSubTask.title
+        subTask.status = draftSubTask.status
+        subTask.estimatedHours = draftSubTask.estimatedHours
+        subTask.note = draftSubTask.note
+
+        if let index = goal.subTasks?.firstIndex(where: { $0.id == subTask.id }) {
+            goal.subTasks?[index] = subTask
+        } else {
+            var s = SubTask()
+            s.title = draftSubTask.title
+            s.status = draftSubTask.status
+            s.estimatedHours = draftSubTask.estimatedHours
+            s.note = draftSubTask.note
+            goal.subTasks?.append(s)
+        }
+
+        goalClient.updateGoal(goal: goal){ result in
+            switch result {
+            case .success(let updatedGoal):
+                print("Goal updated: \(updatedGoal)")
+                onSave(goal)
+            case .failure(let error):
+                print("Failed to update goal: \(error)")
+            }
+
+            presentationMode.wrappedValue.dismiss()
+        }
+    }
     
     struct EditableSubTask {
         var title: String

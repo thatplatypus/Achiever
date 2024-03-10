@@ -27,11 +27,15 @@ struct GoalOverviewView: View {
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 200))]) {
                             ForEach(goalData.filteredGoals) { goal in
-                                GoalCardView(goal: goal){ updatedGoal in
+                                GoalCardView(goal: goal,
+                                             onGoalUpdated: { updatedGoal in
                                     if let index = goalData.goals.firstIndex(where: { $0.id == updatedGoal.id }) {
-                                            goalData.goals[index] = updatedGoal
+                                        goalData.goals[index] = updatedGoal
                                     }
-                                }
+                                },
+                                             onGoalDeleted: {deletedGoalId in
+                                    deleteGoal(id: deletedGoalId)
+                                })
                                  .padding(.horizontal, 16)
                             }
                         }
@@ -85,6 +89,18 @@ struct GoalOverviewView: View {
                     }
                 }
         )
+    }
+    
+    func deleteGoal(id: UUID) {
+        goalClient.deleteGoal(id: id, completion: {result in
+            switch result {
+            case .success(_):
+                goalData.goals.removeAll(where: { $0.id == id})
+                
+            case .failure(let error):
+                print("Failed to delete goal: \(error)")
+            }
+        })
     }
 }
     
