@@ -33,7 +33,14 @@ struct GoalDetailView: View {
                     Text("No tasks")
                 } else {
                     ForEach(Array(newSubTasks.enumerated()), id: \.element.id) { index, _ in
-                        SubTaskCard(subTask: $newSubTasks[index], goal: $goal, color: .gray)
+                        SubTaskCard(subTask: $newSubTasks[index], goal: $goal, color: .gray, subtaskUpdated: { goal in
+                            goalUpdated(goal)
+                            newSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "new" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000") } ?? []
+                        }, subtaskDeleted: {subtaskId in
+                                goal.subTasks?.removeAll(where: {$0.id == subtaskId})
+                                goalUpdated(goal)
+                                newSubTasks.removeAll(where: {$0.id == subtaskId})
+                            })
                     }
                 }
             }
@@ -43,19 +50,29 @@ struct GoalDetailView: View {
                     Text("No tasks")
                 } else {
                     ForEach(Array(inProgressSubTasks.enumerated()), id: \.element.id) { index, _ in
-                        SubTaskCard(subTask: $inProgressSubTasks[index], goal: $goal, color: .cyan)
+                        SubTaskCard(subTask: $inProgressSubTasks[index], goal: $goal, color: .cyan, subtaskUpdated: {goal in
+                            inProgressSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "inprogress" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000")} ?? []
+                            goalUpdated(goal)}, subtaskDeleted: {subtaskId in
+                                goal.subTasks?.removeAll(where: {$0.id == subtaskId})
+                                goalUpdated(goal)
+                                inProgressSubTasks.removeAll(where: {$0.id == subtaskId})
+                            })
                     }
                 }
             }
         
-    
-            
             Section(header: Text("Completed")) {
                 if completedSubTasks.isEmpty {
                     Text("No tasks")
                 } else {
                     ForEach(Array(completedSubTasks.enumerated()), id: \.element.id) { index, _ in
-                        SubTaskCard(subTask: $completedSubTasks[index], goal: $goal, color: .green)
+                        SubTaskCard(subTask: $completedSubTasks[index], goal: $goal, color: .green, subtaskUpdated: {goal in
+                            completedSubTasks = goal.subTasks?.filter { $0.status?.lowercased() == "completed" && $0.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000")} ?? []
+                            goalUpdated(goal)}, subtaskDeleted: {subtaskId in
+                                goal.subTasks?.removeAll(where: {$0.id == subtaskId})
+                                goalUpdated(goal)
+                                completedSubTasks.removeAll(where: {$0.id == subtaskId})
+                            })
                     }
                 }
             }
@@ -74,16 +91,16 @@ struct GoalDetailView: View {
                         let newSubTask = goal.subTasks!.last!
                         switch newSubTask.status?.lowercased() {
                         case "new":
-                            newSubTasks.append(newSubTask)
+                            newSubTasks = (goal.subTasks?.filter({ $0.status?.lowercased() == "new" }))!
                         case "inprogress":
-                            inProgressSubTasks.append(newSubTask)
+                            inProgressSubTasks = (goal.subTasks?.filter({ $0.status?.lowercased() == "inprogress" }))!
                         case "completed":
-                            completedSubTasks.append(newSubTask)
+                            completedSubTasks = (goal.subTasks?.filter({ $0.status?.lowercased() == "completed" }))!
                         default:
                             break
                         }
-                    })
-                }
+          })
+      }
     }
 }
 
@@ -92,6 +109,8 @@ struct SubTaskCard: View {
     @Binding var goal: Goal
     @State private var showingDetail = false
     var color: Color
+    var subtaskUpdated: (Goal) -> Void
+    var subtaskDeleted: (UUID) -> Void
 
     var body: some View {
         HStack {
@@ -113,8 +132,12 @@ struct SubTaskCard: View {
             SubtaskDetailModal(goal: $goal, subTask: $subTask, onSave: { updatedGoal in
                 print(updatedGoal)
                 goal = updatedGoal
-            })
-            }
+                subtaskUpdated(goal)
+            },
+            onDelete: { deletedSubtaskId in
+                subtaskDeleted(deletedSubtaskId)
+           })
         }
     }
+}
 

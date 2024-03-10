@@ -14,6 +14,7 @@ struct SubtaskDetailModal: View {
     @State var showingDeleteAlert: Bool = false
     @State private var sliderValue: Double
     var onSave: ((Goal) -> Void) =  {_ in}
+    var onDelete: ((UUID) -> Void) = {_ in}
     @Environment(\.presentationMode) var presentationMode
     let goalClient = GoalClient(networkManager: NetworkManager())
     
@@ -21,7 +22,7 @@ struct SubtaskDetailModal: View {
     let statuses = ["New", "InProgress", "Completed"]
     let displayStatuses = ["New", "In Progress", "Completed"]
     
-    init(goal: Binding<Goal>, subTask: Binding<SubTask>, onSave: @escaping (Goal) -> Void = { _ in })  {
+    init(goal: Binding<Goal>, subTask: Binding<SubTask>, onSave: @escaping (Goal) -> Void = { _ in }, onDelete: @escaping (UUID) -> Void = { _ in})  {
         _goal = goal
         _subTask = subTask
         _draftSubTask = State(initialValue: EditableSubTask(
@@ -32,6 +33,7 @@ struct SubtaskDetailModal: View {
         ))
         _sliderValue = State(initialValue: subTask.wrappedValue.estimatedHours ?? 0)
         self.onSave = onSave
+        self.onDelete = onDelete
     }
     
     func toDisplayStatus(status: String) -> String {
@@ -147,7 +149,7 @@ struct SubtaskDetailModal: View {
                             if(subTask.id == UUID(uuidString: "00000000-0000-0000-0000-000000000000")) {
                                 Save()
                             } else {
-                                //Delete
+                                Delete()
                             }
                         },
                               secondaryButton: .cancel())
@@ -177,7 +179,7 @@ struct SubtaskDetailModal: View {
         subTask.estimatedHours = draftSubTask.estimatedHours
         subTask.note = draftSubTask.note
 
-        if let index = goal.subTasks?.firstIndex(where: { $0.id == subTask.id }) {
+        if subTask.id != UUID(uuidString: "00000000-0000-0000-0000-000000000000"), let index = goal.subTasks?.firstIndex(where: { $0.id == subTask.id }) {
             goal.subTasks?[index] = subTask
         } else {
             var s = SubTask()
@@ -192,9 +194,33 @@ struct SubtaskDetailModal: View {
             switch result {
             case .success(let updatedGoal):
                 print("Goal updated: \(updatedGoal)")
-                onSave(goal)
+                goalClient.getGoalById(id: goal.id, completion: { result in
+                    switch result {
+                    case .success(let retreivedGoal):
+                        goal = retreivedGoal
+                        onSave(retreivedGoal)
+                    case .failure(let error):
+                        print("Failed to retrieve goal: \(error)")
+                        goal = goal
+                        onSave(goal)
+                    }
+                })
             case .failure(let error):
                 print("Failed to update goal: \(error)")
+            }
+
+            presentationMode.wrappedValue.dismiss()
+        }
+    }
+    
+    func Delete() {
+        goalClient.deleteSubtask(id: subTask.id){ result in
+            switch result {
+            case .success(let updatedGoal):
+                print("Subtask deleted: \(updatedGoal)")
+                onDelete(subTask.id)
+            case .failure(let error):
+                print("Failed to delete subtask: \(error)")
             }
 
             presentationMode.wrappedValue.dismiss()

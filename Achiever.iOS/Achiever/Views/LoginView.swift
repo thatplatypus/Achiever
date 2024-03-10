@@ -12,8 +12,8 @@ import KeychainSwift
 struct LoginView: View {
     let authClient = AuthenticationClient(networkManager: NetworkManager())
     let keychain = KeychainSwift()
-    @State private var email = "system@localhost"
-    @State private var password = "Test123!"
+    @State private var email = ""
+    @State private var password = ""
     @AppStorage("userEmail") var storedEmail: String = ""
     @AppStorage("isDarkMode") var isDarkMode: Bool = false
     @EnvironmentObject var userSettings: UserSettings
@@ -47,12 +47,6 @@ struct LoginView: View {
                         .foregroundColor(.secondary)
                 }
                 .padding()
-                Button(action: loginWithApple) {
-                    Text("Log In with Apple")
-                        .foregroundColor(.black)
-                }
-                .padding()
-                Spacer()
             }
         }
         .preferredColorScheme(isDarkMode ? .dark : .light)
@@ -60,9 +54,7 @@ struct LoginView: View {
     }
     
         func autoLogin() {
-            //keychain.set("system@localhost", forKey: "email")
-            //keychain.set("Test123!", forKey: "password")
-            
+           
             if let storedEmail = keychain.get("email"),
                let storedPassword = keychain.get("password"),
                !storedEmail.isEmpty,

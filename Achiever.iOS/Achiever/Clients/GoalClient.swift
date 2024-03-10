@@ -170,7 +170,7 @@ struct GoalClient {
         }
         
         var request = URLRequest(url: url)
-        var requestBody = DeleteSubtaskRequest(id: id)
+        var requestBody = DeleteSubtaskRequest(subtaskId: id)
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder().encode(requestBody)
 
@@ -206,7 +206,7 @@ struct DeleteGoalRequest: Codable {
 }
 
 struct DeleteSubtaskRequest: Codable {
-    let id: UUID
+    let subtaskId: UUID
 }
 
 struct GoalWrapper: Codable {
