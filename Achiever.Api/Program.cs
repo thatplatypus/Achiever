@@ -13,6 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 // cookie authentication
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddIdentityCookies();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
+
 // configure authorization
 builder.Services.AddAuthorizationBuilder();
 
@@ -74,6 +80,10 @@ app.MapPost("/Logout", async (SignInManager<AppUser> signInManager, [FromBody] o
 
 // activate the CORS policy
 app.UseCors("wasm");
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
