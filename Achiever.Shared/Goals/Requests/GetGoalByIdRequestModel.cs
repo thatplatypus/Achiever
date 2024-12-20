@@ -1,5 +1,6 @@
 ﻿
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Achiever.Shared.Goals.ViewModels;
 
 namespace Achiever.Shared.Goals.Endpoints
@@ -14,7 +15,10 @@ namespace Achiever.Shared.Goals.Endpoints
             public static bool TryParse(string input, out GetGoalByIdRequest result)
             {
                 result = default!;
-                var request = JsonSerializer.Deserialize<GetGoalByIdRequest>(input);
+                var request = JsonSerializer.Deserialize<GetGoalByIdRequest>(input, new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true
+                });
 
                 if(request != null)
                 {
