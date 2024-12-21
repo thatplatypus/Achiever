@@ -3,6 +3,7 @@
     import { getGoals, createGoal, deleteGoal } from '$lib/api/goals';
     import GoalCard from '$lib/components/ui/GoalCard.svelte';
     import Button from '$lib/components/ui/button/button.svelte';
+    import Plus from 'lucide-svelte/icons/plus';
   
     let goals = [];
     let loading = true;
@@ -44,8 +45,10 @@
     <h1 class="text-lg font-bold">Goals</h1>
     <Button 
       on:click={handleCreateGoal}
-      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      variant="outline"
+      class="rounded hover:bg-background/50 hover:text-accent-foreground transition-colors"
     >
+    <Plus class="mr-2 h-4 w-4" />
       Create Goal
     </Button>
   </div>

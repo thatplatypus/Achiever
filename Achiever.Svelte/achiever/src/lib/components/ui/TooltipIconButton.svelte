@@ -10,7 +10,7 @@
   <Tooltip.Root>
     <Tooltip.Trigger>
       <button
-         class="p-2 border rounded bg-background hover:bg-accent hover:text-accent-foreground focus:outline-none transition-colors"
+         class="p-2 border rounded hover:bg-background/50 hover:text-accent-foreground transition-colors"
         on:click={(event) => dispatch('click', event)}
       >
         <slot />

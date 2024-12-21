@@ -18,6 +18,9 @@
     function openDialog() {
       open = true;
     }
+    function cancel() {
+        open = false;
+    }
   </script>
   
   <Dialog.Root bind:open>
@@ -51,7 +54,8 @@
         </div>
       </div>
       <Dialog.Footer>
-        <Button on:click={handleSave}>Save changes</Button>
+        <Button variant="ghost" on:click={cancel}>Cancel</Button>
+        <Button variant="outline" on:click={handleSave}>Save</Button>
       </Dialog.Footer>
     </Dialog.Content>
   </Dialog.Root>

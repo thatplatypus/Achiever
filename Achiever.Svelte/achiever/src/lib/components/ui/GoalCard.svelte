@@ -45,30 +45,32 @@
 </script>
 
 <Card.Root
-  class="hover:shadow-lg hover:cursor-pointer transition-shadow duration-300 hover:shadow-lg hover:scale-105 transition-transform duration-200"
+  class="hover:shadow-lg hover:cursor-pointer transition-shadow duration-300 hover:shadow-lg hover:scale-105 transition-transform duration-200 h-full flex flex-col"
   onclick={handleCardClick}
 >
-  <Card.Header>
-    <Card.Title>{goal.title}</Card.Title>
-    <Card.Description>
-      {goal.subTasks.length} Subtasks | Status: {goal.status}
-    </Card.Description>
-  </Card.Header>
-  <Card.Content>
-    <div class="grid w-full items-center gap-4">
-      {#if goal.subTasks.length > 0}
-        <div>
-          <Label>Subtasks</Label>
-          <ul class="list-disc ml-4">
-            {#each goal.subTasks as subTask}
-              <li>{subTask.title} - {subTask.status}</li>
-            {/each}
-          </ul>
-        </div>
-      {/if}
-    </div>
-  </Card.Content>
-  <Card.Footer class="flex justify-between">
+  <div class="flex-grow">
+    <Card.Header>
+      <Card.Title>{goal.title}</Card.Title>
+      <Card.Description>
+        {goal.subTasks.length} Subtasks | Status: {goal.status}
+      </Card.Description>
+    </Card.Header>
+    <Card.Content>
+      <div class="grid w-full items-center gap-4">
+        {#if goal.subTasks.length > 0}
+          <div>
+            <Label>Subtasks</Label>
+            <ul class="list-disc ml-4">
+              {#each goal.subTasks as subTask}
+                <li>{subTask.title} - {subTask.status}</li>
+              {/each}
+            </ul>
+          </div>
+        {/if}
+      </div>
+    </Card.Content>
+  </div>
+  <Card.Footer class="flex justify-between mt-auto">
     <EditGoalDialog {goal} onSave={(updated) => handleGoalUpdated(updated.id, updated.title, updated.status)}>
       <TooltipIconButton tooltipText="Edit Goal">
         <Pencil class="h-4 w-4" />

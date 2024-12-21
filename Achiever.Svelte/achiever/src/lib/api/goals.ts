@@ -10,6 +10,10 @@ export type SubTask = {
     title: string;
     status: string;
     userDeleted?: boolean;
+    estimatedHours?: number;
+    lastModified?: Date;
+    order?: number;
+    note?: string;
   };
   
   type APIResult<T> = { isSuccess: boolean; value?: T; message?: string };
