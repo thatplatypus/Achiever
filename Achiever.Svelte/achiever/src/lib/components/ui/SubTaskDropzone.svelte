@@ -7,12 +7,14 @@
     import Pencil from "lucide-svelte/icons/pencil";
     import { onMount } from "svelte";
     import { statuses } from "$lib/api/subtaskStatus";
+    import { Clock, NotepadText } from "lucide-svelte";
+    import { Tooltip } from "bits-ui";
   
     export let dropZoneId: string; 
     export let dropZoneTitle: string;
-    export let subtasks: SubTask[] = []; // List of subtasks in this dropzone
-    export let onUpdateStatus: (subtaskId: string, dropZoneId: string) => void; // Callback when subtasks are updated
-    export let onSubtaskUpdated: (subtask: SubTask) => void; // Callback when a subtask is updated
+    export let subtasks: SubTask[] = []; 
+    export let onUpdateStatus: (subtaskId: string, dropZoneId: string) => void; 
+    export let onSubtaskUpdated: (subtask: SubTask) => void; 
 
     function handleDndConsider(e) {
       subtasks = e.detail.items;
@@ -43,6 +45,19 @@
         return "transparent";
     }
   }
+
+  function getStatusTextLabelColor(status: string): string {
+    switch (status) {
+      case "New":
+        return "text-gray-500";
+      case "InProgress":
+        return "text-gray-700 dark:text-gray-300";
+      case "Completed":
+        return "text-emerald-500";
+      default:
+        return "text-gray-500";
+    }
+  }
   
   </script>
   <div class="h-full">
@@ -68,13 +83,66 @@
       <!-- Subtask Details -->
       <div class="flex-1">
         <p class="font-medium">{subtask.title}</p>
-        <p class="text-sm text-gray-500 flex gap-1 items-center"> 
+        <div class="text-sm text-gray-500 flex gap-3 width-full"> 
+
+        <span class="text-sm {getStatusTextLabelColor(subtask.status)} flex gap-0 items-center"> 
           <svelte:component
           this={statuses.find((status) => status.value === subtask.status)?.icon} 
-          class="mr-2 h-4 w-4"
-      /> 
-      {statuses.find((st) => st.value === subtask.status)?.label}
-    </p>
+          class="mr-2 h-4 w-4" />
+          {statuses.find((st) => st.value === subtask.status)?.label}
+        </span> 
+
+        {#if subtask.estimatedHours && subtask.estimatedHours > 0}
+            <Tooltip.Root>
+              <Tooltip.Trigger>
+                <span class="text-sm text-gray-700 dark:text-gray-300 flex gap-1 items-center">
+            <Clock class="h-4 w-4" />
+            <span>{subtask.estimatedHours}</span>
+          </span>
+
+          </Tooltip.Trigger>
+          <Tooltip.Content>
+            <p>{subtask.estimatedHours} estimated hours</p>
+          </Tooltip.Content>
+        </Tooltip.Root> 
+        {:else}
+        <Tooltip.Root>
+          <Tooltip.Trigger>
+            <span class="text-sm text-gray-500 flex gap-1 items-center">
+        <Clock class="h-4 w-4" />
+      </span>
+
+      </Tooltip.Trigger>
+      <Tooltip.Content>
+        <p>No estimated hours</p>
+      </Tooltip.Content>
+    </Tooltip.Root> 
+        {/if}
+
+        {#if subtask.note}
+          <span class="text-sm text-gray-700 dark:text-gray-300 flex gap-1 items-center">
+            <Tooltip.Root>
+              <Tooltip.Trigger>
+                <NotepadText class="h-4 w-4" />
+              </Tooltip.Trigger>
+              <Tooltip.Content>
+                <quote>{subtask.note}</quote>
+              </Tooltip.Content>
+            </Tooltip.Root>    
+          </span>
+          {:else}
+          <span class="text-sm text-gray-500 flex gap-1 items-center">
+            <Tooltip.Root>
+              <Tooltip.Trigger>
+                <NotepadText class="h-4 w-4" />
+              </Tooltip.Trigger>
+              <Tooltip.Content>
+                <p>No notes</p>
+              </Tooltip.Content>
+            </Tooltip.Root>    
+          </span>
+        {/if}
+        </div>
       </div>
   
       <!-- Edit Button -->
