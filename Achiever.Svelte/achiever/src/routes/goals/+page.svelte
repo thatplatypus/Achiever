@@ -58,7 +58,7 @@
   {:else if errorMessage}
     <p>Error: {errorMessage}</p>
   {:else}
-  <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+  <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xxl:grid-cols-4 gap-5">
     {#each goals as goal}
               <GoalCard {goal} onDelete={handleDeleteGoal} />
             {/each}

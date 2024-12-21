@@ -8,6 +8,11 @@ const config = {
     './node_modules/shadcn-svelte/**/*.{html,js,svelte,ts}'
   ],
 	safelist: ["dark"],
+  plugins: [
+    require('flowbite/plugin')({
+      charts: true,
+  }),
+  ],
 	theme: {
 		container: {
 			center: true,

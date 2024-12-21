@@ -67,6 +67,16 @@ export async function loginAndFetchUser(email: string, password: string): Promis
   }
 
   const userInfo = await userInfoResponse.json();
+
+  auth.set({
+    isAuthenticated: true,
+    user: {
+      email: userInfo.email,
+      id: userInfo.id,
+    },
+  });
+
+
   return {
     email: userInfo.email,
     id: userInfo.id,

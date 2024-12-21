@@ -9,7 +9,13 @@
     import { Button } from "$lib/components/ui/button/index.js";
     import { Github } from "lucide-svelte";
     import  * as Tooltip from "$lib/components/ui/tooltip";
+    import * as Avatar from "$lib/components/ui/avatar";
+    import {Separator} from "$lib/components/ui/separator";
     import { writable } from "svelte/store";
+    import { auth } from "$lib/stores/auth";
+    
+
+
     let currentMode = "";
 
 mode.subscribe((value) => {
@@ -21,6 +27,22 @@ mode.subscribe((value) => {
 function handleSetMode(mode) {
   setMode(mode.toLowerCase());
   currentMode = mode;
+}
+
+const avatarColors = [
+  'bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-500',
+  'bg-teal-500', 'bg-blue-500', 'bg-indigo-500', 'bg-purple-500',
+  'bg-pink-500', 'bg-gray-500', 'bg-amber-500', 'bg-lime-500',
+  'bg-cyan-500', 'bg-fuchsia-500', 'bg-rose-500', 'bg-stone-500',
+  'bg-sky-500', 'bg-violet-500', 'bg-zinc-500', 'bg-slate-500',
+  'bg-neutral-500', 'bg-emerald-500', 'bg-amber-600', 'bg-green-700',
+  'bg-red-700', 'bg-blue-600',
+];
+
+function getAvatarColor(email: string): string {
+  const firstLetter = email.charAt(0).toLowerCase();
+  const index = firstLetter.charCodeAt(0) - 'a'.charCodeAt(0);
+  return avatarColors[index % avatarColors.length]; // Handles letters outside 'a-z'
 }
   </script>
   
@@ -87,7 +109,46 @@ function handleSetMode(mode) {
           <p>GitHub</p>
         </Tooltip.Content>
       </Tooltip.Root>
-     
+     <!-- Account Avatar -->
+     <DropdownMenu.Root>
+        <DropdownMenu.Trigger asChild let:builder>
+          <Avatar.Root class="scale-125 ml-2">
+            <Avatar.Fallback class="{getAvatarColor($auth.user?.email ?? "")}">
+                <Button builders={[builder]} variant="ghost" size="icon">
+                {#if $auth.user?.email}
+                    {$auth.user?.email.charAt(0).toUpperCase()}
+                    {:else}
+                    ?
+                    {/if}
+
+                </Button>
+            </Avatar.Fallback>
+          </Avatar.Root>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content align="end">
+            {#if $auth.isAuthenticated}
+            <DropdownMenu.Item>
+                {$auth.user?.email}
+            </DropdownMenu.Item>
+            <Separator class="my-2" />
+            <DropdownMenu.Item
+            >
+            <span class="flex items-center">
+                 Logout
+              </span>
+              
+            </DropdownMenu.Item>
+            {:else}
+            <DropdownMenu.Item
+            >
+            <a href="/login" class="flex items-center">
+                 Login
+            </a>
+              
+            </DropdownMenu.Item>
+            {/if}
+          </DropdownMenu.Content>
+      </DropdownMenu.Root>
     </div>
   </header>
   
