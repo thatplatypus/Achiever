@@ -21,6 +21,7 @@
 		"postcss": "^8.4.49",
 		"shadcn-svelte": "^0.14.0",
 		"svelte": "^5.0.0",
+		"svelte-adapter-azure-swa": "^0.20.1",
 		"svelte-check": "^4.0.0",
 		"svelte-dnd-action": "^0.9.53",
 		"tailwind-merge": "^2.5.5",
