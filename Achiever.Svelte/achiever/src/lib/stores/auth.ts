@@ -16,10 +16,6 @@ export async function login(email: string, password: string): Promise<void> {
     `${API_BASE_URL}/login?useCookies=true&`,
     {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'ACCESS-CONTROL-ALLOW-ORIGIN': '*',
-      },
       credentials: 'include', 
       referrerPolicy: 'strict-origin-when-cross-origin',
       body: JSON.stringify({ email, password }),
