@@ -1,7 +1,7 @@
 // src/hooks.client.js
 export async function handle({ event, resolve }) {
     const session = event.cookies.get('.AspNetCore.Identity.Application');
-    if (!session && (!event.url.pathname.startsWith('/register') || !event.url.pathname.startsWith('/login'))) {
+    if (!session && !event.url.pathname.startsWith('/login')) {
       return Response.redirect('/login', 302);
     }
     return resolve(event);
