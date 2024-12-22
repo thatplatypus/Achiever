@@ -211,10 +211,10 @@ async function handleSubtaskUpdated(updatedSubtask: SubTask) {
     <!-- Goal Content -->
     <div class="w-1/2">
       <Card.Header>
-        <Card.Title>
+        <Card.Title class="absolute">
           {goal.title}
         </Card.Title>
-        <Card.Description class="text-sm text-gray-500">
+        <Card.Description class="text-sm text-gray-500" style="margin-top:2em;">
           <Tooltip.Root>
             <Tooltip.Trigger>
               <span class="flex gap-1 items-center">
