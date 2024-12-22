@@ -60,6 +60,14 @@ export async function fetchUser(): Promise<{ email: string; id: string } | null>
   };
 }
 
+export async function loginAndFetchUser(email: string, password: string): Promise<{ email: string; id: string } | null> {
+  // Step 1: Login
+  const loginResponse = await login(email, password);
+
+  // Step 2: Fetch User Info
+  return await fetchUser();
+}
+
 export async function logout(): Promise<void> {
   const response = await fetch(`${API_BASE_URL}/logout`, {
     method: 'POST',
