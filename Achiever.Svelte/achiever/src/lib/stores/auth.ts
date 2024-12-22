@@ -18,7 +18,7 @@ export async function login(email: string, password: string): Promise<void> {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        //'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
       credentials: 'include', 
       referrerPolicy: 'strict-origin-when-cross-origin',
