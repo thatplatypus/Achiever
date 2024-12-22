@@ -18,11 +18,13 @@ export type SubTask = {
   };
   
   type APIResult<T> = { isSuccess: boolean; value?: T; message?: string };
+
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
   
   // Fetch all goals
   export async function getGoals(): Promise<APIResult<Goal[]>> {
     try {
-      const response = await fetch('https://localhost:7211/GetGoals', {
+      const response = await fetch(`${API_BASE_URL}/GetGoals`, {
         method: 'GET',
         credentials: 'include', // Include cookies
       });
@@ -41,7 +43,7 @@ export type SubTask = {
   // Create a new goal
   export async function createGoal(title: string): Promise<APIResult<Goal>> {
     try {
-      const response = await fetch('https://localhost:7211/CreateGoal', {
+      const response = await fetch(`${API_BASE_URL}/CreateGoal`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -65,7 +67,7 @@ export type SubTask = {
   // Update an existing goal
   export async function updateGoal(goal: Goal): Promise<APIResult<string>> {
     try {
-      const response = await fetch('https://localhost:7211/UpdateGoal', {
+      const response = await fetch(`${API_BASE_URL}/UpdateGoal`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -86,7 +88,7 @@ export type SubTask = {
   // Delete a goal
   export async function deleteGoal(goalId: string): Promise<APIResult<boolean>> {
     try {
-      const response = await fetch('https://localhost:7211/DeleteGoal', {
+      const response = await fetch(`${API_BASE_URL}/DeleteGoal`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -107,7 +109,7 @@ export type SubTask = {
   // Create a subtask for a goal
   export async function createSubTask(goalId: string, subTask: SubTask): Promise<APIResult<string>> {
     try {
-      const response = await fetch('https://localhost:7211/CreateSubTask', {
+      const response = await fetch('${API_BASE_URL}/CreateSubTask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -128,7 +130,7 @@ export type SubTask = {
   // Delete a subtask
   export async function deleteSubTask(subTaskId: string): Promise<APIResult<boolean>> {
     try {
-      const response = await fetch('https://localhost:7211/DeleteSubTask', {
+      const response = await fetch(`${API_BASE_URL}/DeleteSubTask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -149,7 +151,7 @@ export type SubTask = {
   export async function getGoalById(id: string): Promise<APIResult<Goal>> {
     try {
       const response = await fetch(
-        `https://localhost:7211/GetGoalById?request=${encodeURIComponent(
+        `${API_BASE_URL}/GetGoalById?request=${encodeURIComponent(
           JSON.stringify({ id })
         )}`,
         {
