@@ -63,11 +63,31 @@ export async function fetchUser(): Promise<{ email: string; id: string } | null>
 }
 
 export async function loginAndFetchUser(email: string, password: string): Promise<{ email: string; id: string } | null> {
-  // Step 1: Login
   const loginResponse = await login(email, password);
 
-  // Step 2: Fetch User Info
   return await fetchUser();
+}
+
+export async function register(email: string, password: string): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!response.ok) {
+    try {
+      const errorData = await response.json();
+      const errors = errorData.errors
+        ? Object.values(errorData.errors).flat()
+        : [errorData.message || 'Registration failed'];
+      throw new Error(errors.join('\n'));
+    } catch {
+      throw new Error('Unexpected error occurred during registration');
+    }
+  }
 }
 
 export async function logout(): Promise<void> {
