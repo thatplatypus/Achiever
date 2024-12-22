@@ -23,8 +23,10 @@ The solution is structured into the following projects:
   
 6. **iOS**: This project contains a native SwiftUI iOS app for the Api backend. 
    The iOS client is not published on the apple app store at this time but feel free to build and run it from xcode using the swift source code.
-   <img width="443" alt="image" src="https://github.com/user-attachments/assets/db949796-a1fa-495e-9bc6-fb5132aaeced" />
-   <img width="443" alt="image" src="https://github.com/user-attachments/assets/b6b5e77b-046b-4f1f-8f8a-fb174007d3f7" />
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <img width="32%" src="https://github.com/user-attachments/assets/db949796-a1fa-495e-9bc6-fb5132aaeced" alt="iOS Login Screen" />
+  <img width="32%" src="https://github.com/user-attachments/assets/b6b5e77b-046b-4f1f-8f8a-fb174007d3f7" alt="iOS Goal View" />
+</div>
 
 8. **Svelte**: This project contains a client-side Svelte app built with shadcn-ui for svelte and tailwind.
    Svelete [demo site](https://happy-smoke-04e17cc1e.4.azurestaticapps.net/)
