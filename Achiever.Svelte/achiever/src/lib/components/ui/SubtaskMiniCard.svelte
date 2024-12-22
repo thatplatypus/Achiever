@@ -1,9 +1,9 @@
 <script lang="ts">
   import { type SubTask } from "$lib/api/goals";
-  import EditSubtaskDialog from "./EditSubtaskDialog.svelte";
   import { Clock, NotepadText } from "lucide-svelte";
   import * as Tooltip from "$lib/components/ui/tooltip/index.js";
   import { statuses } from "$lib/api/subtaskStatus";
+    import EditSubTaskDialog from "./EditSubTaskDialog.svelte";
 
   export let subTask: SubTask;
   export let onEdit: (updatedSubTask: SubTask) => void;
@@ -37,7 +37,7 @@
 
 
 <!-- Edit Dialog -->
-<EditSubtaskDialog subTask={subTask} onSave={handleSave} bind:open>
+<EditSubTaskDialog subTask={subTask} onSave={handleSave} bind:open>
     <div
       class="shrink-0 p-4 bg-white dark:bg-gray-900 rounded-md shadow-md hover:shadow-lg transition-shadow cursor-pointer"
       on:click={openEditDialog}
@@ -102,4 +102,4 @@
         </Tooltip.Root>
       </div>
     </div>
-  </EditSubtaskDialog>
+  </EditSubTaskDialog>
