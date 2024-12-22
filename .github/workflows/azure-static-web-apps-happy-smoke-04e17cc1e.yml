@@ -28,8 +28,9 @@ jobs:
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "./Achiever.Svelte/achiever" # App source code path
-          output_location: "build"
+          app_location: ${{ env.APP_LOCATION }}
+          api_location: ${{ env.API_LOCATION }}
+          app_artifact_location: ${{ env.APP_ARTIFACT_LOCATION }}
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
