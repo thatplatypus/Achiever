@@ -1,14 +1,19 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button/index.js";
   import * as Card from "$lib/components/ui/card/index.js";
+  import * as Tooltip from "$lib/components/ui/tooltip/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import { goto } from "$app/navigation";
   import TooltipIconButton from "./TooltipIconButton.svelte";
   import EditGoalDialog from "./EditGoalDialog.svelte";
   import Pencil from "lucide-svelte/icons/pencil";
   import Trash from "lucide-svelte/icons/trash";
-  import { updateGoal, type Goal } from "$lib/api/goals";
+  import { updateGoal, type Goal, type SubTask } from "$lib/api/goals";
     import { onMount } from "svelte";
+    import { Calendar, Clock } from "lucide-svelte";
+    import { ScrollArea } from "./scroll-area";
+    import SubtaskMiniCard from "./SubtaskMiniCard.svelte";
+    import { Trigger } from "./dialog";
 
   export let goal: Goal;
 
@@ -46,17 +51,45 @@
   }
 
   // Handle updating the goal
-  async function handleGoalUpdated(id: string, title: string, status: number) {
+  async function handleGoalUpdated(id: string, title: string, status: number, targetEndDate?: Date) {
     console.log("Goal updated:", { id, title, status });
     goal.title = title;
     goal.status = status;
-    const result = await updateGoal(goal);
+    if(targetEndDate)
+      goal.targetEndDate = targetEndDate;
+  
+      const result = await updateGoal(goal);
     if (result.isSuccess) {
       console.log("Goal successfully updated!");
     } else {
       alert(`Failed to update goal: ${result.message}`);
     }
   }
+
+  function getColorByPercentage(percentage: number) : string {
+  switch (true) {
+    case percentage === 100:
+      return "#16A34A"; // Emerald for 100%
+    case percentage >= 90:
+      return "#082f49"; // Sky-950
+    case percentage >= 80:
+      return "#0c4a6e"; // Sky-900
+    case percentage >= 70:
+      return "#075985"; // Sky-800
+    case percentage >= 60:
+      return "#0369a1"; // Sky-700
+    case percentage >= 50:
+      return "#0284c7"; // Sky-600
+    case percentage >= 40:
+      return "#0ea5e9"; // Sky-500
+    case percentage >= 30:
+      return "#38bdf8"; // Sky-400
+    case percentage >= 20:
+      return "#7dd3fc"; // Sky-300
+    default:
+      return "#7dd3fc";
+  }
+}
 
   // Setup chart options
   $: percentageCompleted = calculatePercentage();
@@ -67,7 +100,7 @@
     height: 150,
   },
   labels: ["Completed", "Remaining"],
-  colors: ["#16A34A", "#D1D5DB"],
+  colors: [getColorByPercentage(percentageCompleted), "#D1D5DB"],
   plotOptions: {
     pie: {
       donut: {
@@ -88,7 +121,7 @@
           },
           value: {
             show: true,
-            formatter: ( seriesIndex ) => {
+            formatter: ( ) => {
               return `${percentageCompleted}%`;
           },
         },
@@ -137,6 +170,37 @@ chart.render();
   $: if (chart) {
     chart.updateSeries([percentageCompleted, 100 - percentageCompleted]);
   }
+
+  function formatDateLocal(dateString: string | Date | undefined): string {
+  if (!dateString) return "No Date Provided";
+
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",   
+    day: "numeric",  
+    year: "numeric", 
+  });
+}
+async function handleSubtaskUpdated(updatedSubtask: SubTask) {
+    const subtaskIndex = goal.subTasks.findIndex((st: SubTask) => st.id === updatedSubtask.id);
+  if (subtaskIndex !== -1) {
+    // Update the specific subtask in the array
+    goal.subTasks[subtaskIndex] = {
+      ...goal.subTasks[subtaskIndex],
+      ...updatedSubtask,
+    };
+
+    // Assign a new reference to `goal.subTasks` to trigger reactivity
+    goal.subTasks = [...goal.subTasks];
+
+    // Perform the API call
+    const result = await updateGoal(goal);
+
+    if (!result.isSuccess) {
+      console.error("Failed to update goal:", result.message);
+    }
+}
+}
 </script>
 
 <Card.Root
@@ -145,44 +209,76 @@ chart.render();
 >
   <div class="flex-grow flex">
     <!-- Goal Content -->
-    <div class="w-2/3 p-4">
+    <div class="w-1/2">
       <Card.Header>
-        <Card.Title>{goal.title}</Card.Title>
-        <Card.Description>
-          {goal.subTasks.length} Subtasks | Status: {goal.status}
+        <Card.Title>
+          {goal.title}
+        </Card.Title>
+        <Card.Description class="text-sm text-gray-500">
+          <Tooltip.Root>
+            <Tooltip.Trigger>
+              <span class="flex gap-1 items-center">
+                <Calendar class="h-4 w-4" />
+                {goal?.targetEndDate ? formatDateLocal(goal.targetEndDate) : "--"}
+              </span>
+              </Tooltip.Trigger>
+              <Tooltip.Content>
+                <p class="bg-background p-2">Target Date</p>
+                </Tooltip.Content> 
+          </Tooltip.Root>          
         </Card.Description>
       </Card.Header>
-      <Card.Content>
+      <Card.Content class="px-6 pt-2 pb-6">
         <div class="grid w-full items-center gap-4">
           {#if goal.subTasks.length > 0}
-            <div class="max-h-36 overflow-y">
-              <Label>Subtasks</Label>
-              <ul class="list-disc ml-4">
-                {#each goal.subTasks as subTask}
-                  <li>{subTask.title} - {subTask.status}</li>
-                {/each}
-              </ul>
-            </div>
+          <Label class="text-sm text-gray-500">{goal.subTasks.filter(st => st.status === "Completed").length}/{goal.subTasks.length} Complete</Label>
+          <ScrollArea
+          class="w-full whitespace-nowrap rounded-md border"
+          orientation="horizontal"
+        >
+          <div class="flex w-max space-x-4">
+            {#each goal.subTasks as subTask (subTask.id)}
+              <SubtaskMiniCard subTask={subTask} onEdit={handleSubtaskUpdated} />
+            {/each}
+          </div>
+        </ScrollArea>
           {:else}
-            <p class="text-sm text-gray-500">No subtasks available</p>
+            <p class="text-sm text-gray-500">No subtasks</p>
           {/if}
         </div>
       </Card.Content>
     </div>
     <!-- Chart Section -->
-    <div class="w-1/3 flex items-center justify-center">
-      <div id={`chart-${goal.id}`} class="w-full"></div>
+    <div class="w-1/2 flex items-center justify-center">
+      <div id={`chart-${goal.id}`} class="w-full mr-2"></div>
     </div>
   </div>
-  <Card.Footer class="flex justify-between mt-auto">
-    <EditGoalDialog {goal} onSave={(updated) => handleGoalUpdated(updated.id, updated.title, updated.status)}>
+  <Card.Footer class="flex justify-between mt-auto gap-3">
+    {#if goal.subTasks.filter(st => st?.estimatedHours > 0).length > 0}
+    <Tooltip.Root>
+      <Tooltip.Trigger>
+        <div class="flex flex-row gap-1 items-center">
+      <Clock />
+        <span class="text-sm text-muted-foreground">
+          {goal.subTasks.reduce((acc, st) => acc + (st?.status === "Completed" ? st.estimatedHours : 0), 0)} / {goal.subTasks.reduce((acc, st) => acc + st.estimatedHours, 0)}
+        </span>
+      </div>
+      </Tooltip.Trigger>
+      <Tooltip.Content>
+        <p>Total Estimated Hours</p>
+      </Tooltip.Content>
+    </Tooltip.Root>
+    {/if}
+    <div class="flex flex-1"></div>
+    <EditGoalDialog {goal} onSave={(updated) => handleGoalUpdated(updated.id, updated.title, updated.status, updated.targetEndDate)}>
       <TooltipIconButton tooltipText="Edit Goal">
-        <Pencil class="h-4 w-4" />
+        <Pencil class="h-4 w-4 mr-2" />
+        Edit
       </TooltipIconButton>
     </EditGoalDialog>
-    <Button variant="destructive" on:click={handleDelete}>
-      <Trash class="mr-2 h-4 w-4" />
+    <TooltipIconButton tooltipText="Delete Goal" variant="destructive" on:click={handleDelete}>
+      <Trash class="h-4 w-4 mr-2" />
       Delete
-    </Button>
+    </TooltipIconButton>
   </Card.Footer>
 </Card.Root>

@@ -7,12 +7,14 @@
     import { resetMode, setMode } from "mode-watcher";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
-    import { Github } from "lucide-svelte";
+    import { Github, LogIn, LogOut } from "lucide-svelte";
     import  * as Tooltip from "$lib/components/ui/tooltip";
     import * as Avatar from "$lib/components/ui/avatar";
     import {Separator} from "$lib/components/ui/separator";
     import { writable } from "svelte/store";
-    import { auth } from "$lib/stores/auth";
+    import { auth, fetchUser, logout } from "$lib/stores/auth";
+    import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
     
 
 
@@ -29,6 +31,17 @@ function handleSetMode(mode) {
   currentMode = mode;
 }
 
+onMount(async () => {
+    if(!$auth.isAuthenticated)
+    {
+        try {
+        await fetchUser();
+        } catch (error) {
+        console.warn("User unathenticated:", error);
+        }
+    }
+});
+
 const avatarColors = [
   'bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-500',
   'bg-teal-500', 'bg-blue-500', 'bg-indigo-500', 'bg-purple-500',
@@ -43,6 +56,11 @@ function getAvatarColor(email: string): string {
   const firstLetter = email.charAt(0).toLowerCase();
   const index = firstLetter.charCodeAt(0) - 'a'.charCodeAt(0);
   return avatarColors[index % avatarColors.length]; // Handles letters outside 'a-z'
+}
+
+function logoutUser() {
+    logout();
+    goto("/login");
 }
   </script>
   
@@ -133,17 +151,19 @@ function getAvatarColor(email: string): string {
             <Separator class="my-2" />
             <DropdownMenu.Item
             >
-            <span class="flex items-center">
+            <Button variant="link" class="flex items-center" on:click={logoutUser()}>
                  Logout
-              </span>
+                 <LogOut class="ml-2 h-4 w-4" />
+            </Button>
               
             </DropdownMenu.Item>
             {:else}
             <DropdownMenu.Item
             >
-            <a href="/login" class="flex items-center">
+            <Button variant="link" href="/login" class="flex items-center">
                  Login
-            </a>
+                 <LogIn class="ml-2 h-4 w-4" />
+            </Button>
               
             </DropdownMenu.Item>
             {/if}

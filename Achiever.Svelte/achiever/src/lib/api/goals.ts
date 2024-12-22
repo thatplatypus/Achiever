@@ -3,6 +3,7 @@ export type Goal = {
     title: string;
     subTasks: SubTask[];
     status: number;
+    targetEndDate?: Date | string;
   };
   
 export type SubTask = {

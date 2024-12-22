@@ -57,6 +57,10 @@ export async function loginAndFetchUser(email: string, password: string): Promis
   }
 
   // Step 2: Fetch User Info
+  return await fetchUser();
+}
+
+export async function fetchUser(): Promise<{ email: string; id: string } | null> {
   const userInfoResponse = await fetch('https://localhost:7211/manage/info', {
     method: 'GET',
     credentials: 'include', // Include the cookie in the request
@@ -81,4 +85,25 @@ export async function loginAndFetchUser(email: string, password: string): Promis
     email: userInfo.email,
     id: userInfo.id,
   };
+}
+
+export async function logout(): Promise<void> {
+  const response = await fetch('https://localhost:7211/logout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include', // Include cookies for the request
+    body: JSON.stringify({}), // Pass an empty object as required by the API
+  });
+
+  if (!response.ok) {
+    throw new Error('Logout failed');
+  }
+
+  // Clear the auth state on successful logout
+  auth.set({
+    isAuthenticated: false,
+    user: null,
+  });
 }
