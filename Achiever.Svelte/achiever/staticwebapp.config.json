@@ -1,5 +1,28 @@
 {
     "navigationFallback": {
         "rewrite": "/index.html"
-    }
+    },
+    "routes": [
+        {
+            "route": "/api/*",
+            "allowedOrigins": [
+                "https://happy-smoke-04e17cc1e.4.azurestaticapps.net",
+                "http://localhost:5173"
+            ],
+            "allowedMethods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "OPTIONS"
+            ],
+            "allowedHeaders": [
+                "Content-Type",
+                "Authorization"
+            ],
+            "headers": {
+                "Access-Control-Allow-Credentials": "true"
+            }
+        }
+    ]
 }
