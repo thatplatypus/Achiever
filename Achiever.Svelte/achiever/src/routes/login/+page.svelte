@@ -4,6 +4,7 @@
   import {login} from '$lib/stores/auth';
   import { Button } from '$lib/components/ui/button';
     import { Input } from '$lib/components/ui/input';
+    import Label from '$lib/components/ui/label/label.svelte';
 
   let email = '';
   let password = '';
@@ -26,8 +27,8 @@
   }
 </script>
 
-<div class="flex min-h-screen items-center justify-center bg-gray-100">
-  <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-md shadow-md">
+<div class="flex min-h-screen items-center justify-center">
+  <div class="w-full max-w-md p-8 space-y-6 rounded-md shadow-md">
     <div class="text-center">
       <h1 class="text-2xl font-semibold">Login</h1>
       <p class="text-sm text-gray-500">Access your account with your credentials.</p>
@@ -39,7 +40,7 @@
       {/if}
       
       <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <Label for="email" class="block text-sm font-medium text-gray-700">Email</Label>
         <Input
           id="email"
           type="email"
@@ -50,7 +51,7 @@
       </div>
 
       <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <Label for="password" class="block text-sm font-medium text-gray-700">Password</Label>
         <Input
           id="password"
           type="password"

@@ -8,7 +8,7 @@
     import { onMount } from "svelte";
     import { statuses } from "$lib/api/subtaskStatus";
     import { Clock, NotepadText } from "lucide-svelte";
-    import { Tooltip } from "bits-ui";
+    import * as Tooltip from "./tooltip";
   
     export let dropZoneId: string; 
     export let dropZoneTitle: string;
@@ -114,7 +114,7 @@
 
       </Tooltip.Trigger>
       <Tooltip.Content>
-        <p>No estimated hours</p>
+        <p class="bg-background p-2">No estimated hours</p>
       </Tooltip.Content>
     </Tooltip.Root> 
         {/if}
@@ -126,7 +126,7 @@
                 <NotepadText class="h-4 w-4" />
               </Tooltip.Trigger>
               <Tooltip.Content>
-                <quote>{subtask.note}</quote>
+                <quote class="bg-background p-2">{subtask.note}</quote>
               </Tooltip.Content>
             </Tooltip.Root>    
           </span>
@@ -137,7 +137,7 @@
                 <NotepadText class="h-4 w-4" />
               </Tooltip.Trigger>
               <Tooltip.Content>
-                <p>No notes</p>
+                <p class="bg-background p-2">No notes</p>
               </Tooltip.Content>
             </Tooltip.Root>    
           </span>
