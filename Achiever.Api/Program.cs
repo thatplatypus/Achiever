@@ -38,7 +38,10 @@ builder.Services.AddCors(
     options => options.AddPolicy(
         "wasm",
         policy => policy.WithOrigins([builder.Configuration["BackendUrl"] ?? "https://localhost:5001", 
-            builder.Configuration["FrontendUrl"] ?? "https://localhost:5002"])
+            builder.Configuration["FrontendUrl"] ?? "https://localhost:5002",
+            "https://localhost:5173",
+            "https://happy-smoke-04e17cc1e.4.azurestaticapps.net"
+            ])
             .AllowAnyMethod()
             .SetIsOriginAllowed(pol => true)
             .SetIsOriginAllowedToAllowWildcardSubdomains()
